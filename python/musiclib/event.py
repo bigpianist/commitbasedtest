@@ -3,4 +3,16 @@ class Event(object):
         super(Event, self).__init__()
         self.onset = onset
         self.duration = duration
-        
+
+    def getOnset(self):
+        return self.onset
+
+    def getDuration(self):
+        return self.duration
+
+    def setOnset(self, onset):
+        if isinstance(onset, int):
+            self.onset = onset
+        else:
+            print("Error: The onset you have input '" + onset + "' is not an integer.")
+
