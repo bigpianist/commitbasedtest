@@ -1,11 +1,11 @@
 from musiclib.scale import Scale
 
-def test_scale_is_instantiated_correctly():
+def testScaleIsInstantiatedCorrectly():
     s = Scale("dorian")
     assert s.name == "dorian"
     assert s.pitchClassSequence == [0, 2, 3, 5, 7, 9, 10]
 
-def test_scale_with_wrong_name_defaults_correctly():
+def testScaleWithWrongNameDefaultsCorrectly():
     s = Scale("ssds")
     assert s.name == "ionian"
 

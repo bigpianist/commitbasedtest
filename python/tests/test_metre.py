@@ -1,6 +1,6 @@
 from musiclib.metre import Metre
 
-def test_metre_is_instantiated_correctly():
+def testMetreIsInstantiatedCorrectly():
     m = Metre("3/4", "quarternote")
     assert m.timeSignature == "3/4"
     assert m.tactus["label"] == "quarternote"

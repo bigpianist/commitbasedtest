@@ -123,7 +123,6 @@ class HarmonyRhythmGenerator(object):
         while totDuration != self._barDuration:
             # get all candidate durations
 
-            # TODO: getDurationCandidates
             candidates = currentRS.getDurationCandidates(numDots)
 
             # calculate scores
@@ -156,7 +155,7 @@ class HarmonyRhythmGenerator(object):
 
         return rhythmicSeq
 
-
+    # TODO: Change this to _calcDistTactusMetric in RhythmGeneration
     def _calcScoreDistHarmonicTactus(self, candidates, harmonicMetre,
                                      harmonicDensityImpact):
         """Calculates distance from tactus scores for all candidates. The
@@ -194,7 +193,7 @@ class HarmonyRhythmGenerator(object):
                                                harmonicDensityImpact)
         return tactusDistScores
 
-
+    # TODO: Change this to _calcMetricPositionMetric in RhythmGeneration
     def _calcScoreMetricalPosition(self, candidates, harmonicMetre,
                                    harmonicDensityImpact):
         """Caluclates a score related to the metrical position of the
@@ -237,7 +236,7 @@ class HarmonyRhythmGenerator(object):
                                                      attractionRate)
         return metricalPositionScores
 
-
+    #TODO: Change this with mapVAfeature from RhythmGenerator
     def _mapHarmonicDensity(self, harmonicDensity):
         """Maps harmonicDensity value onto interval [0, maxDensity] for
         given time signature and style
@@ -245,11 +244,12 @@ class HarmonyRhythmGenerator(object):
         Returns:
             densityImpact (float):
         """
+
         densityImpact = harmonicDensity / 1.41 * self._maxDensityImpact
         return densityImpact
 
 
-
+    # TODO: Change this with comporessValues from RhythmGenerator
     def compressValues(self, attractionValue, values, attractionRate):
         """Compresses a list of values around a given value.
 
@@ -308,6 +308,7 @@ class HarmonyRhythmGenerator(object):
         return scores
 
 
+    # TODO: Change this to _decideDuration in RhythmGeneration
     def _decideDuration(self, scores, candidates):
         """Decides which duration to use next
 
@@ -326,6 +327,7 @@ class HarmonyRhythmGenerator(object):
         return candidates[durationIndex]
 
 
+    # TODO: Change this to _decideToApplyTie in RhythmGeneration
     def _decideToApplyTie(self, rhythmicSeqElement, metricalLevel):
         """Decides whether to apply tie and adds a 't' to the duration
 
@@ -346,6 +348,7 @@ class HarmonyRhythmGenerator(object):
             return [duration, None]
 
 
+    # TODO: Change this to _calcDotDuration in RhythmGeneration
     def _calcDotDuration(self, duration, numDots):
         """Calculates duration based on number of dots"""
 

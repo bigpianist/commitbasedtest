@@ -1,6 +1,6 @@
 from musiclib.harmonicmetre import HarmonicMetre
 
-def test_harmonic_metre_is_instantiated_correctly():
+def testHarmonicMetreIsInstantiatedCorrectly():
     hm = HarmonicMetre("3/4", "quarternote")
 
     harmonicTactus = hm.getHarmonicTactus()

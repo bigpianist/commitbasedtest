@@ -2,12 +2,14 @@ from musiclib import probability as p
 
 l = [1, 1, 1, 1]
 
-def test_toNormalisedCumulativeDistr():
+
+def testToNormalisedCumulativeDistr():
     expectedCumulativeDistr = [0, 0.25, 0.5, 0.75]
     cumulativeDistr = p.toNormalisedCumulativeDistr(l)
     assert cumulativeDistr == expectedCumulativeDistr
 
-def test_decideCumulativeDistrOutcome():
+
+def testDecideCumulativeDistrOutcome():
     distr = p.toNormalisedCumulativeDistr(l)
     outcomes = [0, 0, 0, 0]
     for i in range(1000):
