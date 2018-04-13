@@ -223,8 +223,6 @@ class RhythmGenerator(object):
         metricalProminenceScores = []
 
         # calculate basic score for all candidates
-        if candidates == None:
-            a=1
         for candidate in candidates:
             metricalLevel = candidate.getMetricalLevel()
             metricalAccent = candidate.getMetricalAccent()

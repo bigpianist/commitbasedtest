@@ -24,6 +24,9 @@ class Scale(object):
         self.pitchClassSequence = scales[self.name]
 
 
+    def getPitchClassSequence(self):
+        return self.pitchClassSequence
+
     def getName(self):
         return self.name
 
@@ -35,5 +38,21 @@ class Scale(object):
         else:
             print("Error: '" + name + "' scale does not exist. Keeping '" +
                   self.name + "' scale")
+
+
+    def expandScaleSequence(self, octave=0):
+        """Realizes a scale over a number of octaves
+
+        Args:
+            octave (int): Indicates midi octave up to which we want to
+                          realise scale
+        """
+        expandedScaleSeq = []
+        for i in range(octave+1):
+            offset = 12 * i
+            expandedScaleSeq += [(x+offset) for x in self.pitchClassSequence]
+        return expandedScaleSeq
+
+
 
 
