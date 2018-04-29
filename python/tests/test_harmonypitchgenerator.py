@@ -37,7 +37,7 @@ def testChordProgressionsAreGeneratedCorrectly():
     rs4.setMetricalAccent(1)
 
     harmonicRhythm = [rs1, rs2, rs3, rs4]
-    progression = hpg.generateHarmonyPitchMU(harmonicRhythm, -0.7, -0.7,
+    progression = hpg.generateHarmonyPitchMU(harmonicRhythm, 0.7, 0.7,
                                              "musicunit")
     print([x.pitchSet for x in progression])
 

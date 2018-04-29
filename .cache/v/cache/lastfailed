@@ -1,0 +1,3 @@
+{
+  "python/tests/test_rhythmspace.py::testCorrectCandidateDurationsWithNoDotsArePicked": true
+}

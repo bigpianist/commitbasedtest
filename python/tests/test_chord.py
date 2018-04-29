@@ -40,11 +40,19 @@ def testNumCommonChordTonesMatrix():
         print("'" + raw + "': " + str(column) + ",")
     """
 
+"""
 def testAssignDissonanceReturnsEpectedDissonances():
     c1 = Chord("0++")
     expectedCode = "0++--"
     c1.assignDissonance("9th")
     assert c1.code == expectedCode
+"""
+
+def testPitchesChordTonesAreReturnedCorrectly():
+    c1 = Chord("0+-+")
+    pitches = c1.calcPitchesTypes([31, 44])
+    expectedPitches = {31: '5th', 35: '7th', 36: 'fundamental', 40: '3rd', 43: '5th'}
+    assert pitches == expectedPitches
 
 if __name__ == "__main__":
     import sys

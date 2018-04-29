@@ -4,6 +4,8 @@ from .scale import Scale
 MAJORDTHIRD = 4
 MINORTHIRD = 3
 
+noteTypes = ["fundamental", "3rd", "5th", "7th", "9th", "11th"]
+
 
 class Chord(Event):
     def __init__(self, code="0+-", inversion="root", onset=0, duration=8,
@@ -19,11 +21,11 @@ class Chord(Event):
         self.pitchClassSet = Chord.fromCodeToPitchClassSet(self.code,
                                             self.tonic, self.octave)
         self.triadType = self._inferTriadTypeFromCode()
+        self.chordNoteTypes = self._assignChordNoteTypes(self.pitchSet)
 
 
     def __str__(self):
         return self.code
-
 
 
     @staticmethod
@@ -141,6 +143,44 @@ class Chord(Event):
         return matrix
 
 
+    def calcPitchesTypes(self, pitchRange):
+        """Calculates all of the pitches of a chord in a given range
+
+        Args:
+            pitchRange (list): List of the type [11, 13] where first element
+                indicates the low boundary of the pitch range and the
+                second indicates the high boundary
+
+        Returns:
+            pitchChordNoteTypes (dict): List of pitches of the chord in the
+                given pitch range with associated type (e.g., fundamental,
+                3rd...)
+        """
+        NUMOCTAVES = 8
+
+        pitchSet = self.pitchSet
+
+        # calculate chord note pitches accross 8 octaves
+        pitchesChordNotes = [p + 12*i for p in pitchSet for i in range(
+            NUMOCTAVES)]
+
+
+        # filter the chord note pitches based on the pitchRange
+        pitchesChordNotes = list(filter(lambda p: pitchRange[0] <= p <= pitchRange[1],
+                                            pitchesChordNotes))
+        pitchesChordNotes.sort()
+
+        pitchChordNoteTypes = {}
+
+        # go through the pitches and add info about their type
+        for pitch in pitchesChordNotes:
+            pc = pitch % 12
+            type = self._chordNoteTypes[pc]
+            pitchChordNoteTypes[pitch] = type
+
+        return pitchChordNoteTypes
+
+
     def assignDissonance(self, dissonanceType):
         num3rdsToAdd = {
             "7th": 1,
@@ -201,6 +241,21 @@ class Chord(Event):
 
     def getPitchSet(self):
         return self.pitchSet
+
+
+    def _assignChordNoteTypes(self, pitchSet):
+        """Assigns pitch to type of notes e.g., fundamental, 3rd... as a
+        dict of the type {pitch: noteType}
+
+        Args:
+            pitchSet (list):
+
+        """
+        self._chordNoteTypes = {}
+
+        # iterate through the notes of the chord and assign them a note type
+        for i, pitch in enumerate(pitchSet):
+            self._chordNoteTypes[pitch % 12] = noteTypes[i]
 
 
 
