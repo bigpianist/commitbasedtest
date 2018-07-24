@@ -1,5 +1,7 @@
 from musiclib.rhythmspacefactory import RhythmSpaceFactory
+from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
+import random
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
@@ -41,7 +43,7 @@ probabilityRepeatBar = {FOURFOUR: 0.5,
                         THREEFOUR: 0.5}
 
 
-class HarmonyRhythmGenerator(object):
+class HarmonyRhythmGenerator(RhythmGenerator):
     """HarmonyRhythmGenerator is responsible for generating harmonic rhythm
 
     Attributes:
@@ -49,16 +51,15 @@ class HarmonyRhythmGenerator(object):
     """
 
     def __init__(self, metre):
-        super(HarmonyRhythmGenerator, self).__init__()
+        super(HarmonyRhythmGenerator, self).__init__(metre)
 
         timeSignature = metre.getTimeSignature()
         lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
-        rsf = RhythmSpaceFactory()
-        self.rhythmSpace = rsf.createRhythmSpace(lowestMetricalLevel, metre)
+        self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
+                                                      metre)
         self._maxDensityImpact = maxDensityImpact[timeSignature]
         self._metricalAccentImpact = metricalAccentImpact[timeSignature]
         self._weightScores = weightScores[timeSignature]
-        self._barDuration = metre.getBarDuration()
         self._probabilityDot = probabilityDot[timeSignature]
         self._probabilitySingleDot = probabilitySingleDot[timeSignature]
         self._probabilityTie = probabilityTie[timeSignature]
@@ -380,8 +381,8 @@ class HarmonyRhythmGenerator(object):
         numDots = 0
 
         # decide whether to apply a dot
-        if r <= self._probabilityDot[metricalLevel]:
 
+        if r <= self._probabilityDot[metricalLevel]:
             # decide which type of dot to apply
             r2 = random.random()
 

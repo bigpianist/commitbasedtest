@@ -1,5 +1,6 @@
 from musiclib.probability import *
 from musiclib.rhythmspacefactory import RhythmSpaceFactory
+import random
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
@@ -84,7 +85,7 @@ class RhythmGenerator(object):
 
 
     def setDensityImpact(self, newDensity):
-        self.densityImpact = self.apVAfeature(newDensity,
+        self.densityImpact = self.mapVAfeature(newDensity,
                                     self._VAfeaturesMaxImpact["density"])
 
 

@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0778e67-c76a-4c8d-bd65-702ad35f19a1" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/python/musiclib/licks/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/musiclib/licks/lickgenerator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/musiclib/licks/trainmm.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/tests/test_lickgenerator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dev/melodrive/python/melodrive/stats/models/markov/markov.py" beforeDir="false" afterPath="$PROJECT_DIR$/../dev/melodrive/python/melodrive/stats/models/markov/markov.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/musiclib/harmonypitch/scale.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/musiclib/harmonypitch/scale.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/musiclib/rhythmgenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/musiclib/rhythmgenerator.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,87 +20,70 @@
     <favorites_list name="musiclib" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="trainmm.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/musiclib/licks/trainmm.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="192" selection-start-line="192" selection-end-line="192" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="markovchain.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/stats/models/markov/markovchain.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="lickgenerator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/musiclib/licks/lickgenerator.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="scale.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/musiclib/harmonypitch/scale.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1302">
-              <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="probability.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/helpers/probability.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="756">
-              <caret line="43" column="32" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="markov.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/stats/models/markov/markov.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="licks.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/musiclib/licks/licks.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2214" />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_lickgenerator.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/python/tests/test_lickgenerator.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="29">
-              <caret line="85" column="21" selection-start-line="85" selection-start-column="21" selection-end-line="85" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#54#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="melodyrhythmgenerator.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="4110">
+                  <caret line="280" column="41" selection-start-line="280" selection-start-column="33" selection-end-line="280" selection-end-column="41" />
+                  <folding>
+                    <element signature="e#0#52#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="rhythmgenerator.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="317">
+                  <caret line="69" column="62" lean-forward="true" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
+                  <folding>
+                    <element signature="e#0#34#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="harmonyrhythmgenerator.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="90">
+                  <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+                  <folding>
+                    <element signature="e#0#58#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="test_harmonyrhythmgenerator.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="342">
+                  <caret line="34" selection-start-line="34" selection-end-line="34" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="rhythmgenerator.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="18">
+                  <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -115,10 +94,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>RootNode</find>
-      <find>LEVEL</find>
-      <find>lastc</find>
-      <find>find</find>
       <find>&quot;high&quot;</find>
       <find>show</find>
       <find>melodir</find>
@@ -145,6 +120,10 @@
       <find>print</find>
       <find>fromDistr</find>
       <find>scal</find>
+      <find>rsf</find>
+      <find>metricalLevel</find>
+      <find>disttact</find>
+      <find>_calcScoreDistHarmonicTactus</find>
     </findStrings>
     <replaceStrings>
       <replace>EIGHTHNOTEDURATION</replace>
@@ -189,13 +168,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../dev/melodrive/python/melodrive/performance/performer/__init__.py" />
         <option value="$PROJECT_DIR$/../dev/melodrive/python/melodrive/tests/performance/test_dynamics.py" />
         <option value="$PROJECT_DIR$/../dev/melodrive/python/melodrive/helpers/probability.py" />
         <option value="$PROJECT_DIR$/../dev/melodrive/python/melodrive/performance/performer/dynamics.py" />
         <option value="$PROJECT_DIR$/python/tests/test_chordprofile.py" />
-        <option value="$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py" />
-        <option value="$PROJECT_DIR$/python/musiclib/rhythmgenerator.py" />
         <option value="$PROJECT_DIR$/python/musiclib/probability.py" />
         <option value="$PROJECT_DIR$/python/musiclib/harmonypitch/chordprofile.py" />
         <option value="$PROJECT_DIR$/python/musiclib/harmonypitch/harmonypitchgenerator.py" />
@@ -240,6 +216,9 @@
         <option value="$PROJECT_DIR$/python/musiclib/licks/licks.py" />
         <option value="$PROJECT_DIR$/python/musiclib/licks/trainmm.py" />
         <option value="$PROJECT_DIR$/python/tests/test_lickgenerator.py" />
+        <option value="$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py" />
+        <option value="$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py" />
+        <option value="$PROJECT_DIR$/python/musiclib/rhythmgenerator.py" />
       </list>
     </option>
   </component>
@@ -257,6 +236,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -274,13 +254,6 @@
               <item name="musiclib" type="462c0819:PsiDirectoryNode" />
               <item name="python" type="462c0819:PsiDirectoryNode" />
               <item name="musiclib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="musiclib" type="b2602c69:ProjectViewProjectNode" />
-              <item name="musiclib" type="462c0819:PsiDirectoryNode" />
-              <item name="python" type="462c0819:PsiDirectoryNode" />
-              <item name="musiclib" type="462c0819:PsiDirectoryNode" />
-              <item name="licks" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="musiclib" type="b2602c69:ProjectViewProjectNode" />
@@ -316,33 +289,15 @@
               <item name="python" type="462c0819:PsiDirectoryNode" />
               <item name="musiclib" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="musiclib" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.6 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="python" type="462c0819:PsiDirectoryNode" />
-              <item name="musiclib" type="462c0819:PsiDirectoryNode" />
-              <item name="licks" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="musiclib" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.6 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="python" type="462c0819:PsiDirectoryNode" />
-              <item name="musiclib" type="462c0819:PsiDirectoryNode" />
-              <item name="licks" type="462c0819:PsiDirectoryNode" />
-              <item name="lickdataset" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="show&#9;null&#9;null&#10;test_har&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_harmonypitchgenerator.py&#10;test_me&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_melodybackbonegenerator.py&#10;test_sca&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_scale.py&#10;scale&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/scale.py&#10;pro&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/helpers/probability.py&#10;mar&#9;null&#9;null&#10;markovc&#9;null&#9;null&#10;key&#9;null&#9;null&#10;pitchclas&#9;null&#9;null&#10;struc&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/structurefactory.py&#10;subph&#9;null&#9;null&#10;music&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/musicunitnode.py&#10;structur&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/structuralelement.py&#10;jit&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/jitter.py&#10;jitter&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/jitter.py&#10;dynam&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/dynamics.py&#10;main&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/main.py&#10;arpeggio&#9;null&#9;null&#10;calculateCh&#9;null&#9;null&#10;structuref&#9;null&#9;null&#10;RootNode&#9;null&#9;null&#10;root&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/rootnode.py&#10;per&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performancesystem.py&#10;mapp&#9;null&#9;null&#10;struct&#9;null&#9;null&#10;musicuni&#9;null&#9;null&#10;note&#9;null&#9;null&#10;music21&#9;null&#9;null&#10;brok&#9;null&#9;null&#10;test_dyn&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/tests/performance/test_dynamics.py&#10;performance&#9;null&#9;null&#10;tempoman&#9;null&#9;null&#10;calcMetr&#9;null&#9;null&#10;sust&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/harmony/models/part/sustainedchordpartmodel.py&#10;chord&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/chordprofile.py&#10;broken&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/harmony/models/part/brokenchordmodel.py&#10;probab&#9;null&#9;null&#10;probabil&#9;null&#9;null&#10;probabili&#9;null&#9;null&#10;rhythmsp&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/rhythmspace.py&#10;chordpr&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/chordprofile.py&#10;dynamics&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performer/dynamics.py&#10;techni&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/styles/default/techniques.py&#10;perform&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performancesystem.py&#10;compositions&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/compositionsystem.py&#10;activepar&#9;null&#9;null&#10;musicunit&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/musicunitnode.py&#10;system&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/core/system.py&#10;getpart&#9;null&#9;null" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../dev/melodrive/python/melodrive/tests/composition/test_brockenchordpartmodel.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
@@ -363,7 +318,25 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test_lickgenerator">
+  <component name="RunManager" selected="Python.harmonyrhythmgenerator">
+    <configuration name="harmonyrhythmgenerator" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="melodrive" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/python/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="test_chord" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="melodrive" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -436,24 +409,6 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="trainmm" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="melodrive" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/python/musiclib/licks" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/python/musiclib/licks/trainmm.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
     <configuration name="Unnamed" type="tests" factoryName="py.test">
       <module name="melodrive" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -472,14 +427,14 @@
       <item itemvalue="Python tests.Unnamed" />
       <item itemvalue="Python.test_melodybackbonegenerator" />
       <item itemvalue="Python.test_chord" />
-      <item itemvalue="Python.trainmm" />
+      <item itemvalue="Python.harmonyrhythmgenerator" />
       <item itemvalue="Python.test_lickgenerator" />
       <item itemvalue="Python.test_scale" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.harmonyrhythmgenerator" />
         <item itemvalue="Python.test_lickgenerator" />
-        <item itemvalue="Python.trainmm" />
         <item itemvalue="Python.test_scale" />
         <item itemvalue="Python.test_melodybackbonegenerator" />
         <item itemvalue="Python.test_chord" />
@@ -523,7 +478,7 @@
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48976377" visible="true" weight="0.16405828" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48976377" visible="true" weight="0.124123044" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
@@ -543,19 +498,19 @@
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.37989417" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48976377" visible="true" weight="0.09875877" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48976377" visible="true" weight="0.124123044" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.37989417" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32946146" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32910052" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39894179" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.28465608" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info id="Favorites" order="2" sideWeight="0.5102362" side_tool="true" weight="0.102536425" />
@@ -590,7 +545,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="262" />
+      <option name="time" value="263" />
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
@@ -628,34 +583,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/composition/arrangement/arrangement.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="98" selection-start-line="98" selection-end-line="98" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/composition/structure/structurefactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1818">
-          <caret line="103" column="30" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/performance/performers/jitter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="20" column="40" selection-start-line="20" selection-start-column="40" selection-end-line="20" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/core/states/cue.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="322" selection-start-line="322" selection-end-line="322" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive_styles/ambient/performance.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
@@ -776,20 +703,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmspace.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="61" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/probability.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="73" column="36" selection-start-line="73" selection-start-column="4" selection-end-line="73" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/core/projects/mdobject.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -820,13 +733,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/python/musiclib/licks/test1" />
     <entry file="file://$PROJECT_DIR$/python/musiclib/licks/ps" />
-    <entry file="file://$PROJECT_DIR$/python/musiclib/licks/midiToFix">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="5" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/licks/midiToFix" />
     <entry file="file://$PROJECT_DIR$/python/musiclib/licks/licks" />
     <entry file="file://$PROJECT_DIR$/python/musiclib/licks/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -834,27 +741,10 @@
     <entry file="file://$PROJECT_DIR$/python/musiclib/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4950">
-          <caret line="276" column="31" selection-start-line="252" selection-start-column="3" selection-end-line="276" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/harmonicmetre.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$USER_HOME$/.local/lib/python3.6/site-packages/_pytest/python.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="154" selection-start-line="154" selection-end-line="154" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="713">
-          <caret line="82" selection-start-line="82" selection-end-line="86" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -887,24 +777,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/harmonypitch/scale.py">
+    <entry file="file://$PROJECT_DIR$/python/musiclib/licks/trainmm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1302">
-          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/stats/models/markov/markov.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/helpers/probability.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="43" column="32" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="32" />
+        <state relative-caret-position="3456">
+          <caret line="192" selection-start-line="192" selection-end-line="192" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -915,37 +794,109 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/licks/trainmm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="192" selection-start-line="192" selection-end-line="192" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/musiclib/licks/lickgenerator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="486">
-          <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
+          <caret line="246" selection-start-line="246" selection-end-line="246" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/licks/licks.py">
+    <entry file="file://$PROJECT_DIR$/python/musiclib/harmonypitch/scale.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2214" />
+        <state relative-caret-position="18">
+          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+        </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/helpers/probability.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="43" column="32" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/stats/models/markov/markov.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/licks/licks.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/python/tests/test_lickgenerator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29">
+        <state relative-caret-position="175">
           <caret line="85" column="21" selection-start-line="85" selection-start-column="21" selection-end-line="85" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/probability.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1296">
+          <caret line="73" column="36" selection-start-line="73" selection-start-column="4" selection-end-line="73" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmspace.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="15" column="61" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/metre.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/harmonicmetre.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmspacefactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
           <folding>
-            <element signature="e#0#54#0" expanded="true" />
+            <element signature="e#0#44#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4110">
+          <caret line="280" column="41" selection-start-line="280" selection-start-column="33" selection-end-line="280" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="69" column="62" lean-forward="true" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
           </folding>
         </state>
       </provider>
