@@ -9,9 +9,10 @@ THREEFOUR = "3/4"
 lowestMetricalLevelOptions = {FOURFOUR: 3,
                               THREEFOUR: 2}
 
-# max percentage impact of harmonic density on scores
-maxDensityImpact = {FOURFOUR: 0.15,
-                    THREEFOUR: 0.15}
+# scores associated to the distance from the metrical level of the tactus
+# The indexes of the list represent the distance in metrical levels.
+tactusDistScores = {FOURFOUR: [1, 0.6, 0.4, 0.2],
+                    THREEFOUR: [1, 0.6, 0.5]}
 
 # max percentage impact of different metrical level accents on metric
 # position score. Each value in the lists refers to the metrical level
@@ -57,7 +58,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
         self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
                                                       metre)
-        self._maxDensityImpact = maxDensityImpact[timeSignature]
+        self._tactusDistScores = tactusDistScores[timeSignature]
         self._metricalAccentImpact = metricalAccentImpact[timeSignature]
         self._weightScores = weightScores[timeSignature]
         self._probabilityDot = probabilityDot[timeSignature]
@@ -156,43 +157,6 @@ class HarmonyRhythmGenerator(RhythmGenerator):
 
         return rhythmicSeq
 
-    # TODO: Change this to _calcDistTactusMetric in RhythmGeneration
-    def _calcScoreDistHarmonicTactus(self, candidates, harmonicMetre,
-                                     harmonicDensityImpact):
-        """Calculates distance from tactus scores for all candidates. The
-        highest the distance the lower the score.
-
-        Args:
-            harmonicMetre (HarmonicMetre):
-            candidates (list): All the candidates to be evaluated
-            harmonicDensityImpact (float):
-
-        Returns:
-            tactusDistScores (list): List with all the scores for the
-                                     distance from harmonic tactus
-        """
-
-        MIDVALUE = 0.5
-        tactusDistScores = []
-
-        harmonicTactusLevel = harmonicMetre.getHarmonicTactusLevel()
-        harmonicLevels = harmonicMetre.getHarmonicMetricalLevels()
-        maxScore = len(harmonicLevels) - 1
-
-        # calculate score for all candidates
-        for candidate in candidates:
-            candidateMetricalLevel = candidate.getMetricalLevel()
-            metricalDist = abs(harmonicTactusLevel - candidateMetricalLevel)
-
-            # get from distance to normalised score
-            score = (maxScore - metricalDist) / maxScore
-
-            tactusDistScores.append(score)
-
-        # compress the scores based on harmonic density
-        tactusDistScores = self.compressValues(MIDVALUE, tactusDistScores,
-                                               harmonicDensityImpact)
-        return tactusDistScores
 
     # TODO: Change this to _calcMetricPositionMetric in RhythmGeneration
     def _calcScoreMetricalPosition(self, candidates, harmonicMetre,
@@ -296,8 +260,8 @@ class HarmonyRhythmGenerator(RhythmGenerator):
                                              harmonicDensityImpact)
 
         # calculate distance harmonic tactus scores
-        dt = self._calcScoreDistHarmonicTactus(candidates, harmonicMetre,
-                                               harmonicDensityImpact)
+        harmonicTactusLevel = harmonicMetre.getHarmonicTactusLevel()
+        dt = self._calcDistFromTactusMetric(candidates, harmonicTactusLevel)
 
         # retrieve score weights
         a = self._weightScores["metricalPosition"]
