@@ -1,63 +1,41 @@
 from musiclib.rhythmspacefactory import RhythmSpaceFactory
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
+from musiclib.rhythmdata import rhythmData as rd
 import random
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-lowestMetricalLevelOptions = {FOURFOUR: 3,
-                              THREEFOUR: 2}
+lowestMetricalLevelOptions = rd["harmony"]["lowestMetricalLevelOptions"]
 
 # scores associated to the distance from the metrical level of the tactus
 # The indexes of the list represent the distance in metrical levels.
-tactusDistScores = {FOURFOUR: [1, 0.6, 0.4, 0.2],
-                    THREEFOUR: [1, 0.6, 0.5]}
+tactusDistScores = rd["harmony"]["tactusDistScores"]
 
 # scores associated to the metrical prominence. Higher metrical levels are
 # favoured. The raw indexes of the list represent the metrical level,
 # the column indexes represent the metrical accent.
-metricalProminenceScores = {FOURFOUR: [[1, 0, 0, 0],
-                                       [0.7, 1, 0, 0],
-                                       [0.3, 0.5, 1, 0],
-                                       [0.1, 0.3, 0.5, 1],
-                                       ],
-                            THREEFOUR:[[1, 0, 0],
-                                       [0.7, 1, 0],
-                                       [0.5, 0.7, 1],
-                                       [0.2, 0.3, 0.6]]
-                            }
+metricalProminenceScores = rd["harmony"]["metricalProminenceScores"]
 
+musicFeaturesMaxImpact = rd["harmony"]["metricalProminenceScores"]
 
-VAFeaturesMaxImpact = {
-    "entropy": 1,
-    "density": 1
-    }
-
-weightMetrics = {FOURFOUR: {"distTactus": 1,
-                           "metricalProminence": 1},
-                THREEFOUR: {"distTactus": 1,
-                            "metricalProminence": 1}}
+weightMetrics = rd["harmony"]["weightMetrics"]
 
 # probability of having a dot for different metrical levels. Probabilty of
 # having a dot in the lowest metrical level must always be 0!
-probabilityDot = {FOURFOUR: [0, 0.5, 0.5, 0],
-                  THREEFOUR: [0, 0.1, 0]}
+probabilityDot = rd["harmony"]["probabilityDot"]
 
 # probability of single dot vs double dot. Double dot is only possible if
 # metrical level has at least 2 children below it.
-probabilitySingleDot = {FOURFOUR: [0, 0, 1, 0],
-                        THREEFOUR: [0, 1, 0]}
+probabilitySingleDot = rd["harmony"]["probabilitySingleDot"]
 
-densityImpactMetricalLevels = {FOURFOUR: [-0.5, -0.2, 0, 1],
-                               THREEFOUR: [0, 0.4, 1]}
+densityImpactMetricalLevels = rd["harmony"]["densityImpactMetricalLevels"]
 
 # probability of having a tie
-probabilityTie = {FOURFOUR: [0.5, 0.02, 0.1, 0.9],
-                  THREEFOUR: [0.3, 0.2, 0.9]}
+probabilityTie = rd["harmony"]["probabilityTie"]
 
-probabilityRepeatBar = {FOURFOUR: 0.5,
-                        THREEFOUR: 0.5}
+probabilityRepeatBar = rd["harmony"]["probabilityRepeatBar"]
 
 
 class HarmonyRhythmGenerator(RhythmGenerator):
@@ -79,7 +57,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         self._metricalProminenceScores = metricalProminenceScores[
             timeSignature]
 
-        self._VAfeaturesMaxImpact = VAFeaturesMaxImpact
+        self._musicFeaturesMaxImpact = musicFeaturesMaxImpact
 
         self._densityImpactMetricalLevels = densityImpactMetricalLevels[
             timeSignature]

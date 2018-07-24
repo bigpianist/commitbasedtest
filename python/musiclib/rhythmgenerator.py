@@ -2,58 +2,6 @@ from musiclib.probability import *
 from musiclib.rhythmspacefactory import RhythmSpaceFactory
 import random
 
-FOURFOUR = "4/4"
-THREEFOUR = "3/4"
-
-lowestMetricalLevelOptions = {FOURFOUR: 4,
-                              THREEFOUR: 3}
-
-
-# probability of having a tie at different metrical levels
-probabilityTie = {FOURFOUR: [0.1, 0.4, 0.6, 0.7, 0.7],
-                  THREEFOUR: [0.3, 0.2, 0.2, 0.1]}
-
-
-# probability of having a dot for different metrical levels. Probabilty of
-# having a dot in the lowest metrical level must always be 0!
-probabilityDot = {FOURFOUR: [0, 0.2, 0.2, 0.1, 0],
-                  THREEFOUR: [0, 0.2, 0.2, 0]}
-
-# probability of single dot vs double dot. Double dot is only possible if
-# metrical level has at least 2 children below it.
-probabilitySingleDot = {FOURFOUR: [0, 0.8, 0.8, 1, 0],
-                        THREEFOUR: [0, 0.8, 1, 0]}
-
-
-densityImpactMetricalLevels = {FOURFOUR: [-0.5, -0.2, 0, 0.6, 1],
-                               THREEFOUR: [0, 0.3, 0.6, 1]}
-
-
-# scores associated to the distance from the metrical level of the tactus
-# The indexes of the list represent the distance in metrical levels.
-tactusDistScores = {FOURFOUR: [1, 0.6, 0.4, 0.2],
-                    THREEFOUR: [1, 0.6, 0.5]}
-
-# scores associated to the metrical prominence. Higher metrical levels are
-# favoured. The raw indexes of the list represent the metrical level,
-# the column indexes represent the metrical accent.
-metricalProminenceScores = {FOURFOUR: [[1, 0, 0, 0, 0],
-                                       [0.7, 1, 0, 0, 0],
-                                       [0.3, 0.5, 1, 0, 0],
-                                       [0.1, 0.3, 0.5, 1, 0],
-                                       [0.05, 0.2, 0.2, 0.5, 1]],
-                            THREEFOUR:[[1, 0, 0, 0],
-                                       [0.7, 1, 0, 0],
-                                       [0.5, 0.7, 1, 0],
-                                       [0.2, 0.3, 0.6, 1]]
-                            }
-
-
-weightMetrics = {FOURFOUR: {"distTactus": 1,
-                           "metricalProminence": 1},
-                THREEFOUR: {"distTactus": 1,
-                            "metricalProminence": 1}}
-
 
 class RhythmGenerator(object):
     """Base class for melody and harmony rhythm generator classes"""
@@ -69,17 +17,17 @@ class RhythmGenerator(object):
 
 
     def setEntropyImpact(self, newEntropy):
-        self.entropyImpact = self.mapVAfeature(newEntropy,
-                                    self._VAfeaturesMaxImpact["entropy"])
+        self.entropyImpact = self.mapMusicFeature(newEntropy,
+                                    self._musicFeaturesMaxImpact["entropy"])
 
 
     def setDensityImpact(self, newDensity):
-        self.densityImpact = self.mapVAfeature(newDensity,
-                                    self._VAfeaturesMaxImpact["density"])
+        self.densityImpact = self.mapMusicFeature(newDensity,
+                                    self._musicFeaturesMaxImpact["density"])
 
 
     @staticmethod
-    def mapVAfeature(value, maxValue=1):
+    def mapMusicFeature(value, maxValue=1):
         """Maps a VA feature onto interval [0, maxValue].
 
         Args:
