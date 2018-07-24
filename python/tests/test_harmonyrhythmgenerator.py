@@ -6,6 +6,8 @@ from musiclib.rhythmspace import RhythmSpace
 m = Metre("4/4", "quarternote")
 hm = HarmonicMetre("3/4", "dottedhalfnote")
 hrg = HarmonyRhythmGenerator(m)
+hrg.densityImpact = 0
+hrg.entropyImpact = 0
 
 
 def testHarmonyRhythmGeneratorIsInstantiated():
@@ -29,7 +31,7 @@ def testCalculateScores():
     hm2 = HarmonicMetre("4/4", "halfnote")
     candidates = [d2, d3, d4]
     scores = hrg._calcScores(candidates, hm2, 0.05)
-    expectedScores = [2, 1.1, 0.7]
+    expectedScores = [1.0, 0.55, 0.35]
 
     assert scores == expectedScores
 

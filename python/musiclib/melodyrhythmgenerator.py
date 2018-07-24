@@ -148,7 +148,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         candidates = currentRS.getDurationCandidates(numDots)
 
         # calculate scores associated to the metrics
-        scores = self._calcMetrics(candidates, metre)
+        scores = self._calcScores(candidates, metre)
 
         # choose new duration
         currentRS = self._decideNextDuration(scores, candidates)
@@ -256,7 +256,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         return rhythmicSeq
 
 
-    def _calcMetrics(self, candidates, metre):
+    def _calcScores(self, candidates, metre):
         """Returns combined scores for all the candidate durations.
 
         Args:

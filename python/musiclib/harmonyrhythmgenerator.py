@@ -34,10 +34,10 @@ VAFeaturesMaxImpact = {
     "density": 1
     }
 
-weightScores = {FOURFOUR: {"distHarmonicTactus": 1,
-                           "metricalPosition": 1},
-                THREEFOUR: {"distHarmonicTactus": 1,
-                            "metricalPosition": 1}}
+weightMetrics = {FOURFOUR: {"distTactus": 1,
+                           "metricalProminence": 1},
+                THREEFOUR: {"distTactus": 1,
+                            "metricalProminence": 1}}
 
 # probability of having a dot for different metrical levels. Probabilty of
 # having a dot in the lowest metrical level must always be 0!
@@ -48,6 +48,9 @@ probabilityDot = {FOURFOUR: [0, 0.5, 0.5, 0],
 # metrical level has at least 2 children below it.
 probabilitySingleDot = {FOURFOUR: [0, 0, 1, 0],
                         THREEFOUR: [0, 1, 0]}
+
+densityImpactMetricalLevels = {FOURFOUR: [-0.5, -0.2, 0, 1],
+                               THREEFOUR: [0, 0.4, 1]}
 
 # probability of having a tie
 probabilityTie = {FOURFOUR: [0.5, 0.02, 0.1, 0.9],
@@ -78,7 +81,10 @@ class HarmonyRhythmGenerator(RhythmGenerator):
 
         self._VAfeaturesMaxImpact = VAFeaturesMaxImpact
 
-        self._weightScores = weightScores[timeSignature]
+        self._densityImpactMetricalLevels = densityImpactMetricalLevels[
+            timeSignature]
+
+        self._weightMetrics = weightMetrics[timeSignature]
         self._probabilityDot = probabilityDot[timeSignature]
         self._probabilitySingleDot = probabilitySingleDot[timeSignature]
         self._probabilityTie = probabilityTie[timeSignature]
@@ -147,7 +153,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
                                       harmonicDensityImpact)
 
             # choose new duration
-            currentRS = self._decideDuration(scores, candidates)
+            currentRS = self._decideNextDuration(scores, candidates)
 
             duration = currentRS.getDuration()
 
@@ -194,105 +200,23 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         dt = self._calcDistFromTactusMetric(candidates, harmonicTactusLevel)
 
         # retrieve score weights
-        a = self._weightScores["metricalPosition"]
-        b = self._weightScores["distHarmonicTactus"]
+        a = self._weightMetrics["metricalProminence"]
+        b = self._weightMetrics["distTactus"]
 
         # create new list with linear combination of scores
         scores = [a*x + b*y for x, y in zip(mp, dt)]
 
+        MAXSCORE = a + b
+
+        # modify scores based on rhythmic density
+        scores = self._modifyScoresForDensity(candidates, scores, MAXSCORE)
+
+        # modify scores based on rhythmic entropy
+        scores = self._modifyScoresForEntropy(scores, MAXSCORE)
+
         return scores
 
 
-    # TODO: Change this to _decideDuration in RhythmGeneration
-    def _decideDuration(self, scores, candidates):
-        """Decides which duration to use next
-
-        Args:
-            scores (list): List of combined score for each candidate
-                           duration
-
-        Returns:
-            duration (RhythmSpace): Duration to be used
-        """
-
-        # transform scores in normalised cumulative distr
-        distr = toNormalisedCumulativeDistr(scores)
-
-        durationIndex = decideCumulativeDistrOutcome(distr)
-        return candidates[durationIndex]
-
-
-    # TODO: Change this to _decideToApplyTie in RhythmGeneration
-    def _decideToApplyTie(self, rhythmicSeqElement, metricalLevel):
-        """Decides whether to apply tie and adds a 't' to the duration
-
-        Args:
-            rhythmicSeqElement (list): [duration, None] - None indicates no tie
-            metricalLevel (int): Metrical level of chosen rhythm space node
-
-        Returns:
-            newDuration (list): Pair duration, 't' (symbol ofr tie), if tie
-                                gets applied
-        """
-
-        duration = rhythmicSeqElement[0]
-        r = random.random()
-        if r <= self._probabilityTie[metricalLevel]:
-            return [duration, 't']
-        else:
-            return [duration, None]
-
-
-    # TODO: Change this to _calcDotDuration in RhythmGeneration
-    def _calcDotDuration(self, duration, numDots):
-        """Calculates duration based on number of dots"""
-
-        dotMultiplier = 0
-
-        dotMultiplier = 0
-        for i in range(numDots+1):
-            dotMultiplier += 1/2**i
-        dottedDuration = duration * dotMultiplier
-        return [dottedDuration, None], numDots
-
-
-    def _decideToApplyDot(self, rhythmSpace):
-        """Decides whether to apply a dot either single or double.
-
-        Args:
-            rhythmSpace (RhythmSpace): Chosen rhythm space node
-
-        Returns:
-            newDuration (list): Pair duration, 't' (symbol ofr tie), if tie
-                                gets applied
-            numDots (int): Number of dots applied
-        """
-
-        duration = rhythmSpace.getDuration()
-        metricalLevel = rhythmSpace.getMetricalLevel()
-        r = random.random()
-
-        numDots = 0
-
-        # decide whether to apply a dot
-
-        if r <= self._probabilityDot[metricalLevel]:
-            # decide which type of dot to apply
-            r2 = random.random()
-
-            # handle single dot
-            if r2 <= self._probabilitySingleDot[metricalLevel]:
-                numDots = 1
-                return self._calcDotDuration(duration, numDots)
-
-            # handle double dot
-            else:
-                numDots = 2
-                return self._calcDotDuration(duration, numDots)
-
-        # handle case in which no dots were applied
-        else:
-            return [duration, None], numDots
 
 
 
