@@ -1,5 +1,6 @@
 from musiclib.probability import *
 from musiclib.rhythmspacefactory import RhythmSpaceFactory
+import random
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"

@@ -5,6 +5,10 @@ import random
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
+#TODO: I think we can generalize this
+# while this one is tricky, it would be preferrable for this
+# to be encapsulated in a function, even if you're using a dict
+# so getMetricLevelDuration(timeSig, metricLevel)
 metricalLevelDurations = {FOURFOUR: {0: 4.0,
                                      1: 2.0,
                                      2: 1.0,
@@ -34,6 +38,7 @@ class RhythmSpaceFactory(object):
                                        space to be created
             metre (Metre): Metre object
         """
+        #TODO: caps issue
         STARTLEVEL = highestMetricalLevel
         timeSignature = metre.getTimeSignature()
         duration = float(metricalLevelDurations[timeSignature][STARTLEVEL])
@@ -48,6 +53,17 @@ class RhythmSpaceFactory(object):
 
         if STARTLEVEL == lowestMetricalLevel:
             return rhythmSpace
+
+        #TODO: _expandRoot shouldn't be the responsibility of RhythmSpaceFactory
+        # You're pulling in a bunch of member variables and then passing
+        # them back into the rhythmSpace object.
+        # RhythmSpace should just handle this as soon as it has all the necessary
+        # information - it has that when lowestMetricalLevel is set.
+        # It should be a required parameter to the constructor, and also
+        # the RhythmSpace should be recomputed if the lowestMetricalLevel is re-set
+        # The _expandRoot function is a private member function that doesn't
+        # need access to any member variables of RhythmSpaceFactory. That's a
+        # big 'tell' that the functionality is in the wrong spot.
 
         # expand root
         rhythmSpace = self._expandRoot(lowestMetricalLevel, metricalLevels,

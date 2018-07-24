@@ -1,0 +1,31 @@
+notes on music lib
+General topics to discuss:
+Exception handling
+naming
+Object-oriented programming (if something can be done with logic rather than with dictionaries, it should be)
+
+Code review progress
+metre.py - needs refactor/rewrite
+tree.py - reviewed
+rhythmspacefactory.py - needs to be pulled into rhythmspace. There's no need for an extra class layer. The arguments passed to rhythmspacefactory functions are the same as the ones passed to the rhythmspace functions - i.e., it's an unnecessary class. Look at MusicalThemeFactory for a comparison - there is extra information needed in that case, for example to set the name and seed.  
+
+Metre.py - not scalable, only supports metric signatures that have every dict entry entered. You're dealing with numbers, use them. The Metre class should take any signature and figure out all the tactus levels and metric levels of the tactus levels, etc. Your metric signature string contains beats per bar and the note that gets the beat, that's valuable info we're not using at all. For example, barDurations:
+barDurations = {FOURFOUR: 4,
+                THREEFOUR: 3}
+Those are encoded as the numerator of the metric signature: "4/4", "3/4"
+
+TimeSignature(beatsPerBar,noteThatGetsTheBeat)
+Metre(timeSignature, tactusDur=None)
+
+It also means it could be incorrect if we mess up an entry.
+
+For example:
+	metricalLevelTactus = metricalLevelsOptions[timeSignature].index(
+            tactusLabel)
+Should be:
+	metricLevelTactus = timeSignature.getMetricLevel(tactusDur)
+
+
+
+
+

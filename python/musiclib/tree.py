@@ -11,8 +11,11 @@ class Tree(object):
     def __init__(self, value, children=None):
         super(Tree, self).__init__()
         self.value = value
+        #TODO: or doesn't work this way
         self.children = children or []
         self.parent = None
+        #TODO: gotta decide if the tree is doubly-linked or not,
+        # and stick to one or the other
         for child in self.children:
             child.parent = self
 
@@ -40,6 +43,7 @@ class Tree(object):
         Args:
             children (list): List of children Trees to be added
         """
+        #TODO: not assigning parent to the children here like we did in addChild.
         for child in children:
             self.children.append(child)
 
@@ -50,11 +54,13 @@ class Tree(object):
         Args:
             childIndex: index of child to be removed
         """
+        #TODO: it would be cleaner to also set the parent of the children to None
         self.children.pop(childIndex)
 
 
     def removeChildren(self):
         """Removes children from parent"""
+        #TODO: it would be cleaner to also set the parent of the children to None
         self.children = []
 
 
@@ -63,6 +69,7 @@ class Tree(object):
         from
         """
 
+        #TODO: all caps is only for global variables. This variable is not global
         FIRSTCHILD = 0
         while self.hasChildren():
             child = self.children[FIRSTCHILD]
@@ -89,8 +96,8 @@ class Tree(object):
 
         Args:
             degree (int): Degree of descendant to be checked
+            #TODO: you should just name this 'depth'. degree is ambiguous to the caller of the function
         """
-
         # return up the stack if we've reached the desired depth
         if (degree - startLevel) == 0:
             return True
@@ -111,6 +118,11 @@ class Tree(object):
 
         Args:
             degree (int): Degree of ancestor to be checked
+            #TODO: you should just name this 'height'.
+            #similar to depth, it enables the caller to immediately
+            #know what direction the function is looking
+            #Ancestor and descendant are words you have to think about
+            #and height and depth are not
         """
 
         # return up the stack if we've reached the desired depth
@@ -132,7 +144,6 @@ class Tree(object):
         """Boolean method that checks whether Tree object is last child.
         Returns True if children is Root
         """
-
         nodeIndex = self._getIndexOfNodeInParentChildrenList()
 
         # if nodeIndex is None that means that node is Root and has no siblings
@@ -142,6 +153,8 @@ class Tree(object):
         parentChildrenList = self.parent.children
 
         # check node is last child
+        #TODO: no need for if else, can just say:
+        # return len(parentChildrenList) <= nodeIndex + 1
         if len(parentChildrenList) > nodeIndex + 1:
             return False
         else:
@@ -154,6 +167,7 @@ class Tree(object):
         Args:
             childIndex: index of child to be returned
         """
+        #TODO: this would crash if the index is too large.
         return self.children[childIndex]
 
 
@@ -180,11 +194,18 @@ class Tree(object):
 
         # if node is last child, move up a level
         if len(parentChildrenList) == nodeIndex + 1:
+            #TODO: wouldn't this return your "uncle"? I assume the functionality
+            #you would want is to return the "cousin", so up->right->down in the tree, no?
             self.parent.getRightSibling()
-
+        #TODO: an example of naming that is totally fine
+        #even though I would go with "possibleRightSiblingIndex"
+        #notice length is not a problem
         tentativeRightSiblingIndex = nodeIndex + 1
 
         # return right sibling if it exists
+        #TODO: We should talk about exception handling
+        #Here I would just check the length before indexing,
+        #rather than use exceptions.
         try:
             rightSibling = parentChildrenList[tentativeRightSiblingIndex]
             return rightSibling
@@ -206,11 +227,14 @@ class Tree(object):
 
         # if node is first child, move up a level
         if self.isFirstChild():
+            #TODO: same issue as getRightSibling - it actually returns the 'aunt'
             self.parent.getLeftSibling()
 
         tentativeLeftSiblingIndex = nodeIndex - 1
 
         # return right sibling if it exists
+        #TODO: here you only have to check if nodeIndex is 0,
+        #otherwise tentativeLeftSiblingIndex is valid
         try:
             leftSibling = parentChildrenList[tentativeLeftSiblingIndex]
             return leftSibling
@@ -222,21 +246,29 @@ class Tree(object):
         """Boolean method that returns True if child is the last one"""
 
         rightSibling = self.getRightSibling()
-
+        #TODO NOTE: here I doubled-checked all the casees where getRightSibling
+        # can return None - it's only when the node is Root, or when
+        # it truly has no right sibling. In the case of the Root node,
+        # it is the last child anyway, technically
         if rightSibling == None:
             return True
         return False
 
-
+    #TODO: solid function naming here - as close to grammatically correct
+    # as possible, and gets the point across with minimal verbiage
     def getFirstAncestorNotLastChild(self):
         """Returns the first ancestor node which is not a last child.
-        Returns None if such an ancestor doesn't exist
+        Returns None if such an ancestor doesn't exist. #TODO: add
+        the last case as described in TODO below.
 
         Returns:
              ancestor (Tree): Ancestor which is not a first child
         """
 
         if not self.isLastChild():
+            #TODO: technically self is not an ancestor, so this functionality
+            # goes against the naming. However, if you make note of this case
+            # in the comments, I think it's fine
             return self
         elif not self.hasParent():
             return None
@@ -244,10 +276,11 @@ class Tree(object):
         ancestor = self.parent.getFirstAncestorNotLastChild()
         return ancestor
 
-
+    #TODO: naming here is not clear...
+    # maybe getDescendantAtIndex? or getDescendantAtRecursiveIndex?
     def getNodeLowerLevels(self, depth, indexChild, startLevel=0):
         """Returns node at 'depth' levels below, expanding the
-        indexChild at each level.
+        indexChild at each level. #TODO NOTE: very clear commenting here
 
         Args:
              depth (int): No. of levels below the node
@@ -258,11 +291,13 @@ class Tree(object):
         # return up the stack if we've reached the desired depth
         if (depth - startLevel) == 0:
             return self
+        #TODO: have to check if index is valid before indexing
         childToExpand = self.children[indexChild]
         node = childToExpand.getNodeLowerLevels(depth, indexChild, startLevel+1)
         return node
 
-
+    #TODO: here instead of "getAll" you should use "collect"
+    # i.e., collectDescendantsAtRecursiveIndex
     def getAllNodesLowerLevels(self, depth, indexChild, startLevel,
                                targetNodes=[]):
         """Returns all nodes below current level until 'depth' level, expanding
@@ -278,8 +313,11 @@ class Tree(object):
         if (depth - startLevel) == 0:
             return targetNodes
 
+        #TODO: gotta check that index
         childToExpand = self.children[indexChild]
 
+        #TODO: I think you can just say return childToExpand.getAll...
+        # instead of assigning it - might be a bit clearer
         targetNodes = childToExpand.getAllNodesLowerLevels(depth, indexChild,
                                                     startLevel+1, targetNodes)
         return targetNodes
@@ -289,7 +327,7 @@ class Tree(object):
         """Boolean method that checks if node is the first child. Returns
         'None' if node is root.
         """
-
+        #TODO: non-global all caps
         INDEXFIRSTCHILD = 0
 
         # return 'None' in case node is root
@@ -299,6 +337,8 @@ class Tree(object):
         parentChildren = self.parent.children
 
         # check index of node in parent's children list
+        #TODO you don't need an if/else here, you can just
+        # return parentChildren.index(self) == INDEXFIRSTCHILD
         if parentChildren.index(self) == INDEXFIRSTCHILD:
             return True
         else:
@@ -306,6 +346,7 @@ class Tree(object):
 
 
     def _getIndexOfNodeInParentChildrenList(self):
+        #TODO: I would rename all instances of "ParentChildren" to "Sibling"
         """Returns index of node in the children list of the parent. If node
         doesn't have a parent returns None.
         """
@@ -313,9 +354,13 @@ class Tree(object):
         if not self.hasParent():
             return None
         parentChildrenList = self.parent.children
+        #TODO: is this try/except block logically necessary?
+        # i.e., if the node has a parent, isn't it guaranteed to be in
+        # the siblingList?
         try:
             nodeIndex = parentChildrenList.index(self)
         except ValueError:
+            #TODO: why a = 1? if you throw an exception you have to handle it
             a = 1
         return nodeIndex
 
