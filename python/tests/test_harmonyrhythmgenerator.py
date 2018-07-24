@@ -13,17 +13,6 @@ def testHarmonyRhythmGeneratorIsInstantiated():
     hrg is not None
 
 
-def testCalcScoreDistHarmonicTactusReturnsCorrectScores():
-    d1 = RhythmSpace(1, 0)
-    d2 = RhythmSpace(1, 1)
-    d3 = RhythmSpace(1, 2)
-
-    candidates = [d1, d2, d3]
-    expectedScores = [0.95, 0.5, 0.05]
-    scores = hrg._calcScoreDistHarmonicTactus(candidates, hm, 0.1)
-    assert scores == expectedScores
-
-
 def testCompressValues():
     l = [1, 0.8, 0.5, 0.1, 0]
     compressedValues = hrg.compressValues(0.5, l, 0.1)
@@ -31,20 +20,6 @@ def testCompressValues():
     assert compressedValues == expectedCompressedValues
 
 
-def testCalcScoreMetricalPosition():
-    d2 = hrg.rhythmSpace.children[1]
-    d3 = hrg.rhythmSpace.children[1].children[0]
-    d4 = hrg.rhythmSpace.children[1].children[0].children[0]
-
-    expectedPositionScores = [0.6533333333333333, 0.3466666666666667, 0.04]
-
-    hm2 = HarmonicMetre("4/4", "halfnote")
-    candidates = [d2, d3, d4]
-    metricalPositionScores = hrg._calcScoreMetricalPosition(candidates, hm2,
-                                                            0.05)
-    assert metricalPositionScores == expectedPositionScores
-
-"""
 def testCalculateScores():
     d1 = hrg.rhythmSpace
     d2 = hrg.rhythmSpace.children[1]
@@ -54,10 +29,9 @@ def testCalculateScores():
     hm2 = HarmonicMetre("4/4", "halfnote")
     candidates = [d2, d3, d4]
     scores = hrg._calcScores(candidates, hm2, 0.05)
-    expectedScores = [1.6533333333333333, 0.9466666666666667, 0.38166666666666665]
+    expectedScores = [2, 1.1, 0.7]
 
     assert scores == expectedScores
-"""
 
 def testGenerateHarmonycRhythmBar():
     hm2 = HarmonicMetre("4/4", "halfnote")

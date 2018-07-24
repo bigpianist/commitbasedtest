@@ -76,7 +76,7 @@ class RhythmGenerator(object):
         self._weightMetrics = weightMetrics[timeSignature]
         self._densityImpactMetricalLevels = densityImpactMetricalLevels[timeSignature]
         #self._tactusDistScores = tactusDistScores[timeSignature]
-        self._metricalProminenceScores = metricalProminenceScores[timeSignature]
+        # self._metricalProminenceScores = metricalProminenceScores[timeSignature]
 
 
     def setEntropyImpact(self, newEntropy):

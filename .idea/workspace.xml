@@ -26,8 +26,8 @@
           <file leaf-file-name="harmonyrhythmgenerator.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="216">
-                  <caret line="158" column="4" selection-start-line="158" selection-start-column="4" selection-end-line="158" selection-end-column="4" />
+                <state relative-caret-position="1746">
+                  <caret line="169" lean-forward="true" selection-start-line="169" selection-end-line="169" />
                   <folding>
                     <element signature="e#0#58#0" expanded="true" />
                   </folding>
@@ -35,10 +35,19 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="rhythmspace.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmspace.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="270">
+                  <caret line="15" column="61" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="melodyrhythmgenerator.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="4110">
+                <state relative-caret-position="4488">
                   <caret line="280" column="41" selection-start-line="280" selection-start-column="33" selection-end-line="280" selection-end-column="41" />
                   <folding>
                     <element signature="e#0#52#0" expanded="true" />
@@ -50,7 +59,7 @@
           <file leaf-file-name="rhythmgenerator.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="317">
+                <state relative-caret-position="209">
                   <caret line="69" column="62" lean-forward="true" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
                   <folding>
                     <element signature="e#0#34#0" expanded="true" />
@@ -62,8 +71,8 @@
           <file leaf-file-name="test_harmonyrhythmgenerator.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="36">
-                  <caret line="46" selection-start-line="46" selection-end-line="46" />
+                <state relative-caret-position="238">
+                  <caret line="20" selection-start-line="20" selection-end-line="20" />
                 </state>
               </provider>
             </entry>
@@ -75,8 +84,8 @@
           <file leaf-file-name="rhythmgenerator.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="306">
-                  <caret line="77" column="9" selection-start-line="77" selection-start-column="9" selection-end-line="77" selection-end-column="9" />
+                <state relative-caret-position="1094">
+                  <caret line="353" column="73" selection-start-line="353" selection-start-column="63" selection-end-line="353" selection-end-column="73" />
                   <folding>
                     <element signature="e#0#34#0" expanded="true" />
                   </folding>
@@ -219,8 +228,8 @@
         <option value="$PROJECT_DIR$/python/musiclib/licks/trainmm.py" />
         <option value="$PROJECT_DIR$/python/tests/test_lickgenerator.py" />
         <option value="$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py" />
-        <option value="$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py" />
         <option value="$PROJECT_DIR$/python/musiclib/rhythmgenerator.py" />
+        <option value="$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py" />
         <option value="$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py" />
       </list>
     </option>
@@ -299,7 +308,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="show&#9;null&#9;null&#10;test_har&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_harmonypitchgenerator.py&#10;test_me&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_melodybackbonegenerator.py&#10;test_sca&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_scale.py&#10;scale&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/scale.py&#10;pro&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/helpers/probability.py&#10;mar&#9;null&#9;null&#10;markovc&#9;null&#9;null&#10;key&#9;null&#9;null&#10;pitchclas&#9;null&#9;null&#10;struc&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/structurefactory.py&#10;subph&#9;null&#9;null&#10;music&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/musicunitnode.py&#10;structur&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/structuralelement.py&#10;jit&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/jitter.py&#10;jitter&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/jitter.py&#10;dynam&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/dynamics.py&#10;main&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/main.py&#10;arpeggio&#9;null&#9;null&#10;calculateCh&#9;null&#9;null&#10;structuref&#9;null&#9;null&#10;RootNode&#9;null&#9;null&#10;root&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/rootnode.py&#10;per&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performancesystem.py&#10;mapp&#9;null&#9;null&#10;struct&#9;null&#9;null&#10;musicuni&#9;null&#9;null&#10;note&#9;null&#9;null&#10;music21&#9;null&#9;null&#10;brok&#9;null&#9;null&#10;test_dyn&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/tests/performance/test_dynamics.py&#10;performance&#9;null&#9;null&#10;tempoman&#9;null&#9;null&#10;calcMetr&#9;null&#9;null&#10;sust&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/harmony/models/part/sustainedchordpartmodel.py&#10;chord&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/chordprofile.py&#10;broken&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/harmony/models/part/brokenchordmodel.py&#10;probab&#9;null&#9;null&#10;probabil&#9;null&#9;null&#10;probabili&#9;null&#9;null&#10;rhythmsp&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/rhythmspace.py&#10;chordpr&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/chordprofile.py&#10;dynamics&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performer/dynamics.py&#10;techni&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/styles/default/techniques.py&#10;perform&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performancesystem.py&#10;compositions&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/compositionsystem.py&#10;activepar&#9;null&#9;null&#10;musicunit&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/musicunitnode.py&#10;system&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/core/system.py&#10;getpart&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="rhythmspa&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/rhythmspace.py&#10;show&#9;null&#9;null&#10;test_har&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_harmonypitchgenerator.py&#10;test_me&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_melodybackbonegenerator.py&#10;test_sca&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/tests/test_scale.py&#10;scale&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/scale.py&#10;pro&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/helpers/probability.py&#10;mar&#9;null&#9;null&#10;markovc&#9;null&#9;null&#10;key&#9;null&#9;null&#10;pitchclas&#9;null&#9;null&#10;struc&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/structurefactory.py&#10;subph&#9;null&#9;null&#10;music&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/musicunitnode.py&#10;structur&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/structuralelement.py&#10;jit&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/jitter.py&#10;jitter&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/jitter.py&#10;dynam&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performers/dynamics.py&#10;main&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/main.py&#10;arpeggio&#9;null&#9;null&#10;calculateCh&#9;null&#9;null&#10;structuref&#9;null&#9;null&#10;RootNode&#9;null&#9;null&#10;root&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/rootnode.py&#10;per&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performancesystem.py&#10;mapp&#9;null&#9;null&#10;struct&#9;null&#9;null&#10;musicuni&#9;null&#9;null&#10;note&#9;null&#9;null&#10;music21&#9;null&#9;null&#10;brok&#9;null&#9;null&#10;test_dyn&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/tests/performance/test_dynamics.py&#10;performance&#9;null&#9;null&#10;tempoman&#9;null&#9;null&#10;calcMetr&#9;null&#9;null&#10;sust&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/harmony/models/part/sustainedchordpartmodel.py&#10;chord&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/chordprofile.py&#10;broken&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/harmony/models/part/brokenchordmodel.py&#10;probab&#9;null&#9;null&#10;probabil&#9;null&#9;null&#10;probabili&#9;null&#9;null&#10;rhythmsp&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/rhythmspace.py&#10;chordpr&#9;FILE&#9;file:///home/valerio/PycharmProjects/musiclib/python/musiclib/harmonypitch/chordprofile.py&#10;dynamics&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performer/dynamics.py&#10;techni&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/styles/default/techniques.py&#10;perform&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/performance/performancesystem.py&#10;compositions&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/compositionsystem.py&#10;activepar&#9;null&#9;null&#10;musicunit&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/composition/structure/musicunitnode.py&#10;system&#9;FILE&#9;file:///home/valerio/PycharmProjects/dev/melodrive/python/melodrive/core/system.py" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
@@ -478,7 +487,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="1055" extended-state="7" />
+    <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48976377" visible="true" weight="0.124123044" />
@@ -486,7 +495,7 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5005291" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.47089946" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" sideWeight="0.5102362" side_tool="true" weight="0.102536425" />
@@ -845,13 +854,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmspace.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="61" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/musiclib/metre.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -867,26 +869,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4110">
-          <caret line="280" column="41" selection-start-line="280" selection-start-column="33" selection-end-line="280" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
+        <state relative-caret-position="209">
           <caret line="69" column="62" lean-forward="true" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
@@ -894,10 +879,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4488">
+          <caret line="280" column="41" selection-start-line="280" selection-start-column="33" selection-end-line="280" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmspace.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="15" column="61" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="158" column="4" selection-start-line="158" selection-start-column="4" selection-end-line="158" selection-end-column="4" />
+        <state relative-caret-position="1746">
+          <caret line="169" lean-forward="true" selection-start-line="169" selection-end-line="169" />
           <folding>
             <element signature="e#0#58#0" expanded="true" />
           </folding>

@@ -14,12 +14,19 @@ lowestMetricalLevelOptions = {FOURFOUR: 3,
 tactusDistScores = {FOURFOUR: [1, 0.6, 0.4, 0.2],
                     THREEFOUR: [1, 0.6, 0.5]}
 
-# max percentage impact of different metrical level accents on metric
-# position score. Each value in the lists refers to the metrical level
-# associated to the index of the list. The higher the values the more likely
-# is for shorter durations to be picked
-metricalAccentImpact = {FOURFOUR:[0, 0.03, 0.06, 0.09],
-                        THREEFOUR:[0, 0.03, 0.06,]}
+# scores associated to the metrical prominence. Higher metrical levels are
+# favoured. The raw indexes of the list represent the metrical level,
+# the column indexes represent the metrical accent.
+metricalProminenceScores = {FOURFOUR: [[1, 0, 0, 0],
+                                       [0.7, 1, 0, 0],
+                                       [0.3, 0.5, 1, 0],
+                                       [0.1, 0.3, 0.5, 1],
+                                       ],
+                            THREEFOUR:[[1, 0, 0],
+                                       [0.7, 1, 0],
+                                       [0.5, 0.7, 1],
+                                       [0.2, 0.3, 0.6]]
+                            }
 
 weightScores = {FOURFOUR: {"distHarmonicTactus": 1,
                            "metricalPosition": 1},
@@ -58,8 +65,11 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
         self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
                                                       metre)
+
         self._tactusDistScores = tactusDistScores[timeSignature]
-        self._metricalAccentImpact = metricalAccentImpact[timeSignature]
+        self._metricalProminenceScores = metricalProminenceScores[
+            timeSignature]
+
         self._weightScores = weightScores[timeSignature]
         self._probabilityDot = probabilityDot[timeSignature]
         self._probabilitySingleDot = probabilitySingleDot[timeSignature]
@@ -158,49 +168,6 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         return rhythmicSeq
 
 
-    # TODO: Change this to _calcMetricPositionMetric in RhythmGeneration
-    def _calcScoreMetricalPosition(self, candidates, harmonicMetre,
-                                   harmonicDensityImpact):
-        """Caluclates a score related to the metrical position of the
-        candidate durations. Longer tend to be favoured, especially on
-        strong metrical points.
-
-        Args:
-            harmonicMetre (HarmonicMetre):
-            candidates (list): All the candidates to be evaluated
-            harmonicDensityImpact (float):
-
-        Returns:
-            metricalPositionScores (list): List with the scores of metrical
-                                           position for all the candidates
-        """
-
-        MIDVALUE = 0.5
-
-        metricalPositionScores = []
-        candidatesMetricalAccent = candidates[0].getMetricalAccent()
-
-        harmonicLevels = harmonicMetre.getHarmonicMetricalLevels()
-        maxScore = len(harmonicLevels) -  1
-
-        # calculate basic score for all candidates
-        for candidate in candidates:
-            candidateMetricalLevel = candidate.getMetricalLevel()
-
-            score = abs(maxScore - candidateMetricalLevel)
-            normalisedScore = score / maxScore
-
-            metricalPositionScores.append(normalisedScore)
-
-        # compress the scores based on harmonic density and metrical accent
-        attractionRate = (self._metricalAccentImpact[candidatesMetricalAccent] +
-                                harmonicDensityImpact)
-
-        metricalPositionScores = self.compressValues(MIDVALUE,
-                                                     metricalPositionScores,
-                                                     attractionRate)
-        return metricalPositionScores
-
     #TODO: Change this with mapVAfeature from RhythmGenerator
     def _mapHarmonicDensity(self, harmonicDensity):
         """Maps harmonicDensity value onto interval [0, maxDensity] for
@@ -255,9 +222,8 @@ class HarmonyRhythmGenerator(RhythmGenerator):
                            each candidate duration
         """
 
-        # calculate metrical position scores
-        mp = self._calcScoreMetricalPosition(candidates, harmonicMetre,
-                                             harmonicDensityImpact)
+        # calculate metrical prominence scores
+        mp = self._calcMetricalProminenceMetric(candidates)
 
         # calculate distance harmonic tactus scores
         harmonicTactusLevel = harmonicMetre.getHarmonicTactusLevel()
