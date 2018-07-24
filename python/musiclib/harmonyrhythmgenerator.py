@@ -28,6 +28,12 @@ metricalProminenceScores = {FOURFOUR: [[1, 0, 0, 0],
                                        [0.2, 0.3, 0.6]]
                             }
 
+
+VAFeaturesMaxImpact = {
+    "entropy": 1,
+    "density": 1
+    }
+
 weightScores = {FOURFOUR: {"distHarmonicTactus": 1,
                            "metricalPosition": 1},
                 THREEFOUR: {"distHarmonicTactus": 1,
@@ -70,15 +76,14 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         self._metricalProminenceScores = metricalProminenceScores[
             timeSignature]
 
+        self._VAfeaturesMaxImpact = VAFeaturesMaxImpact
+
         self._weightScores = weightScores[timeSignature]
         self._probabilityDot = probabilityDot[timeSignature]
         self._probabilitySingleDot = probabilitySingleDot[timeSignature]
         self._probabilityTie = probabilityTie[timeSignature]
         self._probabilityRepeatBar = probabilityRepeatBar[timeSignature]
 
-    # TODO: This must be set when emotional state is updated
-    def setDensityImpact(self, newDensity):
-        self.densityImpact = self._mapHarmonicDensity(newDensity)
 
     # TODO: controller on top of generator to decide repetitions/variations
     # TODO: have hypermetre influence the generation
@@ -166,47 +171,6 @@ class HarmonyRhythmGenerator(RhythmGenerator):
             totDuration += rhythmicSeqElement[0]
 
         return rhythmicSeq
-
-
-    #TODO: Change this with mapVAfeature from RhythmGenerator
-    def _mapHarmonicDensity(self, harmonicDensity):
-        """Maps harmonicDensity value onto interval [0, maxDensity] for
-        given time signature and style
-
-        Returns:
-            densityImpact (float):
-        """
-
-        densityImpact = harmonicDensity / 1.41 * self._maxDensityImpact
-        return densityImpact
-
-
-    # TODO: Change this with comporessValues from RhythmGenerator
-    def compressValues(self, attractionValue, values, attractionRate):
-        """Compresses a list of values around a given value.
-
-        Args:
-            attractionValue (float): Value among which values will be attracted
-            values (list): List of values to transform
-            attractionRate (float): Number between 0 and 1 that determines
-                                    how much the values will be clustered
-                                    around 'attractionValue'
-
-        Returns:
-            commpressedValues (list):
-        """
-
-        compressedValues = []
-
-        for value in values:
-            dist = value - attractionValue
-            if dist >= 0:
-                compressedValue = value - (dist * attractionRate)
-            else:
-                compressedValue = value + (abs(dist) * attractionRate)
-            compressedValues.append(compressedValue)
-
-        return compressedValues
 
 
     def _calcScores(self, candidates, harmonicMetre, harmonicDensityImpact):

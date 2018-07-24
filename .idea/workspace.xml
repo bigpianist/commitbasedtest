@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e0778e67-c76a-4c8d-bd65-702ad35f19a1" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/musiclib/rhythmgenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/musiclib/rhythmgenerator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,8 +24,8 @@
           <file leaf-file-name="harmonyrhythmgenerator.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1746">
-                  <caret line="169" lean-forward="true" selection-start-line="169" selection-end-line="169" />
+                <state relative-caret-position="-28">
+                  <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
                   <folding>
                     <element signature="e#0#58#0" expanded="true" />
                   </folding>
@@ -47,8 +45,19 @@
           <file leaf-file-name="melodyrhythmgenerator.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="4488">
+                <state relative-caret-position="3528">
                   <caret line="280" column="41" selection-start-line="280" selection-start-column="33" selection-end-line="280" selection-end-column="41" />
+                  <folding>
+                    <element signature="e#0#52#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="test_rhythmgenerator.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/python/tests/test_rhythmgenerator.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-54">
                   <folding>
                     <element signature="e#0#52#0" expanded="true" />
                   </folding>
@@ -84,8 +93,8 @@
           <file leaf-file-name="rhythmgenerator.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1094">
-                  <caret line="353" column="73" selection-start-line="353" selection-start-column="63" selection-end-line="353" selection-end-column="73" />
+                <state relative-caret-position="278">
+                  <caret line="88" column="61" selection-start-line="88" selection-start-column="36" selection-end-line="88" selection-end-column="61" />
                   <folding>
                     <element signature="e#0#34#0" expanded="true" />
                   </folding>
@@ -106,9 +115,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&quot;high&quot;</find>
-      <find>show</find>
-      <find>melodir</find>
       <find>map</find>
       <find>Scale</find>
       <find>markovOrd</find>
@@ -135,7 +141,10 @@
       <find>rsf</find>
       <find>metricalLevel</find>
       <find>_calcScoreDistHarmonicTactus</find>
+      <find>mapVA</find>
+      <find>_VAfeaturesMaxImpact</find>
       <find>disttact</find>
+      <find>_mapHarmonicDensity</find>
     </findStrings>
     <replaceStrings>
       <replace>EIGHTHNOTEDURATION</replace>
@@ -595,13 +604,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive_styles/ambient/performance.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../dev/melodrive/python/melodrive/performance/performers/dynamics.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="792">
@@ -869,30 +871,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="69" column="62" lean-forward="true" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/tests/test_harmonyrhythmgenerator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4488">
-          <caret line="280" column="41" selection-start-line="280" selection-start-column="33" selection-end-line="280" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -903,10 +885,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/melodyrhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3528">
+          <caret line="280" column="41" selection-start-line="280" selection-start-column="33" selection-end-line="280" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/tests/test_rhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-54">
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/musiclib/rhythmgenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="69" column="62" lean-forward="true" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/python/musiclib/harmonyrhythmgenerator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1746">
-          <caret line="169" lean-forward="true" selection-start-line="169" selection-end-line="169" />
+        <state relative-caret-position="-28">
+          <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
           <folding>
             <element signature="e#0#58#0" expanded="true" />
           </folding>
