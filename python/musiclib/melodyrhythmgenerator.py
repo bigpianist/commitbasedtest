@@ -1,5 +1,6 @@
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
+from musiclib.rhythmdata import rhythmData as rd
 import random
 
 #TODO: Internal repetition, prefer metrical levels of tuplets, elaborate
@@ -8,115 +9,49 @@ import random
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-
-lowestMetricalLevelOptions = {FOURFOUR: 4,
-                              THREEFOUR: 3}
-
-VAFeaturesMaxImpact = {
-    "entropy": 1,
-    "density": 1
-    }
-
-
-# probability of having a tie at different metrical levels
-probabilityTie = {FOURFOUR: [0.1, 0.4, 0.6, 0.7, 0.7],
-                  THREEFOUR: [0.3, 0.2, 0.2, 0.1]}
-
-
-# probability of having a dot for different metrical levels. Probabilty of
-# having a dot in the lowest metrical level must always be 0!
-probabilityDot = {FOURFOUR: [0, 0.2, 0.2, 0.1, 0],
-                  THREEFOUR: [0, 0.2, 0.2, 0]}
-
-# probability of single dot vs double dot. Double dot is only possible if
-# metrical level has at least 2 children below it.
-probabilitySingleDot = {FOURFOUR: [0, 0.8, 0.8, 1, 0],
-                        THREEFOUR: [0, 0.8, 1, 0]}
-
-
-densityImpactMetricalLevels = {FOURFOUR: [-0.5, -0.2, 0, 0.6, 1],
-                               THREEFOUR: [0, 0.3, 0.6, 1]}
-
+lowestMetricalLevelOptions = rd["melody"]["lowestMetricalLevelOptions"]
 
 # scores associated to the distance from the metrical level of the tactus
 # The indexes of the list represent the distance in metrical levels.
-tactusDistScores = {FOURFOUR: [1, 0.6, 0.4, 0.2],
-                    THREEFOUR: [1, 0.6, 0.5]}
+tactusDistScores = rd["melody"]["tactusDistScores"]
 
 # scores associated to the metrical prominence. Higher metrical levels are
 # favoured. The raw indexes of the list represent the metrical level,
 # the column indexes represent the metrical accent.
-metricalProminenceScores = {FOURFOUR: [[1, 0, 0, 0, 0],
-                                       [0.7, 1, 0, 0, 0],
-                                       [0.3, 0.5, 1, 0, 0],
-                                       [0.1, 0.3, 0.5, 1, 0],
-                                       [0.05, 0.2, 0.2, 0.5, 1]],
-                            THREEFOUR:[[1, 0, 0, 0],
-                                       [0.7, 1, 0, 0],
-                                       [0.5, 0.7, 1, 0],
-                                       [0.2, 0.3, 0.6, 1]]
-                            }
+metricalProminenceScores = rd["melody"]["metricalProminenceScores"]
 
+musicFeaturesMaxImpact = rd["melody"]["metricalProminenceScores"]
 
-weightMetrics = {FOURFOUR: {"distTactus": 1,
-                           "metricalProminence": 1},
-                THREEFOUR: {"distTactus": 1,
-                            "metricalProminence": 1}}
+weightMetrics = rd["melody"]["weightMetrics"]
+
+# probability of having a dot for different metrical levels. Probabilty of
+# having a dot in the lowest metrical level must always be 0!
+probabilityDot = rd["melody"]["probabilityDot"]
+
+# probability of single dot vs double dot. Double dot is only possible if
+# metrical level has at least 2 children below it.
+probabilitySingleDot = rd["melody"]["probabilitySingleDot"]
+
+densityImpactMetricalLevels = rd["melody"]["densityImpactMetricalLevels"]
+
+# probability of having a tie
+probabilityTie = rd["melody"]["probabilityTie"]
 
 
 # probability of having a tuplet given a metrical level and metrical accent.
 # Data is in the format prob[metricalLevel][metricalAccent]
-probTuplets = {FOURFOUR: [[0.02, 0, 0, 0, 0],
-                          [0.03, 0.07, 0, 0, 0],
-                          [0.05, 0.08, 0.1, 0, 0],
-                          [0.05, 0.08, 0.1, 0.12, 0],
-                          [0, 0, 0, 0, 0]],
-               THREEFOUR: [[0, 0, 0, 0],
-                           [0.05, 0.08, 0.1, 0],
-                           [0.05, 0.08, 0.1, 0],
-                           [0, 0, 0, 0]]
-               }
+probTuplets = rd["melody"]["probTuplets"]
 
 # probability distr for type of tuplet across metrical levels. Data
 # is in the format prob[metricalLevel][tupletType]. Column index 0 stands
 # for the probability of triplet, index 1: probability of quintuplet,
 # index 2: probability of septuplet
-probTupletType = {FOURFOUR: [[9, 1, 1],
-                             [9, 1, 1],
-                             [8, 1, 1],
-                             [1, 0, 0],
-                             [0, 0, 0]],
-                  THREEFOUR: [[0, 0, 0],
-                              [8, 1, 1],
-                              [1, 0, 0],
-                              [0, 0, 0]]
-                  }
+probTupletType = rd["melody"]["probTupletType"]
 
 # info re pickup and prolongation of a MU to bars previous or after core
 # bars. 'distrMetricalLevel' provides probability to be the metrical
 # level of the pickup/prolong, where metrical level = 'distrMetricalLevel'+1
-additionalMUmaterial = {
-    FOURFOUR:{
-        "pickup": {
-            "prob": 0.6,
-            "distrMetricalLevel": [0.1, 0.3, 0.4, 0.2]
-        },
-        "prolongation": {
-            "prob": 0.15,
-            "distrMetricalLevel": [0.05, 0.35, 0.4, 0.2]
-        },
-    },
-    THREEFOUR:{
-        "pickup": {
-            "prob": 0.2,
-            "distrMetricalLevel": [0.3, 0.4, 0.3]
-        },
-        "prolongation": {
-            "prob": 0.2,
-            "distrMetricalLevel": [0.3, 0.4, 0.3]
-        },
-    }
-}
+additionalMUmaterial = rd["melody"]["additionalMUmaterial"]
 
 
 class MelodyRhythmGenerator(RhythmGenerator):
@@ -137,7 +72,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         self._metricalProminenceScores = metricalProminenceScores[
             timeSignature]
 
-        self._VAfeaturesMaxImpact = VAFeaturesMaxImpact
+        self._VAfeaturesMaxImpact = musicFeaturesMaxImpact
 
         self._densityImpactMetricalLevels = densityImpactMetricalLevels[
             timeSignature]
