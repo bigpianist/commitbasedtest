@@ -63,21 +63,9 @@ class RhythmGenerator(object):
         self.entropyImpact = None
         self.densityImpact = None
 
-        timeSignature = metre.getTimeSignature()
-        lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
         self.rsf = RhythmSpaceFactory()
-
-        self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
-                                                     metre)
         self._barDuration = metre.getBarDuration()
-        #self._probabilityTie = probabilityTie[timeSignature]
-        #self._probabilityDot = probabilityDot[timeSignature]
-        #self._probabilitySingleDot = probabilitySingleDot[timeSignature]
-        #self._weightMetrics = weightMetrics[timeSignature]
-        #self._densityImpactMetricalLevels = densityImpactMetricalLevels[
-        # timeSignature]
-        #self._tactusDistScores = tactusDistScores[timeSignature]
-        # self._metricalProminenceScores = metricalProminenceScores[timeSignature]
+
 
 
     def setEntropyImpact(self, newEntropy):
