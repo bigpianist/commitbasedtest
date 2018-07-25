@@ -256,9 +256,14 @@ class RhythmSpaceFactory(object):
             parent.addChild(child)
 
             # assign metrical accent to child
+            #TODO if this is always the same on every node,
+            # you could just store it on the root and reference
+            # the root each time. That way you wouldn't have to
+            # change every node if you change the metricalAccent
             child.assignMetricalAccent(parent, currentLevel)
 
             # assign lowest metrical level to child
+            # TODO: ditto, I'm not sure that this is necessary at every node
             child.setLowestMetricalLevel(lowestMetricalLevel)
 
             self._expandRoot(lowestMetricalLevel, metricalLevels,
