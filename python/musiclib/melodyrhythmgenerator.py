@@ -1,5 +1,6 @@
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
+from musiclib.rhythmdata import rhythmData as rd
 import random
 
 #TODO: Internal repetition, prefer metrical levels of tuplets, elaborate
@@ -8,60 +9,49 @@ import random
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
+lowestMetricalLevelOptions = rd["melody"]["lowestMetricalLevelOptions"]
+
+# scores associated to the distance from the metrical level of the tactus
+# The indexes of the list represent the distance in metrical levels.
+tactusDistScores = rd["melody"]["tactusDistScores"]
+
+# scores associated to the metrical prominence. Higher metrical levels are
+# favoured. The raw indexes of the list represent the metrical level,
+# the column indexes represent the metrical accent.
+metricalProminenceScores = rd["melody"]["metricalProminenceScores"]
+
+musicFeaturesMaxImpact = rd["melody"]["metricalProminenceScores"]
+
+weightMetrics = rd["melody"]["weightMetrics"]
+
+# probability of having a dot for different metrical levels. Probabilty of
+# having a dot in the lowest metrical level must always be 0!
+probabilityDot = rd["melody"]["probabilityDot"]
+
+# probability of single dot vs double dot. Double dot is only possible if
+# metrical level has at least 2 children below it.
+probabilitySingleDot = rd["melody"]["probabilitySingleDot"]
+
+densityImpactMetricalLevels = rd["melody"]["densityImpactMetricalLevels"]
+
+# probability of having a tie
+probabilityTie = rd["melody"]["probabilityTie"]
+
 
 # probability of having a tuplet given a metrical level and metrical accent.
 # Data is in the format prob[metricalLevel][metricalAccent]
-probTuplets = {FOURFOUR: [[0.02, 0, 0, 0, 0],
-                          [0.03, 0.07, 0, 0, 0],
-                          [0.05, 0.08, 0.1, 0, 0],
-                          [0.05, 0.08, 0.1, 0.12, 0],
-                          [0, 0, 0, 0, 0]],
-               THREEFOUR: [[0, 0, 0, 0],
-                           [0.05, 0.08, 0.1, 0],
-                           [0.05, 0.08, 0.1, 0],
-                           [0, 0, 0, 0]]
-               }
+probTuplets = rd["melody"]["probTuplets"]
 
 # probability distr for type of tuplet across metrical levels. Data
 # is in the format prob[metricalLevel][tupletType]. Column index 0 stands
 # for the probability of triplet, index 1: probability of quintuplet,
 # index 2: probability of septuplet
-probTupletType = {FOURFOUR: [[9, 1, 1],
-                             [9, 1, 1],
-                             [8, 1, 1],
-                             [1, 0, 0],
-                             [0, 0, 0]],
-                  THREEFOUR: [[0, 0, 0],
-                              [8, 1, 1],
-                              [1, 0, 0],
-                              [0, 0, 0]]
-                  }
+probTupletType = rd["melody"]["probTupletType"]
 
 # info re pickup and prolongation of a MU to bars previous or after core
 # bars. 'distrMetricalLevel' provides probability to be the metrical
 # level of the pickup/prolong, where metrical level = 'distrMetricalLevel'+1
-additionalMUmaterial = {
-    FOURFOUR:{
-        "pickup": {
-            "prob": 0.6,
-            "distrMetricalLevel": [0.1, 0.3, 0.4, 0.2]
-        },
-        "prolongation": {
-            "prob": 0.15,
-            "distrMetricalLevel": [0.05, 0.35, 0.4, 0.2]
-        },
-    },
-    THREEFOUR:{
-        "pickup": {
-            "prob": 0.2,
-            "distrMetricalLevel": [0.3, 0.4, 0.3]
-        },
-        "prolongation": {
-            "prob": 0.2,
-            "distrMetricalLevel": [0.3, 0.4, 0.3]
-        },
-    }
-}
+additionalMUmaterial = rd["melody"]["additionalMUmaterial"]
 
 
 class MelodyRhythmGenerator(RhythmGenerator):
@@ -74,6 +64,24 @@ class MelodyRhythmGenerator(RhythmGenerator):
         super(MelodyRhythmGenerator, self).__init__(metre)
 
         timeSignature = metre.getTimeSignature()
+        lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
+        self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
+                                                      metre)
+
+        self._tactusDistScores = tactusDistScores[timeSignature]
+        self._metricalProminenceScores = metricalProminenceScores[
+            timeSignature]
+
+        self._VAfeaturesMaxImpact = musicFeaturesMaxImpact
+
+        self._densityImpactMetricalLevels = densityImpactMetricalLevels[
+            timeSignature]
+
+        self._weightMetrics = weightMetrics[timeSignature]
+        self._probabilityDot = probabilityDot[timeSignature]
+        self._probabilitySingleDot = probabilitySingleDot[timeSignature]
+        self._probabilityTie = probabilityTie[timeSignature]
+
         self._probTuplets = probTuplets[timeSignature]
         self._probTupletType = probTupletType[timeSignature]
         self._additionalMUmaterial = additionalMUmaterial[timeSignature]
@@ -148,7 +156,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         candidates = currentRS.getDurationCandidates(numDots)
 
         # calculate scores associated to the metrics
-        scores = self._calcMetrics(candidates, metre)
+        scores = self._calcScores(candidates, metre)
 
         # choose new duration
         currentRS = self._decideNextDuration(scores, candidates)
@@ -256,7 +264,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         return rhythmicSeq
 
 
-    def _calcMetrics(self, candidates, metre):
+    def _calcScores(self, candidates, metre):
         """Returns combined scores for all the candidate durations.
 
         Args:

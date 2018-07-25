@@ -1,48 +1,44 @@
 from musiclib.rhythmspacefactory import RhythmSpaceFactory
+from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
+from musiclib.rhythmdata import rhythmData as rd
 import random
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-lowestMetricalLevelOptions = {FOURFOUR: 3,
-                              THREEFOUR: 2}
+lowestMetricalLevelOptions = rd["harmony"]["lowestMetricalLevelOptions"]
 
-# max percentage impact of harmonic density on scores
-maxDensityImpact = {FOURFOUR: 0.15,
-                    THREEFOUR: 0.15}
+# scores associated to the distance from the metrical level of the tactus
+# The indexes of the list represent the distance in metrical levels.
+tactusDistScores = rd["harmony"]["tactusDistScores"]
 
-# max percentage impact of different metrical level accents on metric
-# position score. Each value in the lists refers to the metrical level
-# associated to the index of the list. The higher the values the more likely
-# is for shorter durations to be picked
-metricalAccentImpact = {FOURFOUR:[0, 0.03, 0.06, 0.09],
-                        THREEFOUR:[0, 0.03, 0.06,]}
+# scores associated to the metrical prominence. Higher metrical levels are
+# favoured. The raw indexes of the list represent the metrical level,
+# the column indexes represent the metrical accent.
+metricalProminenceScores = rd["harmony"]["metricalProminenceScores"]
 
-weightScores = {FOURFOUR: {"distHarmonicTactus": 1,
-                           "metricalPosition": 1},
-                THREEFOUR: {"distHarmonicTactus": 1,
-                            "metricalPosition": 1}}
+musicFeaturesMaxImpact = rd["harmony"]["metricalProminenceScores"]
+
+weightMetrics = rd["harmony"]["weightMetrics"]
 
 # probability of having a dot for different metrical levels. Probabilty of
 # having a dot in the lowest metrical level must always be 0!
-probabilityDot = {FOURFOUR: [0, 0.5, 0.5, 0],
-                  THREEFOUR: [0, 0.1, 0]}
+probabilityDot = rd["harmony"]["probabilityDot"]
 
 # probability of single dot vs double dot. Double dot is only possible if
 # metrical level has at least 2 children below it.
-probabilitySingleDot = {FOURFOUR: [0, 0, 1, 0],
-                        THREEFOUR: [0, 1, 0]}
+probabilitySingleDot = rd["harmony"]["probabilitySingleDot"]
+
+densityImpactMetricalLevels = rd["harmony"]["densityImpactMetricalLevels"]
 
 # probability of having a tie
-probabilityTie = {FOURFOUR: [0.5, 0.02, 0.1, 0.9],
-                  THREEFOUR: [0.3, 0.2, 0.9]}
+probabilityTie = rd["harmony"]["probabilityTie"]
 
-probabilityRepeatBar = {FOURFOUR: 0.5,
-                        THREEFOUR: 0.5}
+probabilityRepeatBar = rd["harmony"]["probabilityRepeatBar"]
 
 
-class HarmonyRhythmGenerator(object):
+class HarmonyRhythmGenerator(RhythmGenerator):
     """HarmonyRhythmGenerator is responsible for generating harmonic rhythm
 
     Attributes:
@@ -50,24 +46,28 @@ class HarmonyRhythmGenerator(object):
     """
 
     def __init__(self, metre):
-        super(HarmonyRhythmGenerator, self).__init__()
+        super(HarmonyRhythmGenerator, self).__init__(metre)
 
         timeSignature = metre.getTimeSignature()
         lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
-        rsf = RhythmSpaceFactory()
-        self.rhythmSpace = rsf.createRhythmSpace(lowestMetricalLevel, metre)
-        self._maxDensityImpact = maxDensityImpact[timeSignature]
-        self._metricalAccentImpact = metricalAccentImpact[timeSignature]
-        self._weightScores = weightScores[timeSignature]
-        self._barDuration = metre.getBarDuration()
+        self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
+                                                      metre)
+
+        self._tactusDistScores = tactusDistScores[timeSignature]
+        self._metricalProminenceScores = metricalProminenceScores[
+            timeSignature]
+
+        self._musicFeaturesMaxImpact = musicFeaturesMaxImpact
+
+        self._densityImpactMetricalLevels = densityImpactMetricalLevels[
+            timeSignature]
+
+        self._weightMetrics = weightMetrics[timeSignature]
         self._probabilityDot = probabilityDot[timeSignature]
         self._probabilitySingleDot = probabilitySingleDot[timeSignature]
         self._probabilityTie = probabilityTie[timeSignature]
         self._probabilityRepeatBar = probabilityRepeatBar[timeSignature]
 
-    # TODO: This must be set when emotional state is updated
-    def setDensityImpact(self, newDensity):
-        self.densityImpact = self._mapHarmonicDensity(newDensity)
 
     # TODO: controller on top of generator to decide repetitions/variations
     # TODO: have hypermetre influence the generation
@@ -131,7 +131,7 @@ class HarmonyRhythmGenerator(object):
                                       harmonicDensityImpact)
 
             # choose new duration
-            currentRS = self._decideDuration(scores, candidates)
+            currentRS = self._decideNextDuration(scores, candidates)
 
             duration = currentRS.getDuration()
 
@@ -156,127 +156,6 @@ class HarmonyRhythmGenerator(object):
 
         return rhythmicSeq
 
-    # TODO: Change this to _calcDistTactusMetric in RhythmGeneration
-    def _calcScoreDistHarmonicTactus(self, candidates, harmonicMetre,
-                                     harmonicDensityImpact):
-        """Calculates distance from tactus scores for all candidates. The
-        highest the distance the lower the score.
-
-        Args:
-            harmonicMetre (HarmonicMetre):
-            candidates (list): All the candidates to be evaluated
-            harmonicDensityImpact (float):
-
-        Returns:
-            tactusDistScores (list): List with all the scores for the
-                                     distance from harmonic tactus
-        """
-
-        MIDVALUE = 0.5
-        tactusDistScores = []
-
-        harmonicTactusLevel = harmonicMetre.getHarmonicTactusLevel()
-        harmonicLevels = harmonicMetre.getHarmonicMetricalLevels()
-        maxScore = len(harmonicLevels) - 1
-
-        # calculate score for all candidates
-        for candidate in candidates:
-            candidateMetricalLevel = candidate.getMetricalLevel()
-            metricalDist = abs(harmonicTactusLevel - candidateMetricalLevel)
-
-            # get from distance to normalised score
-            score = (maxScore - metricalDist) / maxScore
-
-            tactusDistScores.append(score)
-
-        # compress the scores based on harmonic density
-        tactusDistScores = self.compressValues(MIDVALUE, tactusDistScores,
-                                               harmonicDensityImpact)
-        return tactusDistScores
-
-    # TODO: Change this to _calcMetricPositionMetric in RhythmGeneration
-    def _calcScoreMetricalPosition(self, candidates, harmonicMetre,
-                                   harmonicDensityImpact):
-        """Caluclates a score related to the metrical position of the
-        candidate durations. Longer tend to be favoured, especially on
-        strong metrical points.
-
-        Args:
-            harmonicMetre (HarmonicMetre):
-            candidates (list): All the candidates to be evaluated
-            harmonicDensityImpact (float):
-
-        Returns:
-            metricalPositionScores (list): List with the scores of metrical
-                                           position for all the candidates
-        """
-
-        MIDVALUE = 0.5
-
-        metricalPositionScores = []
-        candidatesMetricalAccent = candidates[0].getMetricalAccent()
-
-        harmonicLevels = harmonicMetre.getHarmonicMetricalLevels()
-        maxScore = len(harmonicLevels) -  1
-
-        # calculate basic score for all candidates
-        for candidate in candidates:
-            candidateMetricalLevel = candidate.getMetricalLevel()
-
-            score = abs(maxScore - candidateMetricalLevel)
-            normalisedScore = score / maxScore
-
-            metricalPositionScores.append(normalisedScore)
-
-        # compress the scores based on harmonic density and metrical accent
-        attractionRate = (self._metricalAccentImpact[candidatesMetricalAccent] +
-                                harmonicDensityImpact)
-
-        metricalPositionScores = self.compressValues(MIDVALUE,
-                                                     metricalPositionScores,
-                                                     attractionRate)
-        return metricalPositionScores
-
-    #TODO: Change this with mapVAfeature from RhythmGenerator
-    def _mapHarmonicDensity(self, harmonicDensity):
-        """Maps harmonicDensity value onto interval [0, maxDensity] for
-        given time signature and style
-
-        Returns:
-            densityImpact (float):
-        """
-
-        densityImpact = harmonicDensity / 1.41 * self._maxDensityImpact
-        return densityImpact
-
-
-    # TODO: Change this with comporessValues from RhythmGenerator
-    def compressValues(self, attractionValue, values, attractionRate):
-        """Compresses a list of values around a given value.
-
-        Args:
-            attractionValue (float): Value among which values will be attracted
-            values (list): List of values to transform
-            attractionRate (float): Number between 0 and 1 that determines
-                                    how much the values will be clustered
-                                    around 'attractionValue'
-
-        Returns:
-            commpressedValues (list):
-        """
-
-        compressedValues = []
-
-        for value in values:
-            dist = value - attractionValue
-            if dist >= 0:
-                compressedValue = value - (dist * attractionRate)
-            else:
-                compressedValue = value + (abs(dist) * attractionRate)
-            compressedValues.append(compressedValue)
-
-        return compressedValues
-
 
     def _calcScores(self, candidates, harmonicMetre, harmonicDensityImpact):
         """Returns combined scores for all the candidate durations.
@@ -291,114 +170,31 @@ class HarmonyRhythmGenerator(object):
                            each candidate duration
         """
 
-        # calculate metrical position scores
-        mp = self._calcScoreMetricalPosition(candidates, harmonicMetre,
-                                             harmonicDensityImpact)
+        # calculate metrical prominence scores
+        mp = self._calcMetricalProminenceMetric(candidates)
 
         # calculate distance harmonic tactus scores
-        dt = self._calcScoreDistHarmonicTactus(candidates, harmonicMetre,
-                                               harmonicDensityImpact)
+        harmonicTactusLevel = harmonicMetre.getHarmonicTactusLevel()
+        dt = self._calcDistFromTactusMetric(candidates, harmonicTactusLevel)
 
         # retrieve score weights
-        a = self._weightScores["metricalPosition"]
-        b = self._weightScores["distHarmonicTactus"]
+        a = self._weightMetrics["metricalProminence"]
+        b = self._weightMetrics["distTactus"]
 
         # create new list with linear combination of scores
         scores = [a*x + b*y for x, y in zip(mp, dt)]
 
+        MAXSCORE = a + b
+
+        # modify scores based on rhythmic density
+        scores = self._modifyScoresForDensity(candidates, scores, MAXSCORE)
+
+        # modify scores based on rhythmic entropy
+        scores = self._modifyScoresForEntropy(scores, MAXSCORE)
+
         return scores
 
 
-    # TODO: Change this to _decideDuration in RhythmGeneration
-    def _decideDuration(self, scores, candidates):
-        """Decides which duration to use next
-
-        Args:
-            scores (list): List of combined score for each candidate
-                           duration
-
-        Returns:
-            duration (RhythmSpace): Duration to be used
-        """
-
-        # transform scores in normalised cumulative distr
-        distr = toNormalisedCumulativeDistr(scores)
-
-        durationIndex = decideCumulativeDistrOutcome(distr)
-        return candidates[durationIndex]
-
-
-    # TODO: Change this to _decideToApplyTie in RhythmGeneration
-    def _decideToApplyTie(self, rhythmicSeqElement, metricalLevel):
-        """Decides whether to apply tie and adds a 't' to the duration
-
-        Args:
-            rhythmicSeqElement (list): [duration, None] - None indicates no tie
-            metricalLevel (int): Metrical level of chosen rhythm space node
-
-        Returns:
-            newDuration (list): Pair duration, 't' (symbol ofr tie), if tie
-                                gets applied
-        """
-
-        duration = rhythmicSeqElement[0]
-        r = random.random()
-        if r <= self._probabilityTie[metricalLevel]:
-            return [duration, 't']
-        else:
-            return [duration, None]
-
-
-    # TODO: Change this to _calcDotDuration in RhythmGeneration
-    def _calcDotDuration(self, duration, numDots):
-        """Calculates duration based on number of dots"""
-
-        dotMultiplier = 0
-
-        dotMultiplier = 0
-        for i in range(numDots+1):
-            dotMultiplier += 1/2**i
-        dottedDuration = duration * dotMultiplier
-        return [dottedDuration, None], numDots
-
-
-    def _decideToApplyDot(self, rhythmSpace):
-        """Decides whether to apply a dot either single or double.
-
-        Args:
-            rhythmSpace (RhythmSpace): Chosen rhythm space node
-
-        Returns:
-            newDuration (list): Pair duration, 't' (symbol ofr tie), if tie
-                                gets applied
-            numDots (int): Number of dots applied
-        """
-
-        duration = rhythmSpace.getDuration()
-        metricalLevel = rhythmSpace.getMetricalLevel()
-        r = random.random()
-
-        numDots = 0
-
-        # decide whether to apply a dot
-        if r <= self._probabilityDot[metricalLevel]:
-
-            # decide which type of dot to apply
-            r2 = random.random()
-
-            # handle single dot
-            if r2 <= self._probabilitySingleDot[metricalLevel]:
-                numDots = 1
-                return self._calcDotDuration(duration, numDots)
-
-            # handle double dot
-            else:
-                numDots = 2
-                return self._calcDotDuration(duration, numDots)
-
-        # handle case in which no dots were applied
-        else:
-            return [duration, None], numDots
 
 
 

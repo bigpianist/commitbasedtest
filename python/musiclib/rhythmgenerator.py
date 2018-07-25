@@ -54,7 +54,6 @@ weightMetrics = {FOURFOUR: {"distTactus": 1,
                 THREEFOUR: {"distTactus": 1,
                             "metricalProminence": 1}}
 
-
 class RhythmGenerator(object):
     """Base class for melody and harmony rhythm generator classes"""
 
@@ -63,34 +62,23 @@ class RhythmGenerator(object):
         self.entropyImpact = None
         self.densityImpact = None
 
-        timeSignature = metre.getTimeSignature()
-        lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
         self.rsf = RhythmSpaceFactory()
-
-        self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
-                                                     metre)
         self._barDuration = metre.getBarDuration()
-        self._probabilityTie = probabilityTie[timeSignature]
-        self._probabilityDot = probabilityDot[timeSignature]
-        self._probabilitySingleDot = probabilitySingleDot[timeSignature]
-        self._weightMetrics = weightMetrics[timeSignature]
-        self._densityImpactMetricalLevels = densityImpactMetricalLevels[timeSignature]
-        self._tactusDistScores = tactusDistScores[timeSignature]
-        self._metricalProminenceScores = metricalProminenceScores[timeSignature]
+
 
 
     def setEntropyImpact(self, newEntropy):
-        self.entropyImpact = self.mapVAfeature(newEntropy,
-                                    self._VAfeaturesMaxImpact["entropy"])
+        self.entropyImpact = self.mapMusicFeature(newEntropy,
+                                    self._musicFeaturesMaxImpact["entropy"])
 
 
     def setDensityImpact(self, newDensity):
-        self.densityImpact = self.apVAfeature(newDensity,
-                                    self._VAfeaturesMaxImpact["density"])
+        self.densityImpact = self.mapMusicFeature(newDensity,
+                                    self._musicFeaturesMaxImpact["density"])
 
 
     @staticmethod
-    def mapVAfeature(value, maxValue=1):
+    def mapMusicFeature(value, maxValue=1):
         """Maps a VA feature onto interval [0, maxValue].
 
         Args:
@@ -278,7 +266,7 @@ class RhythmGenerator(object):
             rhythmSpace (RhythmSpace): Chosen rhythm space node
 
         Returns:
-            newDuration (list): Pair duration, 't' (symbol ofr tie), if tie
+            newDuration (list): Pair duration, 't' (symbol for tie), if tie
                                 gets applied
             numDots (int): Number of dots applied
         """
@@ -354,6 +342,10 @@ class RhythmGenerator(object):
         newScores = self.compressValues(MIDVALUE, scores, self.entropyImpact)
 
         return newScores
+
+
+    def _calcScores(self):
+        pass
 
 
 

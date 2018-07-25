@@ -14,7 +14,7 @@ def testCalcMetricsWork():
     r.entropyImpact = 0.1
 
     candidates = [d2, d3, d4]
-    scores = r._calcMetrics(candidates, m)
+    scores = r._calcScores(candidates, m)
 
     for score in scores:
         assert 0 <= score <= 2
