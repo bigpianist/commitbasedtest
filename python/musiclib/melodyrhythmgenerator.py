@@ -130,7 +130,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         else:
             indexChild = 0
 
-        currentRS = currentRS.getNodeLowerLevels(metricalLevel, indexChild)
+        currentRS = currentRS.getDescendantAtIndex(metricalLevel, indexChild)
 
         if type == "pickup":
             currentRS = currentRS.getLeftSibling()

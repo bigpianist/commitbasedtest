@@ -219,7 +219,7 @@ class RhythmSpace(Tree):
         rightSibling = self.getRightSibling()
 
         # move down as many levels as the number of dots, choosing last child
-        targetDuration = rightSibling.getNodeLowerLevels(numDots, LASTCHILDINDEX)
+        targetDuration = rightSibling.getDescendantAtIndex(numDots, LASTCHILDINDEX)
 
         # expand the node getting all the first children until the bottom
         candidateDurations = \

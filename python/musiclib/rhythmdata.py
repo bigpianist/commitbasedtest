@@ -53,7 +53,7 @@ rhythmData = {
             "3/4": [0, 1, 0]
         },
         "probabilityRepeatBar":{
-            "4/4": 3,
+            "4/4": 0.1,
             "3/4": 2
         },
     },

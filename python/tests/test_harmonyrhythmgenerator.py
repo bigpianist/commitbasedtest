@@ -51,7 +51,9 @@ def testDecideToApplyTie():
 
 
 def testGenerateHarmonicRhythmMU():
-    hm2 = HarmonicMetre("4/4", "wholenote")
+    hrg.densityImpact = 1
+    hrg.entropyImpact = 1
+    hm2 = HarmonicMetre("4/4", "halfnote")
     rhythm = hrg.generateHarmonicRhythmMU(hm2, 0.05, 2)
 
 
