@@ -52,7 +52,8 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
         self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
                                                       metre)
-
+        #TODO this should be the same type of distributions that we use
+        # i.e. a dictionary with explicit keys
         self._tactusDistScores = tactusDistScores[timeSignature]
         self._metricalProminenceScores = metricalProminenceScores[
             timeSignature]
@@ -136,6 +137,9 @@ class HarmonyRhythmGenerator(RhythmGenerator):
             duration = currentRS.getDuration()
 
             # index 1 indicates no tie
+            #TODO: we should make our own classes for this
+            #it's always better to make an object and give it named member variables
+            #rather than adhering to a convention (although we all do this sometimes)
             rhythmicSeqElement = [duration, None]
 
             metricalLevelRS = currentRS.getMetricalLevel()
@@ -193,13 +197,3 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         scores = self._modifyScoresForEntropy(scores, MAXSCORE)
 
         return scores
-
-
-
-
-
-
-
-
-
-

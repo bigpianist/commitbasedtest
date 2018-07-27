@@ -14,6 +14,7 @@ class Tree(object):
         self.children = children or []
         self.parent = None
         #TODO: gotta decide if the tree is doubly-linked or not,
+        # (i.e. children refer to parents as well as parents to children)
         # and stick to one or the other
         for child in self.children:
             child.parent = self

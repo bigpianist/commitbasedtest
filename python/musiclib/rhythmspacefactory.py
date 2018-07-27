@@ -20,6 +20,7 @@ metricalLevelDurations = {FOURFOUR: {0: 4.0,
                                       4: 0.25}
                           }
 
+#TODO: rename this to RhythmTreeFactory, I think we should just call RhythmSpace RhythmTree in general, since it will always be a tree
 class RhythmSpaceFactory(object):
     """RhythmSpaceFactory is a class used for instantiating and
     manipulating rhythm space objects.
@@ -54,16 +55,7 @@ class RhythmSpaceFactory(object):
         if STARTLEVEL == lowestMetricalLevel:
             return rhythmSpace
 
-        #TODO: _expandRoot shouldn't be the responsibility of RhythmSpaceFactory
-        # You're pulling in a bunch of member variables and then passing
-        # them back into the rhythmSpace object.
-        # RhythmSpace should just handle this as soon as it has all the necessary
-        # information - it has that when lowestMetricalLevel is set.
-        # It should be a required parameter to the constructor, and also
-        # the RhythmSpace should be recomputed if the lowestMetricalLevel is re-set
-        # The _expandRoot function is a private member function that doesn't
-        # need access to any member variables of RhythmSpaceFactory. That's a
-        # big 'tell' that the functionality is in the wrong spot.
+        #TODO: I changed my mind on this one. I think the functionality can remain segmented as is :)
 
         # expand root
         rhythmSpace = self._expandRoot(lowestMetricalLevel, metricalLevels,
@@ -235,7 +227,17 @@ class RhythmSpaceFactory(object):
         self._modifyTripletItemsDurations(parent, parentMetricalLevel)
         self._expandNode(lowestMetricalLevel, startLevel, parent.children[2])
 
-
+    #TODO: This should be called expandTree or buildTreeFromRoot to know that a tree is the return value
+    #I also usually try to have a convention for argument order - in
+    #general, if you're operating on a particular object, that object should be first.
+    #in this case, let's put parent at the beginning. Optional arguments always have to
+    #go at the end of the list in python, so the convention is sort of
+    #the opposite of that (most important argument first). I'm sure Andy
+    #has an informal convention for this as well.
+    #It's also about usage - when I call this function, I'll have
+    #a specific 'parent' object in mind when I'm finding the function.
+    #So it's easiest to just write it in as the first argument and then
+    # figure out the other necessary arguments
     def _expandRoot(self, lowestMetricalLevel, metricalLevels,
                     metricalSubdivisions, barDuration, currentLevel, parent):
 
@@ -259,11 +261,15 @@ class RhythmSpaceFactory(object):
             #TODO if this is always the same on every node,
             # you could just store it on the root and reference
             # the root each time. That way you wouldn't have to
-            # change every node if you change the metricalAccent
+            # change every node if you change the metricalAccent.
+            # Take a look at getKey in melodrive\composition\structure\structuralelement.py
             child.assignMetricalAccent(parent, currentLevel)
 
             # assign lowest metrical level to child
-            # TODO: ditto, I'm not sure that this is necessary at every node
+            # TODO: ditto, I don't think that this is necessary at every node
+            # if you did need to know how deep your tree went, it would
+            # be better to just have a getDepth() function, which is easy to implement
+            # and cheap to call.
             child.setLowestMetricalLevel(lowestMetricalLevel)
 
             self._expandRoot(lowestMetricalLevel, metricalLevels,

@@ -1,5 +1,6 @@
 from musiclib.tree import Tree
 
+#TODO: rename this to RhythmTree
 class RhythmSpace(Tree):
     """RhythmSpace is a class to represent the rhythm space of a bar of
     a given time signature with a tree structure.
@@ -16,6 +17,10 @@ class RhythmSpace(Tree):
     def __init__(self, duration, metricalLevel, children=None):
         super(RhythmSpace, self).__init__(duration, children)
         self.duration = float(duration)
+        #TODO: 2 things about the use of "metrical":
+        # 1. we need to be consistent and use either "metricLevel" or "metricalLevel"
+        # throughout the codebase. We've used metricLevel thus far.
+        # 2. it's not exactly the same thing as metric level semantically - let's chat about this
         self.metricalLevel = metricalLevel
         self.metricalAccent = None
         self.lowestMetricalLevel = None

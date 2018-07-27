@@ -31,7 +31,8 @@ class HarmonicMetre(object):
         harmonicTactus (dict): Metrical level at which harmonic changes
                                occur the most
     """
-
+    #TODO: harmonicTactusLabel should just be harmonicTactusDuration
+    # which means you don't have to check a dictionary for it
     def __init__(self, timeSignature, harmonicTactusLabel):
 
         # raise error if tactus isn't supported
@@ -39,6 +40,7 @@ class HarmonicMetre(object):
             raise ValueError("%s is not a supported tactusLabel" %
                              harmonicTactusLabel)
 
+        #TODO: should be using the timeSignature.getMetricLevel(tactusDur) as the CodeReview.txt suggested
         self.harmonicTactus = {"label": harmonicTactusLabel,
                                "metricalLevel": metricalLevels[
                                    timeSignature].index(harmonicTactusLabel)}

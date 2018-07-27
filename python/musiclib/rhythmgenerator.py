@@ -107,7 +107,7 @@ class RhythmGenerator(object):
                                     around 'attractionValue'
 
         Returns:
-            commpressedValues (list):
+            compressedValues (list):
         """
 
         compressedValues = []
@@ -188,6 +188,15 @@ class RhythmGenerator(object):
             metricalDist = abs(tactusLevel - candidateMetricalLevel)
 
             # convert distance into normalised score
+            #TODO: this (tactusDistScores) definitely doesn't need to be stored as a list,
+            # and is not fail-safe
+            #if anything we should have a setting that specifies the type of distribution
+            # A replacement formula would be:
+            #if metricalDist == 0:
+            # score = 1
+            #else:
+            # score = 1/(metricalDist+1)
+            #that gives you [1, .5, .33, .25, .2] etc. and is not limited by a list
             score = self._tactusDistScores[metricalDist]
             tactusDistScores.append(score)
 
@@ -281,9 +290,11 @@ class RhythmGenerator(object):
         if r <= self._probabilityDot[metricalLevel]:
 
             # decide which type of dot to apply
+            #TODO need to verify that we're using melodrive's random manager when we integrate
             r2 = random.random()
 
             # handle single dot
+            #TODO: this is confusing, but I get why you did it this way (compactness)
             if r2 <= self._probabilitySingleDot[metricalLevel]:
                 numDots = 1
                 duration = self._calcDotDuration(duration, numDots)
@@ -312,7 +323,7 @@ class RhythmGenerator(object):
         Returns:
             newScores (list):
         """
-
+        #TODO: (minor) make sure scores and candidates are the same length
         newScores = []
         impact = self.densityImpact
         for index, score in enumerate(scores):
