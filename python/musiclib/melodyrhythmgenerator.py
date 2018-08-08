@@ -64,6 +64,8 @@ class MelodyRhythmGenerator(RhythmGenerator):
         super(MelodyRhythmGenerator, self).__init__(metre)
 
         timeSignature = metre.getTimeSignature()
+        #TODO: I don't think this value (lowestMetricalLevel) should come from the time signature-
+        # How do we support generating trees of differing depths in the same metre?
         lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
         self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
                                                       metre)
@@ -183,7 +185,12 @@ class MelodyRhythmGenerator(RhythmGenerator):
 
         return currentRS, rhythmicSeqElement, numDots
 
-
+    #TODO: we're going to need to be able to generate an arbitrary amount of
+    # duration for the generator model, where we'll have to pass in the necessary
+    # information (currentTimeInBar, prevNote, etc.)
+    # Also, we're going to want to generalize this
+    #   For example, we may want to generate a tree with lowestMetricalLevel of 1,
+    #   so that we can generate just the background rhythm.
     def _generateMelodicRhythmBar(self, metre):
         rhythmicSeq = []
 
@@ -195,7 +202,10 @@ class MelodyRhythmGenerator(RhythmGenerator):
         # TODO: Solve bug. If we instantiate rhythmSpace only once,
         # sometimes when we restore the tree, a currentRS emerges which
         # has the wrong parent
-        # currentRS = self.rhythmSpace
+        # TODO: this may relate to the doubly-linked comment(s) i made in tree.py -
+        # perhaps the parent isn't being set properly and happens to point to a valid (and arbitrary) node object?
+        # We need to fix this to test the testTreeDepthOfOne and testTreeDepthOfTwo tests
+        #currentRS = self.rhythmSpace
         currentRS = self.rsf.createRhythmSpace(4, metre)
         currentRS =self.rsf.addTupletsToRhythmSpace(currentRS,
                                                     self._probTuplets, self._probTupletType)

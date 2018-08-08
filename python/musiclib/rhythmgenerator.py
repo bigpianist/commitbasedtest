@@ -204,7 +204,7 @@ class RhythmGenerator(object):
 
 
     def _calcMetricalProminenceMetric(self, candidates):
-        """Caluclates a score related to the metrical level of the
+        """Calculates a score related to the metrical level of the
         candidate durations. Notes corresponding to higher metrical levels
         tend to be favoured, especially on strong metrical points.
 

@@ -21,6 +21,17 @@ class RhythmSpace(Tree):
         # 1. we need to be consistent and use either "metricLevel" or "metricalLevel"
         # throughout the codebase. We've used metricLevel thus far.
         # 2. it's not exactly the same thing as metric level semantically - let's chat about this
+        # UPDATE: I thought of a concise example highlighting the difference. If you have an onset
+        # that is on the downbeat, but only has a duration of a 1/16 note,
+        # then the metric level of that onset is not 4, it's 0. The metric level
+        # is based on onset, not on duration. There is obviously a correlation, but
+        # we should consider renaming these levels to "durationLevels". We'll still
+        # have to keep it the same as metric levels (so that a 0 duration level == a 0 metric level)
+        # but that makes it semantically correct. If we kept metric level, and
+        # also kept the tree structure for a generated rhythmic sequence (which we don't right now - they're de-coupled)
+        # then we would get confusion if we ever called a "getMetricLevel" function
+        # on the tree node of a generated note, since that would not reflect the metricLevel
+        # of the onset.
         self.metricalLevel = metricalLevel
         self.metricalAccent = None
         self.lowestMetricalLevel = None
@@ -52,7 +63,7 @@ class RhythmSpace(Tree):
         current one
 
         Args:
-            numDots (int): Number of dots current rhythmc space
+            numDots (int): Number of dots current rhythmic space
 
         Returns:
             candidateDurations (list): List of RhythmSpace objects
@@ -91,7 +102,12 @@ class RhythmSpace(Tree):
     def setDuration(self, duration):
         self.duration = duration
 
-
+    #TODO: this name was confusing - I didn't think this included the current node (self),
+    # since it specifies lower levels.
+    # The technical term of what we're getting is the "left view" of a tree
+    # this will be all the nodes in a tree that are the left-most node of their
+    # level. Here's an example:
+    # https://www.geeksforgeeks.org/print-left-view-binary-tree/
     def _getAllCandidateDurationsLowerLevels(self, candidateDurations=[]):
         """Returns the list of candidate durations traversing down the tree
         and picking the 0-index children
@@ -200,6 +216,7 @@ class RhythmSpace(Tree):
             if firstAncestorNotLastChild == None:
                 return None
             rightSiblingAncestor = firstAncestorNotLastChild.getRightSibling()
+            #TODO: I think you need to
             candidateDurations = rightSiblingAncestor._getAllCandidateDurationsLowerLevels([])
             return candidateDurations
         else:

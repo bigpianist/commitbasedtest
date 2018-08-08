@@ -1,5 +1,6 @@
 from musiclib.melodyrhythmgenerator import MelodyRhythmGenerator
 from musiclib.metre import Metre
+from musiclib.rhythmspacefactory import RhythmSpaceFactory
 
 m = Metre("4/4", "quarternote")
 r = MelodyRhythmGenerator(m)
@@ -18,7 +19,32 @@ def testCalcMetricsWork():
 
     for score in scores:
         assert 0 <= score <= 2
+#
+# def testTreeDepthOfOne():
+#     met = Metre("4/4", "quarternote")
+#     rGen = MelodyRhythmGenerator(met)
+#     rSpace = RhythmSpaceFactory()
+#     rSpace = rSpace.createRhythmSpace(1, met)
+#     rGen.rhythmSpace = rSpace
+#
+#     rGen.densityImpact = 0
+#     rGen.entropyImpact = 0
+#
+#     rs = rGen._generateMelodicRhythmBar(m)
+#     print(rs)
 
+def testTreeDepthOfTwo():
+    met = Metre("4/4", "quarternote")
+    rGen = MelodyRhythmGenerator(met)
+    rSpace = RhythmSpaceFactory()
+    rSpace = rSpace.createRhythmSpace(2, met)
+    rGen.rhythmSpace = rSpace
+
+    rGen.densityImpact = 0
+    rGen.entropyImpact = 0
+
+    rs = rGen._generateMelodicRhythmBar(m)
+    print(rs)
 
 def testDurationGeneratedBar():
     r.densityImpact = 0

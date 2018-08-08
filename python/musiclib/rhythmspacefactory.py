@@ -375,7 +375,14 @@ class RhythmSpaceFactory(object):
             return 7
 
 
+    def setMetricalAccents(self, rhythmTree, accentList):
+        """Set a list of accents on a tree
 
+        Args:
+            accentList (list of int): A list of levels that should be accented
+            rhythmTree: the rhythmTree to set accents on
+        """
+        treeDepth = rhythmTree.getLowestMetricalLevel()
 
 
 
