@@ -192,9 +192,6 @@ class RhythmGenerator(object):
             # and is not fail-safe
             #if anything we should have a setting that specifies the type of distribution
             # A replacement formula would be:
-            #if metricalDist == 0:
-            # score = 1
-            #else:
             # score = 1/(metricalDist+1)
             #that gives you [1, .5, .33, .25, .2] etc. and is not limited by a list
             score = self._tactusDistScores[metricalDist]

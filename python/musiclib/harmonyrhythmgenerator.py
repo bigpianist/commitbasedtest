@@ -122,6 +122,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         numDots = 0
 
         # traverse the rhythm space until bar is filled
+        #TODO: shouldn't this while be totDuration<=barDuration?
         while totDuration != self._barDuration:
             # get all candidate durations
 

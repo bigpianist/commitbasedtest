@@ -248,10 +248,41 @@ class RhythmSpace(Tree):
             targetDuration._getAllCandidateDurationsLowerLevels([])
         return candidateDurations
 
+    def _getIndexOfNodeInTree(self):
+        if self.parent is not None:
+            curIndex = self._getIndexOfNodeInSiblingList()
+            return [curIndex] + self.parent._getIndexOfNodeInTree
+        return []
 
+    def __getitem__(self, index):
+        if isinstance(index, (int, slice)):
+            return self.children[index]
+        elif isinstance(index, (list, tuple)):
+            if len(index) == 0:
+                return self
+            elif len(index) == 1:
+                return self[index[0]]
+            else:
+                return self[index[0]][index[1:]]
+        else:
+            raise TypeError("%s indices must be integers, not %s" %
+                            (type(self).__name__, type(index).__name__))
 
-
-
+    def __setitem__(self, index, value):
+        if isinstance(index, (int, slice)):
+            self.children[index] = value
+            return
+        if isinstance(index, (list, tuple)):
+            if len(index) == 0:
+                raise IndexError('The tree position () may not be '
+                                 'assigned to.')
+            elif len(index) == 1:
+                self[index[0]] = value
+            else:
+                self[index[0]][index[1:]] = value
+        else:
+            raise TypeError("%s indices must be integers, not %s" %
+                            (type(self).__name__, type(index).__name__))
 
 
 

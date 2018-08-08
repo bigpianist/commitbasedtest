@@ -383,6 +383,8 @@ class RhythmSpaceFactory(object):
             rhythmTree: the rhythmTree to set accents on
         """
         treeDepth = rhythmTree.getLowestMetricalLevel()
+        # for accent in accentList:
+
 
 
 

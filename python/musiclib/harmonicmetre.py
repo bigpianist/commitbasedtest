@@ -22,6 +22,8 @@ metricalLevels = {FOURFOUR: [WHOLENOTE,
                               QUARTERNOTE,
                               EIGHTHNOTE]}
 
+#TODO this class can be consolidated with metre.py and removed.
+# The only thing that's different is the settings up top
 
 class HarmonicMetre(object):
     """HarmonicMetre is a class that represents interaction about metre and
@@ -32,6 +34,7 @@ class HarmonicMetre(object):
                                occur the most
     """
     #TODO: harmonicTactusLabel should just be harmonicTactusDuration
+    # or tactusLevel
     # which means you don't have to check a dictionary for it
     def __init__(self, timeSignature, harmonicTactusLabel):
 

@@ -1,5 +1,5 @@
 from musiclib.melodyrhythmgenerator import MelodyRhythmGenerator
-from musiclib.metre import Metre
+from musiclib.metre import Metre, calculateMetricalSubdivisions
 from musiclib.rhythmspacefactory import RhythmSpaceFactory
 
 m = Metre("4/4", "quarternote")
@@ -17,8 +17,23 @@ def testCalcMetricsWork():
     candidates = [d2, d3, d4]
     scores = r._calcScores(candidates, m)
 
+    #TODO: this test could be invalidated based on model settings.
     for score in scores:
         assert 0 <= score <= 2
+
+def testTreeIndexing():
+    rhythmNode = r.rhythmSpace[(1,0,1)]
+    print(rhythmNode)
+    r.rhythmSpace[(1, 0, 1)] = "woot"
+    rhythmNode = r.rhythmSpace[(1,0,1)]
+    rhythmNode == "woot"
+
+def testSubdivisionCalc():
+    subdivisions = calculateMetricalSubdivisions(9, 4)
+    assert subdivisions  == {0: 3, 1: 3, 2:2, 3:2}
+
+    subdivisions = calculateMetricalSubdivisions(4, 4)
+    assert subdivisions == {0: 2, 1: 2, 2: 2, 3: 2}
 #
 # def testTreeDepthOfOne():
 #     met = Metre("4/4", "quarternote")
@@ -33,18 +48,18 @@ def testCalcMetricsWork():
 #     rs = rGen._generateMelodicRhythmBar(m)
 #     print(rs)
 
-def testTreeDepthOfTwo():
-    met = Metre("4/4", "quarternote")
-    rGen = MelodyRhythmGenerator(met)
-    rSpace = RhythmSpaceFactory()
-    rSpace = rSpace.createRhythmSpace(2, met)
-    rGen.rhythmSpace = rSpace
-
-    rGen.densityImpact = 0
-    rGen.entropyImpact = 0
-
-    rs = rGen._generateMelodicRhythmBar(m)
-    print(rs)
+# def testTreeDepthOfTwo():
+#     met = Metre("4/4", "quarternote")
+#     rGen = MelodyRhythmGenerator(met)
+#     rSpace = RhythmSpaceFactory()
+#     rSpace = rSpace.createRhythmSpace(2, met)
+#     rGen.rhythmSpace = rSpace
+#
+#     rGen.densityImpact = 0
+#     rGen.entropyImpact = 0
+#
+#     rs = rGen._generateMelodicRhythmBar(m)
+#     print(rs)
 
 def testDurationGeneratedBar():
     r.densityImpact = 0
