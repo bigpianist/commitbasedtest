@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/../dev/melodrive/.idea/melodrive.iml" filepath="$PROJECT_DIR$/../dev/melodrive/.idea/melodrive.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/musiclib.iml" filepath="$PROJECT_DIR$/.idea/musiclib.iml" />
-    </modules>
-  </component>
-</project>
