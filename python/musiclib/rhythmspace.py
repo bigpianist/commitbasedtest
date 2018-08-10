@@ -216,7 +216,6 @@ class RhythmSpace(Tree):
             if firstAncestorNotLastChild == None:
                 return None
             rightSiblingAncestor = firstAncestorNotLastChild.getRightSibling()
-            #TODO: I think you need to
             candidateDurations = rightSiblingAncestor._getAllCandidateDurationsLowerLevels([])
             return candidateDurations
         else:
