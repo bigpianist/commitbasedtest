@@ -5,7 +5,7 @@ import random
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-lowestMetricalLevelOptions = {FOURFOUR: 4,
+lowestDurationLevelOptions = {FOURFOUR: 4,
                               THREEFOUR: 3}
 
 
@@ -25,7 +25,7 @@ probabilitySingleDot = {FOURFOUR: [0, 0.8, 0.8, 1, 0],
                         THREEFOUR: [0, 0.8, 1, 0]}
 
 
-densityImpactMetricalLevels = {FOURFOUR: [-0.5, -0.2, 0, 0.6, 1],
+densityImpactDurationLevels = {FOURFOUR: [-0.5, -0.2, 0, 0.6, 1],
                                THREEFOUR: [0, 0.3, 0.6, 1]}
 
 
@@ -184,8 +184,8 @@ class RhythmGenerator(object):
 
         # calculate score for all candidates
         for candidate in candidates:
-            candidateMetricalLevel = candidate.getMetricalLevel()
-            metricalDist = abs(tactusLevel - candidateMetricalLevel)
+            candidateDurationLevel = candidate.getDurationLevel()
+            metricalDist = abs(tactusLevel - candidateDurationLevel)
 
             # convert distance into normalised score
             #TODO: this (tactusDistScores) definitely doesn't need to be stored as a list,
@@ -208,7 +208,7 @@ class RhythmGenerator(object):
         Args:
             candidates (list of RhythmTree objects): All the candidates to be
                                                       evaluated
-            metricalLevels (list): Available metrical levels
+            durationLevels (list): Available metrical levels
 
         Returns:
             metricalProminenceScores (list): List with the scores of metrical
@@ -219,20 +219,20 @@ class RhythmGenerator(object):
 
         # calculate basic score for all candidates
         for candidate in candidates:
-            metricalLevel = candidate.getMetricalLevel()
+            durationLevel = candidate.getDurationLevel()
             metricalAccent = candidate.getMetricalAccent()
-            score = self._metricalProminenceScores[metricalLevel][metricalAccent]
+            score = self._metricalProminenceScores[durationLevel][metricalAccent]
             metricalProminenceScores.append(score)
 
         return metricalProminenceScores
 
 
-    def _decideToApplyTie(self, rhythmicSeqElement, metricalLevel):
+    def _decideToApplyTie(self, rhythmicSeqElement, durationLevel):
         """Decides whether to apply tie and adds a 't' to the duration
 
         Args:
             rhythmicSeqElement (list): [duration, None] - None indicates no tie
-            metricalLevel (int): Metrical level of chosen rhythm space node
+            durationLevel (int): Metrical level of chosen rhythm space node
 
         Returns:
             newDuration (list): Pair duration, 't' (symbol ofr tie), if tie
@@ -241,7 +241,7 @@ class RhythmGenerator(object):
 
         duration = rhythmicSeqElement[0]
         r = random.random()
-        if r <= self._probabilityTie[metricalLevel]:
+        if r <= self._probabilityTie[durationLevel]:
             return [duration, 't']
         else:
             return [duration, None]
@@ -278,13 +278,13 @@ class RhythmGenerator(object):
         """
 
         duration = rhythmTree.getDuration()
-        metricalLevel = rhythmTree.getMetricalLevel()
+        durationLevel = rhythmTree.getDurationLevel()
         r = random.random()
 
         numDots = 0
 
         # decide whether to apply a dot
-        if r <= self._probabilityDot[metricalLevel]:
+        if r <= self._probabilityDot[durationLevel]:
 
             # decide which type of dot to apply
             #TODO need to verify that we're using melodrive's random manager when we integrate
@@ -292,7 +292,7 @@ class RhythmGenerator(object):
 
             # handle single dot
             #TODO: this is confusing, but I get why you did it this way (compactness)
-            if r2 <= self._probabilitySingleDot[metricalLevel]:
+            if r2 <= self._probabilitySingleDot[durationLevel]:
                 numDots = 1
                 duration = self._calcDotDuration(duration, numDots)
                 return [duration, None], numDots
@@ -324,8 +324,8 @@ class RhythmGenerator(object):
         newScores = []
         impact = self.densityImpact
         for index, score in enumerate(scores):
-            metricalLevel = candidates[index].getMetricalLevel()
-            densityScore = self._densityImpactMetricalLevels[metricalLevel]
+            durationLevel = candidates[index].getDurationLevel()
+            densityScore = self._densityImpactDurationLevels[durationLevel]
             newScore = (score + densityScore * impact) / MAXSCORE
             newScores.append(newScore)
         return newScores

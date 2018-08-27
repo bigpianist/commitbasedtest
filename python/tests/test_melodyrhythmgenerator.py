@@ -1,5 +1,5 @@
 from musiclib.melodyrhythmgenerator import MelodyRhythmGenerator
-from musiclib.metre import Metre, calculateMetricalSubdivisions
+from musiclib.metre import Metre, calculateDurationSubdivisions
 from musiclib.rhythmtreefactory import RhythmTreeFactory
 
 m = Metre("4/4", "quarternote")
@@ -29,10 +29,10 @@ def testTreeIndexing():
     rhythmNode == "woot"
 
 def testSubdivisionCalc():
-    subdivisions = calculateMetricalSubdivisions(9, 4)
+    subdivisions = calculateDurationSubdivisions(9, 4)
     assert subdivisions  == {0: 3, 1: 3, 2:2, 3:2}
 
-    subdivisions = calculateMetricalSubdivisions(4, 4)
+    subdivisions = calculateDurationSubdivisions(4, 4)
     assert subdivisions == {0: 2, 1: 2, 2: 2, 3: 2}
 #
 # def testTreeDepthOfOne():

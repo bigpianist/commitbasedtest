@@ -15,16 +15,16 @@ class RhythmTreeFactory(object):
         super(RhythmTreeFactory, self).__init__()
 
 
-    def createRhythmTree(self, lowestMetricalLevel, metre,
-                         highestMetricalLevel=0):
+    def createRhythmTree(self, lowestDurationLevel, metre,
+                         highestDurationLevel=0):
         """Instantiate and returns a rhythm space tree
 
         Args:
-            lowestMetricalLevel (int): Lowest metrical level of the rhythm
+            lowestDurationLevel (int): Lowest duration level of the rhythm
                                        space to be created
             metre (Metre): Metre object
         """
-        startLevel = highestMetricalLevel
+        startLevel = highestDurationLevel
         timeSignature = metre.getTimeSignature()
         duration = RhythmTreeFactory.getDurationAtDurationLevel(timeSignature,
                                                                 startLevel)
@@ -32,18 +32,18 @@ class RhythmTreeFactory(object):
         # instantiate root level of rhythm space
         rhythmTree = RhythmTree(duration, startLevel)
         rhythmTree.setMetricalAccent(startLevel)
-        rhythmTree.setLowestMetricalLevel(lowestMetricalLevel)
+        rhythmTree.setLowestDurationLevel(lowestDurationLevel)
 
-        metricalLevels = metre.getMetricalLevels()
-        metricalSubdivisions = metre.getMetricalSubdivisions()
+        durationLevels = metre.getDurationLevels()
+        durationSubdivisions = metre.getDurationSubdivisions()
 
-        if startLevel == lowestMetricalLevel:
+        if startLevel == lowestDurationLevel:
             return rhythmTree
 
         # expand root
-        rhythmTree = self._expandTree(rhythmTree, lowestMetricalLevel,
-                                      metricalLevels,
-                                      metricalSubdivisions, duration,
+        rhythmTree = self._expandTree(rhythmTree, lowestDurationLevel,
+                                      durationLevels,
+                                      durationSubdivisions, duration,
                                       startLevel + 1)
         return rhythmTree
 
@@ -52,22 +52,22 @@ class RhythmTreeFactory(object):
         """Inserts tuplets in the rhythm space tree
 
         Args:
-            probTuplet (list): Prob of having a tuplet at different metrical
+            probTuplet (list): Prob of having a tuplet at different duration
                                levels
             probTupletType (dict): Prob of having different types of tuplets at
-                                   different metrical levels
+                                   different duration levels
 
         Returns:
             newTree (RhythmTree): Rhythm space with tuplets
         """
 
-        lowestMetricalLevel = parent.getLowestMetricalLevel()
-        currentLevel = parent.getMetricalLevel()
+        lowestDurationLevel = parent.getLowestDurationLevel()
+        currentLevel = parent.getDurationLevel()
         metricalAccent = parent.getMetricalAccent()
 
-        # return up the stack if we're at the penultimate lowest metrical level
+        # return up the stack if we're at the penultimate lowest duration level
 
-        if (lowestMetricalLevel - currentLevel) < 1:
+        if (lowestDurationLevel - currentLevel) < 1:
             return parent
 
         # decide whether to insert tuplets
@@ -129,7 +129,7 @@ class RhythmTreeFactory(object):
 
     def _restoreRhythmTreeNode(self, tree):
         """Restores normal durations, removing tuplets and going back to
-        initial metrical divisions for a given node.
+        initial duration divisions for a given node.
 
         Args:
             tree (RhythmTree): RhythmTree node that needs to be restored
@@ -139,10 +139,10 @@ class RhythmTreeFactory(object):
         tree.removeChildren()
 
         # expand node
-        startLevel = tree.getMetricalLevel() + 1
-        lowestMetricalLevel = tree.getLowestMetricalLevel()
+        startLevel = tree.getDurationLevel() + 1
+        lowestDurationLevel = tree.getLowestDurationLevel()
 
-        self._expandNode(lowestMetricalLevel, startLevel, tree)
+        self._expandNode(lowestDurationLevel, startLevel, tree)
 
 
     def _insertNonTripletTuplets(self, parent, tupletType):
@@ -158,31 +158,31 @@ class RhythmTreeFactory(object):
             parent (RhythmTree)
         """
 
-        NOMETRICALLEVELSBELOWPARENT = 2
+        numDurationLevelsBelowParent = 2
 
-        # check there are two metrical levels below the parent
-        if not parent.hasDescendant(NOMETRICALLEVELSBELOWPARENT):
+        # check there are two duration levels below the parent
+        if not parent.hasDescendant(numDurationLevelsBelowParent):
             raise ValueError("It's not possible to insert a %s-tuplet, "
-                             "as there are not enough metrical levels to "
+                             "as there are not enough duration levels to "
                              "support it" % tupletType)
 
         # cut off the children
         parent.removeChildren()
 
-        # create children with right duration and metrical level
+        # create children with right duration and duration level
         tupletItemDuration = parent.calculateTupletItemDuration(tupletType)
-        metricalLevelChildren = parent.getMetricalLevel() + NOMETRICALLEVELSBELOWPARENT
+        durationLevelChildren = parent.getDurationLevel() + numDurationLevelsBelowParent
 
         parent = self._createChildren(parent, tupletType, tupletItemDuration,
-                                      metricalLevelChildren)
+                                      durationLevelChildren)
 
         # expand children
         children = parent.getChildren()
-        startLevel = children[0].getMetricalLevel() + 1
-        lowestMetricalLevel = parent.getLowestMetricalLevel()
+        startLevel = children[0].getDurationLevel() + 1
+        lowestDurationLevel = parent.getLowestDurationLevel()
 
         for child in children:
-            self._expandNode(lowestMetricalLevel, startLevel, child)
+            self._expandNode(lowestDurationLevel, startLevel, child)
 
         return parent
 
@@ -190,9 +190,9 @@ class RhythmTreeFactory(object):
     def _insertTriplet(self, parent):
 
         # add extra child to parent
-        parentMetricalLevel = parent.getMetricalLevel()
-        child = RhythmTree(1, parentMetricalLevel + 1)
-        child.setMetricalAccent(parentMetricalLevel+1)
+        parentDurationLevel = parent.getDurationLevel()
+        child = RhythmTree(1, parentDurationLevel + 1)
+        child.setMetricalAccent(parentDurationLevel+1)
 
         parent.addChild(child)
 
@@ -204,25 +204,25 @@ class RhythmTreeFactory(object):
         for item in tripletItems:
             item.setDuration(tripletItemDuration)
 
-        lowestMetricalLevel = parent.getLowestMetricalLevel()
-        startLevel = parentMetricalLevel + 2
+        lowestDurationLevel = parent.getLowestDurationLevel()
+        startLevel = parentDurationLevel + 2
 
         # expand triplet
-        self._modifyTripletItemsDurations(parent, parentMetricalLevel)
-        self._expandNode(lowestMetricalLevel, startLevel, parent.children[2])
+        self._modifyTripletItemsDurations(parent, parentDurationLevel)
+        self._expandNode(lowestDurationLevel, startLevel, parent.children[2])
 
 
-    def _expandTree(self, parent, lowestMetricalLevel, metricalLevels,
-                    metricalSubdivisions, barDuration, currentLevel):
+    def _expandTree(self, parent, lowestDurationLevel, durationLevels,
+                    durationSubdivisions, barDuration, currentLevel):
 
-        # return up the stack if we're at the lowest metrical level
-        if (lowestMetricalLevel - currentLevel) < 0:
+        # return up the stack if we're at the lowest duration level
+        if (lowestDurationLevel - currentLevel) < 0:
             return
 
-        parentLevelLabel = metricalLevels[currentLevel-1]
+        parentLevelLabel = durationLevels[currentLevel-1]
 
         # calculate duration of child
-        subdivisionsParent = metricalSubdivisions[parentLevelLabel]
+        subdivisionsParent = durationSubdivisions[parentLevelLabel]
         parentDuration = parent.getDuration()
         duration = parentDuration / subdivisionsParent
 
@@ -244,40 +244,40 @@ class RhythmTreeFactory(object):
             # if you did need to know how deep your tree went, it would
             # be better to just have a getDepth() function, which is easy to implement
             # and cheap to call.
-            child.setLowestMetricalLevel(lowestMetricalLevel)
+            child.setLowestDurationLevel(lowestDurationLevel)
 
-            self._expandTree(child, lowestMetricalLevel, metricalLevels,
-                             metricalSubdivisions, barDuration,
+            self._expandTree(child, lowestDurationLevel, durationLevels,
+                             durationSubdivisions, barDuration,
                              currentLevel + 1)
         return parent
 
 
-    def _modifyTripletItemsDurations(self, parent, thresholdMetricalLevel):
+    def _modifyTripletItemsDurations(self, parent, thresholdDurationLevel):
 
         # return up the stack if we're at the lowest level of the tree
         if not parent.hasChildren():
             return
         children = parent.getChildren()
-        parentMetricalLevel = parent.getMetricalLevel()
+        parentDurationLevel = parent.getDurationLevel()
 
         # change durations of children to be half of that of parent
-        if parentMetricalLevel > thresholdMetricalLevel:
+        if parentDurationLevel > thresholdDurationLevel:
             parentDuration = parent.getDuration()
             newChildDuration = parentDuration / 2
             for child in children:
                 child.setDuration(newChildDuration)
-                self._modifyTripletItemsDurations(child, thresholdMetricalLevel)
+                self._modifyTripletItemsDurations(child, thresholdDurationLevel)
         else:
             for child in children:
-                self._modifyTripletItemsDurations(child, thresholdMetricalLevel)
+                self._modifyTripletItemsDurations(child, thresholdDurationLevel)
 
 
-    def _expandNode(self, lowestMetricalLevel, currentLevel, parent):
+    def _expandNode(self, lowestDurationLevel, currentLevel, parent):
 
         numSubdivisions = 2
 
         # return up the stack if we've reached the desired depth
-        if (lowestMetricalLevel - currentLevel) < 0:
+        if (lowestDurationLevel - currentLevel) < 0:
             return
         parentDuration = parent.getDuration()
         duration = parentDuration / numSubdivisions
@@ -288,39 +288,39 @@ class RhythmTreeFactory(object):
             # assign metrical accent to child
             child.assignMetricalAccent(parent, currentLevel)
 
-            # assign lowest metrical level to child
-            child.setLowestMetricalLevel(lowestMetricalLevel)
+            # assign lowest duration level to child
+            child.setLowestDurationLevel(lowestDurationLevel)
 
-            self._expandNode(lowestMetricalLevel, currentLevel+1, child)
+            self._expandNode(lowestDurationLevel, currentLevel+1, child)
 
 
-    def _createChildren(self, parent, number, noteDuration, metricalLevel):
-        """Creates a number of children with a note duration and metrical
+    def _createChildren(self, parent, number, noteDuration, durationLevel):
+        """Creates a number of children with a note duration and duration
         level
 
         Args:
             parent (RhythmTree): Node we want to add the children to
             number (int): Number of children to be added
             noteDuration (float): Note duration of children
-            metricalLevel (float): Metrical level of children
+            durationLevel (float): duration level of children
 
         Returns:
             parent (RhythmTree)
         """
-        lowestMetricalLevel = parent.getLowestMetricalLevel()
+        lowestDurationLevel = parent.getLowestDurationLevel()
         parentMetricalAccent = parent.getMetricalAccent()
 
         # create children, add them to parent and assign them a metrical accent
         for i in range(number):
-            child = RhythmTree(noteDuration, metricalLevel)
+            child = RhythmTree(noteDuration, durationLevel)
 
             if i == 0:
                 child.setMetricalAccent(parentMetricalAccent)
             else:
-                child.setMetricalAccent(metricalLevel)
+                child.setMetricalAccent(durationLevel)
 
             # assign lowest metrical level to child
-            child.setLowestMetricalLevel(lowestMetricalLevel)
+            child.setLowestDurationLevel(lowestDurationLevel)
             parent.addChild(child)
 
         return parent
@@ -330,9 +330,9 @@ class RhythmTreeFactory(object):
         """Decide which tuplet type to apply
 
         Args:
-            probTupletType (list of list): Prob tuplet type across metrical
+            probTupletType (list of list): Prob tuplet type across duration
                                            levels
-            currentLevel (int): Current metrical level
+            currentLevel (int): Current duration level
 
         Returns:
             tupletType (int): Tuplet type (e.g., '3' stands for triplet)
@@ -356,7 +356,7 @@ class RhythmTreeFactory(object):
             accentList (list of int): A list of levels that should be accented
             rhythmTree: the rhythmTree to set accents on
         """
-        treeDepth = rhythmTree.getLowestMetricalLevel()
+        treeDepth = rhythmTree.getLowestDurationLevel()
         # for accent in accentList:
 
 

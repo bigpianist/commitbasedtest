@@ -24,7 +24,7 @@ probTupletType = [[7, 7, 7],
 def testRhythmicSpaceIsInstantiatedCorrectly():
     root = RhythmTree(1, 2)
     assert root.duration == 1
-    assert root.metricalLevel == 2
+    assert root.durationLevel == 2
 
 
 def testRhythmicSpaceIsCreatedCorrectly():

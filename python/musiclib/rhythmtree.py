@@ -7,34 +7,19 @@ class RhythmTree(Tree):
 
     Attributes:
         duration (float): Duration of node of the rhythm space
-        metricalLevel (int):  Metrical level of node of the rhythm space
+        durationLevel (int):  Metrical level of node of the rhythm space
         metricalAccent (int): Metrical accent level in the metrical grid
-        lowestMetricalLevel (int):
+        lowestDurationLevel (int):
         hasTupletChildren (bool): Flag to know whether node has children
                                   that are a tuplet
     """
 
-    def __init__(self, duration, metricalLevel, children=None):
+    def __init__(self, duration, durationLevel, children=None):
         super(RhythmTree, self).__init__(duration, children)
         self.duration = float(duration)
-        #TODO: 2 things about the use of "metrical":
-        # 1. we need to be consistent and use either "metricLevel" or "metricalLevel"
-        # throughout the codebase. We've used metricLevel thus far.
-        # 2. it's not exactly the same thing as metric level semantically - let's chat about this
-        # UPDATE: I thought of a concise example highlighting the difference. If you have an onset
-        # that is on the downbeat, but only has a duration of a 1/16 note,
-        # then the metric level of that onset is not 4, it's 0. The metric level
-        # is based on onset, not on duration. There is obviously a correlation, but
-        # we should consider renaming these levels to "durationLevels". We'll still
-        # have to keep it the same as metric levels (so that a 0 duration level == a 0 metric level)
-        # but that makes it semantically correct. If we kept metric level, and
-        # also kept the tree structure for a generated rhythmic sequence (which we don't right now - they're de-coupled)
-        # then we would get confusion if we ever called a "getMetricLevel" function
-        # on the tree node of a generated note, since that would not reflect the metricLevel
-        # of the onset.
-        self.metricalLevel = metricalLevel
+        self.durationLevel = durationLevel
         self.metricalAccent = None
-        self.lowestMetricalLevel = None
+        self.lowestDurationLevel = None
         self.hasTupletChildren = False
 
 
@@ -95,8 +80,8 @@ class RhythmTree(Tree):
         return self.duration
 
 
-    def getMetricalLevel(self):
-        return self.metricalLevel
+    def getDurationLevel(self):
+        return self.durationLevel
 
 
     def setDuration(self, duration):
@@ -130,12 +115,12 @@ class RhythmTree(Tree):
         self.metricalAccent = metricalAccent
 
 
-    def getLowestMetricalLevel(self):
-        return self.lowestMetricalLevel
+    def getLowestDurationLevel(self):
+        return self.lowestDurationLevel
 
 
-    def setLowestMetricalLevel(self, lowestMetricalLevel):
-        self.lowestMetricalLevel = lowestMetricalLevel
+    def setLowestDurationLevel(self, lowestDurationLevel):
+        self.lowestDurationLevel = lowestDurationLevel
 
 
     def getHasTupletChildren(self):

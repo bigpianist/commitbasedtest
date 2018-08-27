@@ -7,14 +7,14 @@ import random
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-lowestMetricalLevelOptions = rd["harmony"]["lowestMetricalLevelOptions"]
+lowestDurationLevelOptions = rd["harmony"]["lowestDurationLevelOptions"]
 
-# scores associated to the distance from the metrical level of the tactus
-# The indexes of the list represent the distance in metrical levels.
+# scores associated to the distance from the duration level of the tactus
+# The indexes of the list represent the distance in duration levels.
 tactusDistScores = rd["harmony"]["tactusDistScores"]
 
-# scores associated to the metrical prominence. Higher metrical levels are
-# favoured. The raw indexes of the list represent the metrical level,
+# scores associated to the metrical prominence. Higher duration levels are
+# favoured. The raw indexes of the list represent the duration level,
 # the column indexes represent the metrical accent.
 metricalProminenceScores = rd["harmony"]["metricalProminenceScores"]
 
@@ -22,15 +22,15 @@ musicFeaturesMaxImpact = rd["harmony"]["metricalProminenceScores"]
 
 weightMetrics = rd["harmony"]["weightMetrics"]
 
-# probability of having a dot for different metrical levels. Probabilty of
-# having a dot in the lowest metrical level must always be 0!
+# probability of having a dot for different duration levels. Probabilty of
+# having a dot in the lowest duration level must always be 0!
 probabilityDot = rd["harmony"]["probabilityDot"]
 
 # probability of single dot vs double dot. Double dot is only possible if
-# metrical level has at least 2 children below it.
+# duration level has at least 2 children below it.
 probabilitySingleDot = rd["harmony"]["probabilitySingleDot"]
 
-densityImpactMetricalLevels = rd["harmony"]["densityImpactMetricalLevels"]
+densityImpactDurationLevels = rd["harmony"]["densityImpactDurationLevels"]
 
 # probability of having a tie
 probabilityTie = rd["harmony"]["probabilityTie"]
@@ -49,8 +49,8 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         super(HarmonyRhythmGenerator, self).__init__(metre)
 
         timeSignature = metre.getTimeSignature()
-        lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
-        self.rhythmTree = self.rsf.createRhythmTree(lowestMetricalLevel,
+        lowestDurationLevel = lowestDurationLevelOptions[timeSignature]
+        self.rhythmTree = self.rsf.createRhythmTree(lowestDurationLevel,
                                                      metre)
         #TODO this should be the same type of distributions that we use
         # i.e. a dictionary with explicit keys
@@ -60,7 +60,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
 
         self._musicFeaturesMaxImpact = musicFeaturesMaxImpact
 
-        self._densityImpactMetricalLevels = densityImpactMetricalLevels[
+        self._densityImpactDurationLevels = densityImpactDurationLevels[
             timeSignature]
 
         self._weightMetrics = weightMetrics[timeSignature]
@@ -143,7 +143,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
             #rather than adhering to a convention (although we all do this sometimes)
             rhythmicSeqElement = [duration, None]
 
-            metricalLevelRS = currentRS.getMetricalLevel()
+            durationLevelRT = currentRS.getDurationLevel()
 
             # reset number of dots
             numDots = 0
@@ -151,7 +151,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
             # if current rs is last child we can apply a tie, otherwise a dot
             if currentRS.isLastChild():
                 rhythmicSeqElement = self._decideToApplyTie(
-                    rhythmicSeqElement, metricalLevelRS)
+                    rhythmicSeqElement, durationLevelRT)
             else:
                 rhythmicSeqElement, numDots = self._decideToApplyDot(
                                                     currentRS)

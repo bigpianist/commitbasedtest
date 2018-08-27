@@ -19,7 +19,7 @@ barDurations = {FOURFOUR: 4,
                 THREEFOUR: 3}
 
 # start from 0 at the level of the bar and increase by 1 at each lower level
-metricalLevelsOptions = {FOURFOUR: [WHOLENOTE,
+durationLevelsOptions = {FOURFOUR: [WHOLENOTE,
                                     HALFNOTE,
                                     QUARTERNOTE,
                                     EIGHTHNOTE,
@@ -29,7 +29,7 @@ metricalLevelsOptions = {FOURFOUR: [WHOLENOTE,
                                      EIGHTHNOTE,
                                      SIXTEENTHNOTE]}
 
-metricalSubdivisionsOptions = {FOURFOUR: {WHOLENOTE: 2,
+durationSubdivisionsOptions = {FOURFOUR: {WHOLENOTE: 2,
                                           HALFNOTE: 2,
                                           QUARTERNOTE: 2,
                                           EIGHTHNOTE: 2},
@@ -38,7 +38,7 @@ metricalSubdivisionsOptions = {FOURFOUR: {WHOLENOTE: 2,
                                            EIGHTHNOTE: 2}}
 
 
-def calculateMetricalSubdivisions(beatsPerBar, lowestDurationLevel, levelOfFullBar=0):
+def calculateDurationSubdivisions(beatsPerBar, lowestDurationLevel, levelOfFullBar=0):
     """
 
     :param beatsPerBar: number of beats in the bar
@@ -55,7 +55,7 @@ def calculateMetricalSubdivisions(beatsPerBar, lowestDurationLevel, levelOfFullB
     elif beatsPerBar % 3 == 0:
         beatsPerNextLevel = beatsPerBar / 3
         subdivisions[levelOfFullBar] = 3
-        lowerSubdivisions = calculateMetricalSubdivisions(beatsPerNextLevel, lowestDurationLevel, levelOfFullBar + 1)
+        lowerSubdivisions = calculateDurationSubdivisions(beatsPerNextLevel, lowestDurationLevel, levelOfFullBar + 1)
         #we have to overwrite the lowerSubdivisions with subdivisions because
         # it handles the levels above levelOfFullBar by just populating them with 2 (see below)
         lowerSubdivisions.update(subdivisions)
@@ -68,18 +68,18 @@ def calculateMetricalSubdivisions(beatsPerBar, lowestDurationLevel, levelOfFullB
     return subdivisions
 
 class Metre(object):
-    """Metre is a class that represents time signatures and their metrical
+    """Metre is a class that represents time signatures and their duration
     structure
 
     Attributes:
         timeSignature (str): The time signature of a piece
         tactus (dict): The note duration label and the relative numerical
-                       metrical level of the tactus
-        metricalStruct (list): The metrical structure of the time signature
-        metricalLevels (list): Note duration labels of different metrical
-                               levels. Numerical metrical level implied by
+                       duration level of the tactus
+        durationStruct (list): The duration structure of the time signature
+        durationLevels (list): Note duration labels of different duration
+                               levels. Numerical duration level implied by
                                the item index.
-        metricalSubdivisions (dict): Number of items a metrical level is
+        durationSubdivisions (dict): Number of items a duration level is
                                      subdivided in to
         barDuration (float): Duration of time signature calculated in
                              quarter notes.
@@ -100,14 +100,14 @@ class Metre(object):
         if tactusLabel not in tactusOptions[self.timeSignature]:
             raise ValueError("%s is not a supported tactusLabel" % tactusLabel)
 
-        metricalLevelTactus = metricalLevelsOptions[timeSignature].index(
+        durationLevelTactus = durationLevelsOptions[timeSignature].index(
             tactusLabel)
         self.tactus = {"label": tactusLabel,
-                       "metricalLevel": metricalLevelTactus}
+                       "durationLevel": durationLevelTactus}
 
-        self.metricalAccentuation = self._populateMetricalStruct()
-        self.metricalLevels = metricalLevelsOptions[timeSignature]
-        self.metricalSubdivisions = metricalSubdivisionsOptions[timeSignature]
+        self.durationAccentuation = self._populateDurationStruct()
+        self.durationLevels = durationLevelsOptions[timeSignature]
+        self.durationSubdivisions = durationSubdivisionsOptions[timeSignature]
         self.barDuration = barDurations[timeSignature]
 
     def getTimeSignature(self):
@@ -117,19 +117,19 @@ class Metre(object):
         return self.tactus
 
     def getTactusLevel(self):
-        return  self.tactus["metricalLevel"]
+        return  self.tactus["durationLevel"]
 
-    def getMetricalStruct(self):
+    def getDurationStruct(self):
         return self.metricalAccentuation
 
-    def getMetricalLevels(self):
-        return self.metricalLevels
+    def getDurationLevels(self):
+        return self.durationLevels
 
-    def getMetricalSubdivisions(self):
-        return self.metricalSubdivisions
+    def getDurationSubdivisions(self):
+        return self.durationSubdivisions
 
     def getBarDuration(self):
         return self.barDuration
 
-    def _populateMetricalStruct(self):
+    def _populateDurationStruct(self):
         pass

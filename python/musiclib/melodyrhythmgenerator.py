@@ -3,20 +3,20 @@ from musiclib.probability import *
 from musiclib.rhythmdata import rhythmData as rd
 import random
 
-#TODO: Internal repetition, prefer metrical levels of tuplets, elaborate
+#TODO: Internal repetition, prefer duration levels of tuplets, elaborate
 # duration fingerprint, add rests, fix bug
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-lowestMetricalLevelOptions = rd["melody"]["lowestMetricalLevelOptions"]
+lowestDurationLevelOptions = rd["melody"]["lowestDurationLevelOptions"]
 
-# scores associated to the distance from the metrical level of the tactus
-# The indexes of the list represent the distance in metrical levels.
+# scores associated to the distance from the duration level of the tactus
+# The indexes of the list represent the distance in duration levels.
 tactusDistScores = rd["melody"]["tactusDistScores"]
 
-# scores associated to the metrical prominence. Higher metrical levels are
-# favoured. The raw indexes of the list represent the metrical level,
+# scores associated to the metrical prominence. Higher duration levels are
+# favoured. The raw indexes of the list represent the duration level,
 # the column indexes represent the metrical accent.
 metricalProminenceScores = rd["melody"]["metricalProminenceScores"]
 
@@ -24,33 +24,33 @@ musicFeaturesMaxImpact = rd["melody"]["metricalProminenceScores"]
 
 weightMetrics = rd["melody"]["weightMetrics"]
 
-# probability of having a dot for different metrical levels. Probabilty of
-# having a dot in the lowest metrical level must always be 0!
+# probability of having a dot for different duration levels. Probabilty of
+# having a dot in the lowest duration level must always be 0!
 probabilityDot = rd["melody"]["probabilityDot"]
 
 # probability of single dot vs double dot. Double dot is only possible if
-# metrical level has at least 2 children below it.
+# duration level has at least 2 children below it.
 probabilitySingleDot = rd["melody"]["probabilitySingleDot"]
 
-densityImpactMetricalLevels = rd["melody"]["densityImpactMetricalLevels"]
+densityImpactDurationLevels = rd["melody"]["densityImpactDurationLevels"]
 
 # probability of having a tie
 probabilityTie = rd["melody"]["probabilityTie"]
 
 
-# probability of having a tuplet given a metrical level and metrical accent.
-# Data is in the format prob[metricalLevel][metricalAccent]
+# probability of having a tuplet given a duration level and metrical accent.
+# Data is in the format prob[durationLevel][metricalAccent]
 probTuplets = rd["melody"]["probTuplets"]
 
-# probability distr for type of tuplet across metrical levels. Data
-# is in the format prob[metricalLevel][tupletType]. Column index 0 stands
+# probability distr for type of tuplet across duration levels. Data
+# is in the format prob[durationLevel][tupletType]. Column index 0 stands
 # for the probability of triplet, index 1: probability of quintuplet,
 # index 2: probability of septuplet
 probTupletType = rd["melody"]["probTupletType"]
 
 # info re pickup and prolongation of a MU to bars previous or after core
-# bars. 'distrMetricalLevel' provides probability to be the metrical
-# level of the pickup/prolong, where metrical level = 'distrMetricalLevel'+1
+# bars. 'distrDurationLevel' provides probability to be the duration
+# level of the pickup/prolong, where duration level = 'distrDurationLevel'+1
 additionalMUmaterial = rd["melody"]["additionalMUmaterial"]
 
 
@@ -64,10 +64,10 @@ class MelodyRhythmGenerator(RhythmGenerator):
         super(MelodyRhythmGenerator, self).__init__(metre)
 
         timeSignature = metre.getTimeSignature()
-        #TODO: I don't think this value (lowestMetricalLevel) should come from the time signature-
+        #TODO: I don't think this value (lowestDurationLevel) should come from the time signature-
         # How do we support generating trees of differing depths in the same metre?
-        lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
-        self.rhythmSpace = self.rsf.createRhythmTree(lowestMetricalLevel,
+        lowestDurationLevel = lowestDurationLevelOptions[timeSignature]
+        self.rhythmSpace = self.rsf.createRhythmTree(lowestDurationLevel,
                                                      metre)
 
         self._tactusDistScores = tactusDistScores[timeSignature]
@@ -76,7 +76,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
 
         self._VAfeaturesMaxImpact = musicFeaturesMaxImpact
 
-        self._densityImpactMetricalLevels = densityImpactMetricalLevels[
+        self._densityImpactDurationLevels = densityImpactDurationLevels[
             timeSignature]
 
         self._weightMetrics = weightMetrics[timeSignature]
@@ -121,10 +121,10 @@ class MelodyRhythmGenerator(RhythmGenerator):
 
     def _generateAdditionalBar(self, metre, type):
 
-        # decide metrical level pickup/prolongation
-        distr = self._additionalMUmaterial[type]["distrMetricalLevel"]
+        # decide duration level pickup/prolongation
+        distr = self._additionalMUmaterial[type]["distrDurationLevel"]
         distr = toNormalisedCumulativeDistr(distr)
-        metricalLevel = decideCumulativeDistrOutcome(distr) + 1
+        durationLevel = decideCumulativeDistrOutcome(distr) + 1
         currentRS = self.rsf.createRhythmTree(4, metre)
 
         if type == "pickup":
@@ -132,7 +132,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         else:
             indexChild = 0
 
-        currentRS = currentRS.getDescendantAtIndex(metricalLevel, indexChild)
+        currentRS = currentRS.getDescendantAtIndex(durationLevel, indexChild)
 
         if type == "pickup":
             currentRS = currentRS.getLeftSibling()
@@ -168,7 +168,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         # index 1 indicates no tie
         rhythmicSeqElement = [duration, None]
 
-        metricalLevelRS = currentRS.getMetricalLevel()
+        durationLevelRD = currentRS.getDurationLevel()
 
         # reset number of dots
         numDots = 0
@@ -176,7 +176,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         # if current rs is last child we can apply a tie, otherwise a dot
         if currentRS.isLastChild():
             rhythmicSeqElement = self._decideToApplyTie(
-                rhythmicSeqElement, metricalLevelRS)
+                rhythmicSeqElement, durationLevelRD)
         elif currentRS.isFirstChild():
             rightSibling = currentRS.getRightSibling()
 
@@ -255,7 +255,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
             # index 1 indicates no tie
             rhythmicSeqElement = [duration, None]
 
-            metricalLevelRS = currentRS.getMetricalLevel()
+            durationLevelRT = currentRS.getDurationLevel()
 
             # reset number of dots
             numDots = 0
@@ -263,7 +263,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
             # if current rs is last child we can apply a tie, otherwise a dot
             if currentRS.isLastChild():
                 rhythmicSeqElement = self._decideToApplyTie(
-                    rhythmicSeqElement, metricalLevelRS)
+                    rhythmicSeqElement, durationLevelRT)
             else:
                 rhythmicSeqElement, numDots = self._decideToApplyDot(
                                                     currentRS)

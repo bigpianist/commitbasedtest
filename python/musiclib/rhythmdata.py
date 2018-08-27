@@ -1,6 +1,6 @@
 rhythmData = {
     "harmony":{
-        "lowestMetricalLevelOptions":{
+        "lowestDurationLevelOptions":{
             "4/4": 3,
             "3/4": 2
         },
@@ -36,7 +36,7 @@ rhythmData = {
                 "metricalProminence": 1
             },
         },
-        "densityImpactMetricalLevels":{
+        "densityImpactDurationLevels":{
             "4/4": [-0.5, -0.2, 0, 1],
             "3/4": [0, 0.4, 1]
         },
@@ -59,7 +59,7 @@ rhythmData = {
     },
 
     "melody":{
-        "lowestMetricalLevelOptions":{
+        "lowestDurationLevelOptions":{
             "4/4": 4,
             "3/4": 3
         },
@@ -96,7 +96,7 @@ rhythmData = {
                 "metricalProminence": 1
             },
         },
-        "densityImpactMetricalLevels":{
+        "densityImpactDurationLevels":{
             "4/4": [-0.5, -0.2, 0, 0.6, 1],
             "3/4": [0, 0.3, 0.6, 1]
         },
@@ -150,21 +150,21 @@ rhythmData = {
             "4/4": {
                 "pickup": {
                             "prob": 0.6,
-                            "distrMetricalLevel": [0.1, 0.3, 0.4, 0.2]
+                            "distrDurationLevel": [0.1, 0.3, 0.4, 0.2]
                         },
                         "prolongation": {
                             "prob": 0.15,
-                            "distrMetricalLevel": [0.05, 0.35, 0.4, 0.2]
+                            "distrDurationLevel": [0.05, 0.35, 0.4, 0.2]
                         }
             },
             "3/4": {
                 "pickup": {
                             "prob": 0.2,
-                            "distrMetricalLevel": [0.3, 0.4, 0.3]
+                            "distrDurationLevel": [0.3, 0.4, 0.3]
                         },
                         "prolongation": {
                             "prob": 0.2,
-                            "distrMetricalLevel": [0.3, 0.4, 0.3]
+                            "distrDurationLevel": [0.3, 0.4, 0.3]
                         }
             }
         }

@@ -14,7 +14,7 @@ harmonicTactusOptions = {FOURFOUR: (WHOLENOTE, HALFNOTE, QUARTERNOTE),
 
 timeSignatures = (FOURFOUR, THREEFOUR)
 
-metricalLevels = {FOURFOUR: [WHOLENOTE,
+durationLevels = {FOURFOUR: [WHOLENOTE,
                              HALFNOTE,
                              QUARTERNOTE,
                              EIGHTHNOTE],
@@ -45,15 +45,15 @@ class HarmonicMetre(object):
 
         #TODO: should be using the timeSignature.getMetricLevel(tactusDur) as the CodeReview.txt suggested
         self.harmonicTactus = {"label": harmonicTactusLabel,
-                               "metricalLevel": metricalLevels[
+                               "durationLevel": durationLevels[
                                    timeSignature].index(harmonicTactusLabel)}
-        self.metricalLevels = metricalLevels[timeSignature]
+        self.durationLevels = durationLevels[timeSignature]
 
     def getHarmonicTactus(self):
         return self.harmonicTactus
 
     def getHarmonicTactusLevel(self):
-        return self.harmonicTactus["metricalLevel"]
+        return self.harmonicTactus["durationLevel"]
 
-    def getHarmonicMetricalLevels(self):
-        return self.metricalLevels
+    def getHarmonicDurationLevels(self):
+        return self.durationLevels
