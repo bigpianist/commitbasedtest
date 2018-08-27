@@ -5,21 +5,6 @@ import random
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-#TODO: I think we can generalize this
-# while this one is tricky, it would be preferrable for this
-# to be encapsulated in a function, even if you're using a dict
-# so getMetricLevelDuration(timeSig, metricLevel)
-metricalLevelDurations = {FOURFOUR: {0: 4.0,
-                                     1: 2.0,
-                                     2: 1.0,
-                                     3: 0.5,
-                                     4: 0.25},
-                          THREEFOUR: {0: 3,
-                                      1: 1,
-                                      3: 0.5,
-                                      4: 0.25}
-                          }
-
 
 class RhythmTreeFactory(object):
     """RhythmTreeFactory is a class used for instantiating and
@@ -41,7 +26,8 @@ class RhythmTreeFactory(object):
         """
         startLevel = highestMetricalLevel
         timeSignature = metre.getTimeSignature()
-        duration = float(metricalLevelDurations[timeSignature][startLevel])
+        duration = RhythmTreeFactory.getDurationAtDurationLevel(timeSignature,
+                                                                startLevel)
 
         # instantiate root level of rhythm space
         rhythmTree = RhythmTree(duration, startLevel)
@@ -55,9 +41,10 @@ class RhythmTreeFactory(object):
             return rhythmTree
 
         # expand root
-        rhythmTree = self._expandTree(lowestMetricalLevel, metricalLevels,
+        rhythmTree = self._expandTree(rhythmTree, lowestMetricalLevel,
+                                      metricalLevels,
                                       metricalSubdivisions, duration,
-                                      startLevel + 1, rhythmTree)
+                                      startLevel + 1)
         return rhythmTree
 
 
@@ -224,19 +211,9 @@ class RhythmTreeFactory(object):
         self._modifyTripletItemsDurations(parent, parentMetricalLevel)
         self._expandNode(lowestMetricalLevel, startLevel, parent.children[2])
 
-    #TODO: This should be called expandTree or buildTreeFromRoot to know that a tree is the return value
-    #I also usually try to have a convention for argument order - in
-    #general, if you're operating on a particular object, that object should be first.
-    #in this case, let's put parent at the beginning. Optional arguments always have to
-    #go at the end of the list in python, so the convention is sort of
-    #the opposite of that (most important argument first). I'm sure Andy
-    #has an informal convention for this as well.
-    #It's also about usage - when I call this function, I'll have
-    #a specific 'parent' object in mind when I'm finding the function.
-    #So it's easiest to just write it in as the first argument and then
-    # figure out the other necessary arguments
-    def _expandTree(self, lowestMetricalLevel, metricalLevels,
-                    metricalSubdivisions, barDuration, currentLevel, parent):
+
+    def _expandTree(self, parent, lowestMetricalLevel, metricalLevels,
+                    metricalSubdivisions, barDuration, currentLevel):
 
         # return up the stack if we're at the lowest metrical level
         if (lowestMetricalLevel - currentLevel) < 0:
@@ -269,9 +246,9 @@ class RhythmTreeFactory(object):
             # and cheap to call.
             child.setLowestMetricalLevel(lowestMetricalLevel)
 
-            self._expandTree(lowestMetricalLevel, metricalLevels,
+            self._expandTree(child, lowestMetricalLevel, metricalLevels,
                              metricalSubdivisions, barDuration,
-                             currentLevel + 1, child)
+                             currentLevel + 1)
         return parent
 
 
@@ -297,13 +274,13 @@ class RhythmTreeFactory(object):
 
     def _expandNode(self, lowestMetricalLevel, currentLevel, parent):
 
-        NOSUBDIVISIONS = 2
+        numSubdivisions = 2
 
         # return up the stack if we've reached the desired depth
         if (lowestMetricalLevel - currentLevel) < 0:
             return
         parentDuration = parent.getDuration()
-        duration = parentDuration / NOSUBDIVISIONS
+        duration = parentDuration / numSubdivisions
         for _ in range(2):
             child = RhythmTree(duration, currentLevel)
             parent.addChild(child)
@@ -381,6 +358,30 @@ class RhythmTreeFactory(object):
         """
         treeDepth = rhythmTree.getLowestMetricalLevel()
         # for accent in accentList:
+
+
+    @staticmethod
+    def getDurationAtDurationLevel(timeSig, durationLevel):
+        """Returns the duration in quarter notes of duration level,
+        for a given time signature
+
+        Args:
+            timeSig:
+            durationLevel (int):
+
+        """
+        durationLevelDurations = {FOURFOUR: {0: 4.0,
+                                             1: 2.0,
+                                             2: 1.0,
+                                             3: 0.5,
+                                             4: 0.25},
+                                  THREEFOUR: {0: 3,
+                                              1: 1,
+                                              3: 0.5,
+                                              4: 0.25}
+                                  }
+
+        return durationLevelDurations[timeSig][durationLevel]
 
 
 

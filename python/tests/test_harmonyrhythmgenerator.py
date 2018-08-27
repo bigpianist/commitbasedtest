@@ -23,10 +23,10 @@ def testCompressValues():
 
 
 def testCalculateScores():
-    d1 = hrg.rhythmSpace
-    d2 = hrg.rhythmSpace.children[1]
-    d3 = hrg.rhythmSpace.children[1].children[0]
-    d4 = hrg.rhythmSpace.children[1].children[0].children[0]
+    d1 = hrg.rhythmTree
+    d2 = hrg.rhythmTree.children[1]
+    d3 = hrg.rhythmTree.children[1].children[0]
+    d4 = hrg.rhythmTree.children[1].children[0].children[0]
 
     hm2 = HarmonicMetre("4/4", "halfnote")
     candidates = [d2, d3, d4]
