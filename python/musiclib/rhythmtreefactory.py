@@ -29,7 +29,7 @@ class RhythmTreeFactory(object):
         duration = RhythmTreeFactory.getDurationAtDurationLevel(timeSignature,
                                                                 startLevel)
 
-        # instantiate root level of rhythm space
+        # instantiate root level of rhythm tree
         rhythmTree = RhythmTree(duration, startLevel)
         rhythmTree.setMetricalAccent(startLevel)
         rhythmTree.setLowestDurationLevel(lowestDurationLevel)
@@ -231,20 +231,7 @@ class RhythmTreeFactory(object):
             child = RhythmTree(duration, currentLevel)
             parent.addChild(child)
 
-            # assign metrical accent to child
-            #TODO if this is always the same on every node,
-            # you could just store it on the root and reference
-            # the root each time. That way you wouldn't have to
-            # change every node if you change the metricalAccent.
-            # Take a look at getKey in melodrive\composition\structure\structuralelement.py
             child.assignMetricalAccent(parent, currentLevel)
-
-            # assign lowest metrical level to child
-            # TODO: ditto, I don't think that this is necessary at every node
-            # if you did need to know how deep your tree went, it would
-            # be better to just have a getDepth() function, which is easy to implement
-            # and cheap to call.
-            child.setLowestDurationLevel(lowestDurationLevel)
 
             self._expandTree(child, lowestDurationLevel, durationLevels,
                              durationSubdivisions, barDuration,
@@ -288,9 +275,6 @@ class RhythmTreeFactory(object):
             # assign metrical accent to child
             child.assignMetricalAccent(parent, currentLevel)
 
-            # assign lowest duration level to child
-            child.setLowestDurationLevel(lowestDurationLevel)
-
             self._expandNode(lowestDurationLevel, currentLevel+1, child)
 
 
@@ -307,7 +291,6 @@ class RhythmTreeFactory(object):
         Returns:
             parent (RhythmTree)
         """
-        lowestDurationLevel = parent.getLowestDurationLevel()
         parentMetricalAccent = parent.getMetricalAccent()
 
         # create children, add them to parent and assign them a metrical accent
@@ -319,8 +302,6 @@ class RhythmTreeFactory(object):
             else:
                 child.setMetricalAccent(durationLevel)
 
-            # assign lowest metrical level to child
-            child.setLowestDurationLevel(lowestDurationLevel)
             parent.addChild(child)
 
         return parent
@@ -360,6 +341,7 @@ class RhythmTreeFactory(object):
         # for accent in accentList:
 
 
+    #TODO: Generalise this method
     @staticmethod
     def getDurationAtDurationLevel(timeSig, durationLevel):
         """Returns the duration in quarter notes of duration level,

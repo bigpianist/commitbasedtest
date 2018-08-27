@@ -116,7 +116,14 @@ class RhythmTree(Tree):
 
 
     def getLowestDurationLevel(self):
-        return self.lowestDurationLevel
+        """Recursively traverse up the tree and get the lowestDurationLevel on
+        the root
+        """
+
+        if not self.hasParent():
+            return self.lowestDurationLevel
+        else:
+            return self.parent.getLowestDurationLevel()
 
 
     def setLowestDurationLevel(self, lowestDurationLevel):
