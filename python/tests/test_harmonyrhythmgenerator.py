@@ -1,7 +1,7 @@
 from musiclib.harmonyrhythmgenerator import HarmonyRhythmGenerator
 from musiclib.harmonicmetre import HarmonicMetre
 from musiclib.metre import Metre
-from musiclib.rhythmspace import RhythmSpace
+from musiclib.rhythmtree import RhythmTree
 
 m = Metre("4/4", "quarternote")
 hm = HarmonicMetre("3/4", "dottedhalfnote")

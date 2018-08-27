@@ -1,4 +1,4 @@
-from musiclib.rhythmspace import RhythmSpace
+from musiclib.rhythmtree import RhythmTree
 from musiclib.probability import *
 import random
 
@@ -20,14 +20,14 @@ metricalLevelDurations = {FOURFOUR: {0: 4.0,
                                       4: 0.25}
                           }
 
-#TODO: rename this to RhythmTreeFactory, I think we should just call RhythmSpace RhythmTree in general, since it will always be a tree
-class RhythmSpaceFactory(object):
-    """RhythmSpaceFactory is a class used for instantiating and
+
+class RhythmTreeFactory(object):
+    """RhythmTreeFactory is a class used for instantiating and
     manipulating rhythm space objects.
     """
 
     def __init__(self):
-        super(RhythmSpaceFactory, self).__init__()
+        super(RhythmTreeFactory, self).__init__()
 
 
     def createRhythmSpace(self, lowestMetricalLevel, metre,
@@ -45,7 +45,7 @@ class RhythmSpaceFactory(object):
         duration = float(metricalLevelDurations[timeSignature][STARTLEVEL])
 
         # instantiate root level of rhythm space
-        rhythmSpace = RhythmSpace(duration, STARTLEVEL)
+        rhythmSpace = RhythmTree(duration, STARTLEVEL)
         rhythmSpace.setMetricalAccent(STARTLEVEL)
         rhythmSpace.setLowestMetricalLevel(lowestMetricalLevel)
 
@@ -74,7 +74,7 @@ class RhythmSpaceFactory(object):
                                    different metrical levels
 
         Returns:
-            newTree (RhythmSpace): Rhythm space with tuplets
+            newTree (RhythmTree): Rhythm space with tuplets
         """
 
         lowestMetricalLevel = parent.getLowestMetricalLevel()
@@ -106,7 +106,7 @@ class RhythmSpaceFactory(object):
         space tree
 
         Args:
-            tree (RhythmSpace): Root of the rhythm space tree
+            tree (RhythmTree): Root of the rhythm space tree
             """
 
         # get all the nodes of the tree which have tuplet children
@@ -125,7 +125,7 @@ class RhythmSpaceFactory(object):
         """Inserts a tuplet of a given type in a rhythm space node
 
         Args:
-            parent (RhythmSpace): RhythmSpace object that gets a
+            parent (RhythmTree): RhythmTree object that gets a
             tupletType (int): Number that indicates the type of tuplet to be
                               inserted (e.g., 5 stands for quintuplet)
         """
@@ -148,10 +148,10 @@ class RhythmSpaceFactory(object):
         initial metrical divisions for a given node.
 
         Args:
-            tree (RhythmSpace): RhythmSpace node that needs to be restored
+            tree (RhythmTree): RhythmTree node that needs to be restored
         """
 
-        # remove children from RhythmSpace node
+        # remove children from RhythmTree node
         tree.removeChildren()
 
         # expand node
@@ -165,13 +165,13 @@ class RhythmSpaceFactory(object):
         """Inserts a non triplet tuplet in a rhythm space tree.
 
         Args:
-            parent (RhythmSpace): Node in the rhythm space, the tuplet is
+            parent (RhythmTree): Node in the rhythm space, the tuplet is
                                   inserted into
             tupletType (int): Number that indicates the type of tuplet to be
                               inserted (e.g., 5 stands for quintuplet)
 
         Returns:
-            parent (RhythmSpace)
+            parent (RhythmTree)
         """
 
         NOMETRICALLEVELSBELOWPARENT = 2
@@ -207,7 +207,7 @@ class RhythmSpaceFactory(object):
 
         # add extra child to parent
         parentMetricalLevel = parent.getMetricalLevel()
-        child = RhythmSpace(1, parentMetricalLevel+1)
+        child = RhythmTree(1, parentMetricalLevel + 1)
         child.setMetricalAccent(parentMetricalLevel+1)
 
         parent.addChild(child)
@@ -254,7 +254,7 @@ class RhythmSpaceFactory(object):
 
         # create as many children as the number of subdivisions of the parent
         for _ in range(subdivisionsParent):
-            child = RhythmSpace(duration, currentLevel)
+            child = RhythmTree(duration, currentLevel)
             parent.addChild(child)
 
             # assign metrical accent to child
@@ -308,7 +308,7 @@ class RhythmSpaceFactory(object):
         parentDuration = parent.getDuration()
         duration = parentDuration / NOSUBDIVISIONS
         for _ in range(2):
-            child = RhythmSpace(duration, currentLevel)
+            child = RhythmTree(duration, currentLevel)
             parent.addChild(child)
 
             # assign metrical accent to child
@@ -325,20 +325,20 @@ class RhythmSpaceFactory(object):
         level
 
         Args:
-            parent (RhythmSpace): Node we want to add the children to
+            parent (RhythmTree): Node we want to add the children to
             number (int): Number of children to be added
             noteDuration (float): Note duration of children
             metricalLevel (float): Metrical level of children
 
         Returns:
-            parent (RhythmSpace)
+            parent (RhythmTree)
         """
         lowestMetricalLevel = parent.getLowestMetricalLevel()
         parentMetricalAccent = parent.getMetricalAccent()
 
         # create children, add them to parent and assign them a metrical accent
         for i in range(number):
-            child = RhythmSpace(noteDuration, metricalLevel)
+            child = RhythmTree(noteDuration, metricalLevel)
 
             if i == 0:
                 child.setMetricalAccent(parentMetricalAccent)

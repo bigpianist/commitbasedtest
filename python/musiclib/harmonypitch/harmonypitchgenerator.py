@@ -142,7 +142,7 @@ class HarmonyPitchGenerator(object):
         """Generates a chord progression for a harmonic rhythm sequence
 
         Args:
-            harmonicRhythm (list): List containing RhythmSpace objects
+            harmonicRhythm (list): List containing RhythmTree objects
             harmonicComplexity (float): Value of emotional feature
             minMajRatio (float): Value of emotional feature
             structureLevelMU (str):
@@ -251,7 +251,7 @@ class HarmonyPitchGenerator(object):
         """Applies a stock cadence
 
         Args:
-            harmonicRhythm (list): List of RhythmSpace objects
+            harmonicRhythm (list): List of RhythmTree objects
 
         Returns:
             cadenceChordProgression (list): List of Chord objects
@@ -288,7 +288,7 @@ class HarmonyPitchGenerator(object):
 
         Args:
             scores (list): List of scores for the 48 triads
-            durationObj (RhythmSpace):
+            durationObj (RhythmTree):
 
         Returns:
             newChord (str): Chord code of new triad

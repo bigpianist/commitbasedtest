@@ -1,8 +1,8 @@
 from musiclib.tree import Tree
 
-#TODO: rename this to RhythmTree
-class RhythmSpace(Tree):
-    """RhythmSpace is a class to represent the rhythm space of a bar of
+
+class RhythmTree(Tree):
+    """RhythmTree is a class to represent the rhythm space of a bar of
     a given time signature with a tree structure.
 
     Attributes:
@@ -15,7 +15,7 @@ class RhythmSpace(Tree):
     """
 
     def __init__(self, duration, metricalLevel, children=None):
-        super(RhythmSpace, self).__init__(duration, children)
+        super(RhythmTree, self).__init__(duration, children)
         self.duration = float(duration)
         #TODO: 2 things about the use of "metrical":
         # 1. we need to be consistent and use either "metricLevel" or "metricalLevel"
@@ -66,7 +66,7 @@ class RhythmSpace(Tree):
             numDots (int): Number of dots current rhythmic space
 
         Returns:
-            candidateDurations (list): List of RhythmSpace objects
+            candidateDurations (list): List of RhythmTree objects
         """
 
         if numDots == 0:
@@ -81,7 +81,7 @@ class RhythmSpace(Tree):
         figuring out whether it is a first child
 
         Args:
-            parent (RhythmSpace): Parent node of self
+            parent (RhythmTree): Parent node of self
             currentLevel (int): Metrical level of the child
         """
         if self.isFirstChild():
@@ -113,7 +113,7 @@ class RhythmSpace(Tree):
         and picking the 0-index children
 
         Returns:
-            candidateDurations (list): List of RhythmSpace objects
+            candidateDurations (list): List of RhythmTree objects
         """
         candidateDurations.append(self)
 
@@ -201,7 +201,7 @@ class RhythmSpace(Tree):
         current one, in case the current duration isn't dotted.
 
         Returns:
-            candidateDurations (list): List of RhythmSpace objects
+            candidateDurations (list): List of RhythmTree objects
 
         """
 
@@ -231,7 +231,7 @@ class RhythmSpace(Tree):
             numDots (int): Should be either 1 or 2
 
         Retutrns:
-            candidateDurations (RhythmSpace):  List of RhythmSpace objects
+            candidateDurations (RhythmTree):  List of RhythmTree objects
         """
 
         LASTCHILDINDEX = 1

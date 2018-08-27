@@ -1,4 +1,4 @@
-from musiclib.rhythmspacefactory import RhythmSpaceFactory
+from musiclib.rhythmtreefactory import RhythmTreeFactory
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
 from musiclib.rhythmdata import rhythmData as rd
@@ -42,7 +42,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
     """HarmonyRhythmGenerator is responsible for generating harmonic rhythm
 
     Attributes:
-          rhythmSpace (RhythmSpace): Rhythm space tree
+          rhythmSpace (RhythmTree): Rhythm space tree
     """
 
     def __init__(self, metre):

@@ -1,6 +1,6 @@
 from musiclib.melodypitch.melodybackbonegenerator import MelodyBackboneGenerator
 from musiclib.harmonypitch.chord import Chord
-from musiclib.rhythmspace import RhythmSpace
+from musiclib.rhythmtree import RhythmTree
 from musiclib.melodypitch.note import Note
 
 LOW = "low"
@@ -157,24 +157,24 @@ def testPitchIsChosenCorrectly():
 
 def testBackboneNotesAreGeneratedCorrectly():
     c1 = Chord("0+-")
-    r1 = RhythmSpace(1, 1)
+    r1 = RhythmTree(1, 1)
     r1.metricalAccent = 0
     n1 = Note(r1, c1)
 
 
     c2 = Chord("5-+")
-    r2 = RhythmSpace(1, 1)
+    r2 = RhythmTree(1, 1)
     r2.metricalAccent = 2
     n2 = Note(r2, c2)
 
 
     c3 = Chord("7+--")
-    r3 = RhythmSpace(1, 1)
+    r3 = RhythmTree(1, 1)
     r3.metricalAccent = 1
     n3 = Note(r3, c3)
 
     c4 = Chord("0-+")
-    r4 = RhythmSpace(1, 1)
+    r4 = RhythmTree(1, 1)
     r4.metricalAccent = 0
     n4 = Note(r4, c4)
 

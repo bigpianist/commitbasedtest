@@ -1,6 +1,6 @@
 from musiclib.melodyrhythmgenerator import MelodyRhythmGenerator
 from musiclib.metre import Metre, calculateMetricalSubdivisions
-from musiclib.rhythmspacefactory import RhythmSpaceFactory
+from musiclib.rhythmtreefactory import RhythmTreeFactory
 
 m = Metre("4/4", "quarternote")
 r = MelodyRhythmGenerator(m)
@@ -38,7 +38,7 @@ def testSubdivisionCalc():
 # def testTreeDepthOfOne():
 #     met = Metre("4/4", "quarternote")
 #     rGen = MelodyRhythmGenerator(met)
-#     rSpace = RhythmSpaceFactory()
+#     rSpace = RhythmTreeFactory()
 #     rSpace = rSpace.createRhythmSpace(1, met)
 #     rGen.rhythmSpace = rSpace
 #
@@ -51,7 +51,7 @@ def testSubdivisionCalc():
 # def testTreeDepthOfTwo():
 #     met = Metre("4/4", "quarternote")
 #     rGen = MelodyRhythmGenerator(met)
-#     rSpace = RhythmSpaceFactory()
+#     rSpace = RhythmTreeFactory()
 #     rSpace = rSpace.createRhythmSpace(2, met)
 #     rGen.rhythmSpace = rSpace
 #

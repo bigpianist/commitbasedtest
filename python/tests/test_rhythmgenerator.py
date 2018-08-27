@@ -1,6 +1,6 @@
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.metre import Metre
-from musiclib.rhythmspace import RhythmSpace
+from musiclib.rhythmtree import RhythmTree
 
 
 m = Metre("4/4", "quarternote")
@@ -36,10 +36,10 @@ def testVAfeaturesAreMappedCorrectly():
 
 
 def testCalcScoreDistHarmonicTactusReturnsCorrectScores():
-    d1 = RhythmSpace(1, 0)
-    d2 = RhythmSpace(1, 1)
-    d3 = RhythmSpace(1, 2)
-    d4 = RhythmSpace(1, 3)
+    d1 = RhythmTree(1, 0)
+    d2 = RhythmTree(1, 1)
+    d3 = RhythmTree(1, 2)
+    d4 = RhythmTree(1, 3)
 
     candidates = [d1, d2, d3, d4]
     expectedScores = [0.4, 0.6, 1, 0.6]
@@ -70,9 +70,9 @@ def testDecideToApplyTie():
 
 
 def testScoresAreModifiedCorrectlyForDensity():
-    d1 = RhythmSpace(1, 0)
-    d2 = RhythmSpace(1, 1)
-    d3 = RhythmSpace(1, 2)
+    d1 = RhythmTree(1, 0)
+    d2 = RhythmTree(1, 1)
+    d3 = RhythmTree(1, 2)
     candidates = [d1, d2, d3]
     scores = [0.8, 0.6, 0.5]
     r.densityImpact = 1

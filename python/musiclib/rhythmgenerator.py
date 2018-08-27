@@ -1,5 +1,5 @@
 from musiclib.probability import *
-from musiclib.rhythmspacefactory import RhythmSpaceFactory
+from musiclib.rhythmtreefactory import RhythmTreeFactory
 import random
 
 FOURFOUR = "4/4"
@@ -62,7 +62,7 @@ class RhythmGenerator(object):
         self.entropyImpact = None
         self.densityImpact = None
 
-        self.rsf = RhythmSpaceFactory()
+        self.rsf = RhythmTreeFactory()
         self._barDuration = metre.getBarDuration()
 
 
@@ -150,11 +150,11 @@ class RhythmGenerator(object):
 
         Args:
             scores (list): List of scores for each duration candidate
-            candidates (list of lists): List of RhythmSpace objects that
+            candidates (list of lists): List of RhythmTree objects that
                                         can be chosen as the next duration
 
         Returns:
-            nextDuration (RhythmSpace): Duration (RhythmSpace object) to be
+            nextDuration (RhythmTree): Duration (RhythmTree object) to be
                                         used
         """
 
@@ -171,7 +171,7 @@ class RhythmGenerator(object):
         bigger the distance the lower the score.
 
         Args:
-            candidates (list of RhythmSpace objects): All the candidates to be
+            candidates (list of RhythmTree objects): All the candidates to be
                                                       evaluated
             tactusLevel (int): Numeric index of tactus
 
@@ -206,7 +206,7 @@ class RhythmGenerator(object):
         tend to be favoured, especially on strong metrical points.
 
         Args:
-            candidates (list of RhythmSpace objects): All the candidates to be
+            candidates (list of RhythmTree objects): All the candidates to be
                                                       evaluated
             metricalLevels (list): Available metrical levels
 
@@ -269,7 +269,7 @@ class RhythmGenerator(object):
         """Decides whether to apply a dot either single or double.
 
         Args:
-            rhythmSpace (RhythmSpace): Chosen rhythm space node
+            rhythmSpace (RhythmTree): Chosen rhythm space node
 
         Returns:
             newDuration (list): Pair duration, 't' (symbol for tie), if tie

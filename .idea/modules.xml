@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../lsystem/.idea/lsystem.iml" filepath="$PROJECT_DIR$/../lsystem/.idea/lsystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lunarlander/.idea/lunarlander.iml" filepath="$PROJECT_DIR$/../lunarlander/.idea/lunarlander.iml" />
       <module fileurl="file://$PROJECT_DIR$/../dev/melodrive/.idea/melodrive.iml" filepath="$PROJECT_DIR$/../dev/melodrive/.idea/melodrive.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/musiclib.iml" filepath="$PROJECT_DIR$/.idea/musiclib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../utilityAI/.idea/utilityAI.iml" filepath="$PROJECT_DIR$/../utilityAI/.idea/utilityAI.iml" />
     </modules>
   </component>
 </project>
