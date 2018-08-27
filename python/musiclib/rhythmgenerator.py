@@ -265,11 +265,11 @@ class RhythmGenerator(object):
         return dottedDuration
 
 
-    def _decideToApplyDot(self, rhythmSpace):
+    def _decideToApplyDot(self, rhythmTree):
         """Decides whether to apply a dot either single or double.
 
         Args:
-            rhythmSpace (RhythmTree): Chosen rhythm space node
+            rhythmTree (RhythmTree): Chosen rhythm space node
 
         Returns:
             newDuration (list): Pair duration, 't' (symbol for tie), if tie
@@ -277,8 +277,8 @@ class RhythmGenerator(object):
             numDots (int): Number of dots applied
         """
 
-        duration = rhythmSpace.getDuration()
-        metricalLevel = rhythmSpace.getMetricalLevel()
+        duration = rhythmTree.getDuration()
+        metricalLevel = rhythmTree.getMetricalLevel()
         r = random.random()
 
         numDots = 0

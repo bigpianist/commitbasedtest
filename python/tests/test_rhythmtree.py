@@ -5,7 +5,7 @@ from musiclib.metre import Metre
 m3 = Metre("3/4", "quarternote")
 m4 = Metre("4/4", "quarternote")
 rsf = RhythmTreeFactory()
-rs3 = rsf.createRhythmSpace(2, m3)
+rs3 = rsf.createRhythmTree(2, m3)
 
 probTuplets = [[0.02, 0, 0, 0, 0],
                           [0.03, 0.07, 0, 0, 0],
@@ -30,7 +30,7 @@ def testRhythmicSpaceIsInstantiatedCorrectly():
 def testRhythmicSpaceIsCreatedCorrectly():
     m = Metre("3/4", "quarternote")
     rsf = RhythmTreeFactory()
-    rs2 = rsf.createRhythmSpace(2, m)
+    rs2 = rsf.createRhythmTree(2, m)
 
     rs = RhythmTree(3, 0,
                     [RhythmTree(1, 1,
@@ -47,7 +47,7 @@ def testInsertTriplet():
     rsf = RhythmTreeFactory()
     m = Metre("4/4", "quarternote")
 
-    rs = rsf.createRhythmSpace(3, m)
+    rs = rsf.createRhythmTree(3, m)
 
     rs1 = RhythmTree(2, 0,
                      [RhythmTree(1, 1,
@@ -65,7 +65,7 @@ def testInsertTriplet():
 def testCorrectCandidateDurationsWithNoDotsArePicked():
     m5 = Metre("4/4", "quarternote")
     rsf5 = RhythmTreeFactory()
-    rs5 = rsf.createRhythmSpace(2, m5)
+    rs5 = rsf.createRhythmTree(2, m5)
 
     # starting from root
     expectedResult5 = [rs5, rs5.children[0], rs5.children[0].children[0]]
@@ -74,7 +74,7 @@ def testCorrectCandidateDurationsWithNoDotsArePicked():
     assert expectedResult5 == result5
 
     # starting from a node which is last child
-    rs6 = rsf.createRhythmSpace(3, m5)
+    rs6 = rsf.createRhythmTree(3, m5)
     expectedResult = [rs6.children[1], rs6.children[1].children[0],
                       rs6.children[1].children[0].children[0]]
     result = rs6.children[0].children[1].children[1]._getDurationCandidatesNoDot()
@@ -95,13 +95,13 @@ def testGetDurationCandidatesDot():
 """
 """
 def testInsertTuplet():
-    rs = rsf.createRhythmSpace(4, m4)
+    rs = rsf.createRhythmTree(4, m4)
     rsf.insertTuplet(rs.children[0], 5)
 """
 
 """
 def testChildrenAreCreatedAndAddedCorrectlyToParent():
-    rs = rsf.createRhythmSpace(1, m4)
+    rs = rsf.createRhythmTree(1, m4)
     rs.removeChildren()
     parent = rsf._createChildren(rs, 4, 2.5, 3)
 
@@ -134,31 +134,31 @@ def testChildrenAreCreatedAndAddedCorrectlyToParent():
 def testTupletIsInsertedCorrectly():
 
     # triplet
-    rs2 = rsf.createRhythmSpace(2, m4)
+    rs2 = rsf.createRhythmTree(2, m4)
     rsf.insertTuplet(rs2, 3)
     assert len(rs2.children) == 3
 
     # quintuplet
-    rs2 = rsf.createRhythmSpace(2, m4)
+    rs2 = rsf.createRhythmTree(2, m4)
     rsf.insertTuplet(rs2, 5)
     assert len(rs2.children) == 5
 
 
 def testRhythmSpaceIsRestoredCorrectly():
-    rs1 = rsf.createRhythmSpace(2, m4)
-    rs2 = rsf.createRhythmSpace(2, m4)
+    rs1 = rsf.createRhythmTree(2, m4)
+    rs2 = rsf.createRhythmTree(2, m4)
     rsf.insertTuplet(rs2, 3)
-    rsf._restoreRhythmSpaceNode(rs2)
+    rsf._restoreRhythmTreeNode(rs2)
     assert str(rs1) == str(rs2)
 
 
 def testTupletsAreAddedCorrectlyToRhythmSpace():
-    rs4 = rsf.createRhythmSpace(4, m4)
-    rs4 = rsf.addTupletsToRhythmSpace(rs4, probTuplets, probTupletType)
+    rs4 = rsf.createRhythmTree(4, m4)
+    rs4 = rsf.addTupletsToRhythmTree(rs4, probTuplets, probTupletType)
 
 
 def testNodesWithTupletChildrenAreIdentifiedCorrectly():
-    rs = rsf.createRhythmSpace(4, m4)
+    rs = rsf.createRhythmTree(4, m4)
     rs.children[0].setHasTupletChildren(True)
     rs.children[1].children[1].setHasTupletChildren(True)
     nodes = rs.getNodesWithTupletChildren()
@@ -169,18 +169,18 @@ def testNodesWithTupletChildrenAreIdentifiedCorrectly():
 
 
 def testRhythmSpaceTreeIsRestoredCorrectlyFromTuplets():
-    rs = rsf.createRhythmSpace(4, m4)
-    rs2 = rsf.createRhythmSpace(4, m4)
+    rs = rsf.createRhythmTree(4, m4)
+    rs2 = rsf.createRhythmTree(4, m4)
 
     rs.children[0].setHasTupletChildren(True)
     rs.children[1].children[1].setHasTupletChildren(True)
 
-    rsf.restoreRhythmSpace(rs)
+    rsf.restoreRhythmTree(rs)
     assert str(rs) == str(rs2)
 
 
 def testTupletAncestorsAreIdentifiedCorrectly():
-    rs = rsf.createRhythmSpace(4, m4)
+    rs = rsf.createRhythmTree(4, m4)
     rs.children[1].children[1].setHasTupletChildren(True)
 
     assert rs.children[1].hasTupletAncestors() == True

@@ -42,7 +42,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
     """HarmonyRhythmGenerator is responsible for generating harmonic rhythm
 
     Attributes:
-          rhythmSpace (RhythmTree): Rhythm space tree
+          rhythmTree (RhythmTree): Rhythm space tree
     """
 
     def __init__(self, metre):
@@ -50,8 +50,8 @@ class HarmonyRhythmGenerator(RhythmGenerator):
 
         timeSignature = metre.getTimeSignature()
         lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
-        self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
-                                                      metre)
+        self.rhythmTree = self.rsf.createRhythmTree(lowestMetricalLevel,
+                                                     metre)
         #TODO this should be the same type of distributions that we use
         # i.e. a dictionary with explicit keys
         self._tactusDistScores = tactusDistScores[timeSignature]
@@ -116,7 +116,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         rhythmicSeq = []
 
         totDuration = 0
-        currentRS = self.rhythmSpace
+        currentRS = self.rhythmTree
 
         # num of dots currentRS
         numDots = 0

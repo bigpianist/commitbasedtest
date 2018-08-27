@@ -67,8 +67,8 @@ class MelodyRhythmGenerator(RhythmGenerator):
         #TODO: I don't think this value (lowestMetricalLevel) should come from the time signature-
         # How do we support generating trees of differing depths in the same metre?
         lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
-        self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
-                                                      metre)
+        self.rhythmSpace = self.rsf.createRhythmTree(lowestMetricalLevel,
+                                                     metre)
 
         self._tactusDistScores = tactusDistScores[timeSignature]
         self._metricalProminenceScores = metricalProminenceScores[
@@ -125,7 +125,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         distr = self._additionalMUmaterial[type]["distrMetricalLevel"]
         distr = toNormalisedCumulativeDistr(distr)
         metricalLevel = decideCumulativeDistrOutcome(distr) + 1
-        currentRS = self.rsf.createRhythmSpace(4, metre)
+        currentRS = self.rsf.createRhythmTree(4, metre)
 
         if type == "pickup":
             indexChild = 1
@@ -206,9 +206,9 @@ class MelodyRhythmGenerator(RhythmGenerator):
         # perhaps the parent isn't being set properly and happens to point to a valid (and arbitrary) node object?
         # We need to fix this to test the testTreeDepthOfOne and testTreeDepthOfTwo tests
         #currentRS = self.rhythmSpace
-        currentRS = self.rsf.createRhythmSpace(4, metre)
-        currentRS =self.rsf.addTupletsToRhythmSpace(currentRS,
-                                                    self._probTuplets, self._probTupletType)
+        currentRS = self.rsf.createRhythmTree(4, metre)
+        currentRS =self.rsf.addTupletsToRhythmTree(currentRS,
+                                                   self._probTuplets, self._probTupletType)
 
         # traverse the rhythm space until bar is filled
         while round(totDuration, 4) != self._barDuration:
@@ -217,7 +217,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
             rhythmicSeq.append(rhythmicSeqElement)
             totDuration += rhythmicSeqElement[0]
 
-        # self.rsf.restoreRhythmSpace(self.rhythmSpace)
+        # self.rsf.restoreRhythmTree(self.rhythmSpace)
 
         return rhythmicSeq
 

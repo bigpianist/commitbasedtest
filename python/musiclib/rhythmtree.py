@@ -102,15 +102,10 @@ class RhythmTree(Tree):
     def setDuration(self, duration):
         self.duration = duration
 
-    #TODO: this name was confusing - I didn't think this included the current node (self),
-    # since it specifies lower levels.
-    # The technical term of what we're getting is the "left view" of a tree
-    # this will be all the nodes in a tree that are the left-most node of their
-    # level. Here's an example:
-    # https://www.geeksforgeeks.org/print-left-view-binary-tree/
-    def _getAllCandidateDurationsLowerLevels(self, candidateDurations=[]):
+
+    def _getLeftViewCurrentNode(self, candidateDurations=[]):
         """Returns the list of candidate durations traversing down the tree
-        and picking the 0-index children
+        and picking the 0-index children, included the current node (self)
 
         Returns:
             candidateDurations (list): List of RhythmTree objects
@@ -122,7 +117,7 @@ class RhythmTree(Tree):
             return candidateDurations
 
         firstChild = self.children[0]
-        candidateDurations = firstChild._getAllCandidateDurationsLowerLevels(
+        candidateDurations = firstChild._getLeftViewCurrentNode(
                                                 candidateDurations)
         return candidateDurations
 
@@ -207,7 +202,7 @@ class RhythmTree(Tree):
 
         # handle case we're at the root of the tree
         if self.parent == None:
-            candidateDurations =  self._getAllCandidateDurationsLowerLevels()
+            candidateDurations =  self._getLeftViewCurrentNode()
             return candidateDurations
 
         # handle case we're at the last child
@@ -216,11 +211,11 @@ class RhythmTree(Tree):
             if firstAncestorNotLastChild == None:
                 return None
             rightSiblingAncestor = firstAncestorNotLastChild.getRightSibling()
-            candidateDurations = rightSiblingAncestor._getAllCandidateDurationsLowerLevels([])
+            candidateDurations = rightSiblingAncestor._getLeftViewCurrentNode([])
             return candidateDurations
         else:
             rightSibling = self.getRightSibling()
-            candidateDurations = rightSibling._getAllCandidateDurationsLowerLevels([])
+            candidateDurations = rightSibling._getLeftViewCurrentNode([])
             return candidateDurations
 
 
@@ -244,14 +239,16 @@ class RhythmTree(Tree):
 
         # expand the node getting all the first children until the bottom
         candidateDurations = \
-            targetDuration._getAllCandidateDurationsLowerLevels([])
+            targetDuration._getLeftViewCurrentNode([])
         return candidateDurations
+
 
     def _getIndexOfNodeInTree(self):
         if self.parent is not None:
             curIndex = self._getIndexOfNodeInSiblingList()
             return [curIndex] + self.parent._getIndexOfNodeInTree
         return []
+
 
     def __getitem__(self, index):
         if isinstance(index, (int, slice)):
@@ -266,6 +263,7 @@ class RhythmTree(Tree):
         else:
             raise TypeError("%s indices must be integers, not %s" %
                             (type(self).__name__, type(index).__name__))
+
 
     def __setitem__(self, index, value):
         if isinstance(index, (int, slice)):

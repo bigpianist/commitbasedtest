@@ -30,8 +30,8 @@ class RhythmTreeFactory(object):
         super(RhythmTreeFactory, self).__init__()
 
 
-    def createRhythmSpace(self, lowestMetricalLevel, metre,
-                          highestMetricalLevel=0):
+    def createRhythmTree(self, lowestMetricalLevel, metre,
+                         highestMetricalLevel=0):
         """Instantiate and returns a rhythm space tree
 
         Args:
@@ -39,32 +39,29 @@ class RhythmTreeFactory(object):
                                        space to be created
             metre (Metre): Metre object
         """
-        #TODO: caps issue
-        STARTLEVEL = highestMetricalLevel
+        startLevel = highestMetricalLevel
         timeSignature = metre.getTimeSignature()
-        duration = float(metricalLevelDurations[timeSignature][STARTLEVEL])
+        duration = float(metricalLevelDurations[timeSignature][startLevel])
 
         # instantiate root level of rhythm space
-        rhythmSpace = RhythmTree(duration, STARTLEVEL)
-        rhythmSpace.setMetricalAccent(STARTLEVEL)
-        rhythmSpace.setLowestMetricalLevel(lowestMetricalLevel)
+        rhythmTree = RhythmTree(duration, startLevel)
+        rhythmTree.setMetricalAccent(startLevel)
+        rhythmTree.setLowestMetricalLevel(lowestMetricalLevel)
 
         metricalLevels = metre.getMetricalLevels()
         metricalSubdivisions = metre.getMetricalSubdivisions()
 
-        if STARTLEVEL == lowestMetricalLevel:
-            return rhythmSpace
-
-        #TODO: I changed my mind on this one. I think the functionality can remain segmented as is :)
+        if startLevel == lowestMetricalLevel:
+            return rhythmTree
 
         # expand root
-        rhythmSpace = self._expandRoot(lowestMetricalLevel, metricalLevels,
-                                       metricalSubdivisions, duration,
-                                       STARTLEVEL+1, rhythmSpace)
-        return rhythmSpace
+        rhythmTree = self._expandTree(lowestMetricalLevel, metricalLevels,
+                                      metricalSubdivisions, duration,
+                                      startLevel + 1, rhythmTree)
+        return rhythmTree
 
 
-    def addTupletsToRhythmSpace(self, parent, probTuplets, probTupletType):
+    def addTupletsToRhythmTree(self, parent, probTuplets, probTupletType):
         """Inserts tuplets in the rhythm space tree
 
         Args:
@@ -97,11 +94,11 @@ class RhythmTreeFactory(object):
 
         children = parent.getChildren()
         for child in children:
-            self.addTupletsToRhythmSpace(child, probTuplets, probTupletType)
+            self.addTupletsToRhythmTree(child, probTuplets, probTupletType)
         return parent
 
 
-    def restoreRhythmSpace(self, tree):
+    def restoreRhythmTree(self, tree):
         """Restores normal durations, removing tuplets for all of the rhythm
         space tree
 
@@ -115,7 +112,7 @@ class RhythmTreeFactory(object):
         # restore nodes
         for node in nodesWithTupletChildren:
             node.setHasTupletChildren(False)
-            self._restoreRhythmSpaceNode(node)
+            self._restoreRhythmTreeNode(node)
 
         return tree
 
@@ -143,7 +140,7 @@ class RhythmTreeFactory(object):
         return parent
 
 
-    def _restoreRhythmSpaceNode(self, tree):
+    def _restoreRhythmTreeNode(self, tree):
         """Restores normal durations, removing tuplets and going back to
         initial metrical divisions for a given node.
 
@@ -238,7 +235,7 @@ class RhythmTreeFactory(object):
     #a specific 'parent' object in mind when I'm finding the function.
     #So it's easiest to just write it in as the first argument and then
     # figure out the other necessary arguments
-    def _expandRoot(self, lowestMetricalLevel, metricalLevels,
+    def _expandTree(self, lowestMetricalLevel, metricalLevels,
                     metricalSubdivisions, barDuration, currentLevel, parent):
 
         # return up the stack if we're at the lowest metrical level
@@ -272,9 +269,9 @@ class RhythmTreeFactory(object):
             # and cheap to call.
             child.setLowestMetricalLevel(lowestMetricalLevel)
 
-            self._expandRoot(lowestMetricalLevel, metricalLevels,
+            self._expandTree(lowestMetricalLevel, metricalLevels,
                              metricalSubdivisions, barDuration,
-                             currentLevel+1, child)
+                             currentLevel + 1, child)
         return parent
 
 

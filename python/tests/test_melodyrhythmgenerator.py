@@ -39,7 +39,7 @@ def testSubdivisionCalc():
 #     met = Metre("4/4", "quarternote")
 #     rGen = MelodyRhythmGenerator(met)
 #     rSpace = RhythmTreeFactory()
-#     rSpace = rSpace.createRhythmSpace(1, met)
+#     rSpace = rSpace.createRhythmTree(1, met)
 #     rGen.rhythmSpace = rSpace
 #
 #     rGen.densityImpact = 0
@@ -52,7 +52,7 @@ def testSubdivisionCalc():
 #     met = Metre("4/4", "quarternote")
 #     rGen = MelodyRhythmGenerator(met)
 #     rSpace = RhythmTreeFactory()
-#     rSpace = rSpace.createRhythmSpace(2, met)
+#     rSpace = rSpace.createRhythmTree(2, met)
 #     rGen.rhythmSpace = rSpace
 #
 #     rGen.densityImpact = 0
