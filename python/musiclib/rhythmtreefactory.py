@@ -341,7 +341,8 @@ class RhythmTreeFactory(object):
         # for accent in accentList:
 
 
-    #TODO: Generalise this method
+    #TODO: Generalise method to handle all possible time signatures
+    # programmatically
     @staticmethod
     def getDurationAtDurationLevel(timeSig, durationLevel):
         """Returns the duration in quarter notes of duration level,

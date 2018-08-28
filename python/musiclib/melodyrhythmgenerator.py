@@ -222,7 +222,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         return rhythmicSeq
 
 
-    def _generateHarmonicRhythmBar(self, harmonicMetre, harmonicDensityImpact):
+    def _generateHarmonicRhythmBar(self, metre, harmonicDensityImpact):
         """Generates a harmonic rhythm sequence for a bar
 
         Returns:
@@ -244,7 +244,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
             candidates = currentRS.getDurationCandidates(numDots)
 
             # calculate scores
-            scores = self._calcScores(candidates, harmonicMetre,
+            scores = self._calcScores(candidates, metre,
                                       harmonicDensityImpact)
 
             # choose new duration

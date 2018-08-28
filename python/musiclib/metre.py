@@ -14,6 +14,9 @@ timeSignatures = (FOURFOUR, THREEFOUR)
 tactusOptions = {FOURFOUR: (HALFNOTE, QUARTERNOTE, EIGHTHNOTE),
                  THREEFOUR: (DOTTEDHALFNOTE, QUARTERNOTE, EIGHTHNOTE)}
 
+harmonicTactusOptions = {FOURFOUR: (WHOLENOTE, HALFNOTE, QUARTERNOTE),
+                         THREEFOUR: (DOTTEDHALFNOTE, QUARTERNOTE)}
+
 # durations are notated in quarter notes
 barDurations = {FOURFOUR: 4,
                 THREEFOUR: 3}
@@ -38,6 +41,7 @@ durationSubdivisionsOptions = {FOURFOUR: {WHOLENOTE: 2,
                                            EIGHTHNOTE: 2}}
 
 
+# need to generalise this to account for compound time signature (e.g., 6/8)
 def calculateDurationSubdivisions(beatsPerBar, lowestDurationLevel, levelOfFullBar=0):
     """
 
@@ -87,7 +91,8 @@ class Metre(object):
 
 
 
-    def __init__(self, timeSignature=FOURFOUR, tactusLabel=QUARTERNOTE):
+    def __init__(self, timeSignature=FOURFOUR, tactusLabel=QUARTERNOTE,
+                 harmonicTactusLabel=QUARTERNOTE):
         super(Metre, self).__init__()
 
         # raise error if time signature isn't supported
@@ -100,12 +105,25 @@ class Metre(object):
         if tactusLabel not in tactusOptions[self.timeSignature]:
             raise ValueError("%s is not a supported tactusLabel" % tactusLabel)
 
+        # raise error if tactus isn't supported
+        if harmonicTactusLabel not in harmonicTactusOptions[self.timeSignature]:
+            raise ValueError("%s is not a supported harmonicTactusLabel" %
+                             harmonicTactusLabel)
+
         durationLevelTactus = durationLevelsOptions[timeSignature].index(
             tactusLabel)
-        self.tactus = {"label": tactusLabel,
-                       "durationLevel": durationLevelTactus}
+        self.tactus = {
+            "label": tactusLabel,
+            "durationLevel": durationLevelTactus
+        }
 
-        self.durationAccentuation = self._populateDurationStruct()
+        durationLevelHarmonicTactus = durationLevelsOptions[
+            timeSignature].index(harmonicTactusLabel)
+        self.harmonicTactus = {
+            "label": harmonicTactusLabel,
+            "durationLevel": durationLevelHarmonicTactus
+        }
+        self.metricalAccentuation = self._populateMetricalStruct()
         self.durationLevels = durationLevelsOptions[timeSignature]
         self.durationSubdivisions = durationSubdivisionsOptions[timeSignature]
         self.barDuration = barDurations[timeSignature]
@@ -117,9 +135,15 @@ class Metre(object):
         return self.tactus
 
     def getTactusLevel(self):
-        return  self.tactus["durationLevel"]
+        return self.tactus["durationLevel"]
 
-    def getDurationStruct(self):
+    def getHarmonicTactus(self):
+        return self.harmonicTactus
+
+    def getHarmonicTactusLevel(self):
+        return self.harmonicTactus["durationLevel"]
+
+    def getMetricalStruct(self):
         return self.metricalAccentuation
 
     def getDurationLevels(self):
@@ -131,5 +155,8 @@ class Metre(object):
     def getBarDuration(self):
         return self.barDuration
 
-    def _populateDurationStruct(self):
+    def _populateMetricalStruct(self):
         pass
+
+
+

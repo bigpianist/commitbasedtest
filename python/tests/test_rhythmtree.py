@@ -109,7 +109,7 @@ def testChildrenAreCreatedAndAddedCorrectlyToParent():
     for child in parent.children:
         duration += child.duration
 
-    metricalLevel = rs.children[0].metricalLevel
+    durationLevel = rs.children[0].durationLevel
 
     metricalAccentChild1 = rs.children[0].metricalAccent
     expectedMetricalAccentChild1 = 0
@@ -119,9 +119,9 @@ def testChildrenAreCreatedAndAddedCorrectlyToParent():
 
 
     expectedTotalDuration = 10
-    expectedMetricalLevel = 3
+    expecteddurationLevel = 3
 
-    assert metricalLevel == expectedMetricalLevel
+    assert durationLevel == expecteddurationLevel
     assert duration == expectedTotalDuration
 
     # first child

@@ -73,12 +73,12 @@ class HarmonyRhythmGenerator(RhythmGenerator):
     # TODO: controller on top of generator to decide repetitions/variations
     # TODO: have hypermetre influence the generation
     # TODO: have harmonic tactus change based on arousal
-    def generateHarmonicRhythmMU(self, harmonicMetre, harmonicDensityImpact,
+    def generateHarmonicRhythmMU(self, metre, harmonicDensityImpact,
                                  numBarsMU):
         """Generates a harmonic rhythm sequence for a MU
 
         Args:
-            harmonicMetre (HarmonicMetre):
+            metre (Metre):
             harmonicDensityImpact (float): Arousal feature that influences
                                            the density of the harmony
             numBarsMU (int): Number of bars in a MU
@@ -89,7 +89,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         # decide whether to use bar as a repeated pattern
         r = random.random()
         if r < self._probabilityRepeatBar:
-            rhythmicSeqBar = self._generateHarmonicRhythmBar(harmonicMetre,
+            rhythmicSeqBar = self._generateHarmonicRhythmBar(metre,
                                 harmonicDensityImpact)
             rhythmicSeq = [[rhythmicSeqBar]*numBarsMU]
 
@@ -97,7 +97,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
 
             # create harmonic rhythm for each bar
             for i in range(numBarsMU):
-                rhythmicSeqBar = self._generateHarmonicRhythmBar(harmonicMetre,
+                rhythmicSeqBar = self._generateHarmonicRhythmBar(metre,
                                     harmonicDensityImpact)
                 rhythmicSeq.append(rhythmicSeqBar)
 
@@ -106,7 +106,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         return rhythmicSeqBar
 
 
-    def _generateHarmonicRhythmBar(self, harmonicMetre, harmonicDensityImpact):
+    def _generateHarmonicRhythmBar(self, metre, harmonicDensityImpact):
         """Generates a harmonic rhythm sequence for a bar
 
         Returns:
@@ -124,12 +124,12 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         # traverse the rhythm space until bar is filled
         #TODO: shouldn't this while be totDuration<=barDuration?
         while totDuration != self._barDuration:
-            # get all candidate durations
 
+            # get all candidate durations
             candidates = currentRS.getDurationCandidates(numDots)
 
             # calculate scores
-            scores = self._calcScores(candidates, harmonicMetre,
+            scores = self._calcScores(candidates, metre,
                                       harmonicDensityImpact)
 
             # choose new duration
@@ -162,11 +162,11 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         return rhythmicSeq
 
 
-    def _calcScores(self, candidates, harmonicMetre, harmonicDensityImpact):
+    def _calcScores(self, candidates, metre, harmonicDensityImpact):
         """Returns combined scores for all the candidate durations.
 
         Args:
-            harmonicMetre (HarmonicMetre):
+            metre (metre):
             candidates (list): All the candidates to be evaluated
             harmonicDensityImpact (float):
 
@@ -179,7 +179,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         mp = self._calcMetricalProminenceMetric(candidates)
 
         # calculate distance harmonic tactus scores
-        harmonicTactusLevel = harmonicMetre.getHarmonicTactusLevel()
+        harmonicTactusLevel = metre.getHarmonicTactusLevel()
         dt = self._calcDistFromTactusMetric(candidates, harmonicTactusLevel)
 
         # retrieve score weights
