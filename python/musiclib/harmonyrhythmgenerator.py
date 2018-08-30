@@ -1,41 +1,7 @@
 from musiclib.rhythmtreefactory import RhythmTreeFactory
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
-from musiclib.rhythmdata import rhythmData as rd
 import random
-
-FOURFOUR = "4/4"
-THREEFOUR = "3/4"
-
-lowestDurationLevelOptions = rd["harmony"]["lowestDurationLevelOptions"]
-
-# scores associated to the distance from the duration level of the tactus
-# The indexes of the list represent the distance in duration levels.
-tactusDistScores = rd["harmony"]["tactusDistScores"]
-
-# scores associated to the metrical prominence. Higher duration levels are
-# favoured. The raw indexes of the list represent the duration level,
-# the column indexes represent the metrical accent.
-metricalProminenceScores = rd["harmony"]["metricalProminenceScores"]
-
-musicFeaturesMaxImpact = rd["harmony"]["metricalProminenceScores"]
-
-weightMetrics = rd["harmony"]["weightMetrics"]
-
-# probability of having a dot for different duration levels. Probabilty of
-# having a dot in the lowest duration level must always be 0!
-probabilityDot = rd["harmony"]["probabilityDot"]
-
-# probability of single dot vs double dot. Double dot is only possible if
-# duration level has at least 2 children below it.
-probabilitySingleDot = rd["harmony"]["probabilitySingleDot"]
-
-densityImpactDurationLevels = rd["harmony"]["densityImpactDurationLevels"]
-
-# probability of having a tie
-probabilityTie = rd["harmony"]["probabilityTie"]
-
-probabilityRepeatBar = rd["harmony"]["probabilityRepeatBar"]
 
 
 class HarmonyRhythmGenerator(RhythmGenerator):
@@ -45,7 +11,11 @@ class HarmonyRhythmGenerator(RhythmGenerator):
           rhythmTree (RhythmTree): Rhythm space tree
     """
 
-    def __init__(self, metre):
+    def __init__(self, metre, lowestDurationLevelOptions, tactusDistScores,
+                 metricalProminenceScores, musicFeaturesMaxImpact,
+                 densityImpactDurationLevels, weightMetrics,
+                 probabilityDot, probabilitySingleDot, probabilityTie,
+                 probabilityRepeatBar):
         super(HarmonyRhythmGenerator, self).__init__(metre)
 
         timeSignature = metre.getTimeSignature()
@@ -69,6 +39,46 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         self._probabilityTie = probabilityTie[timeSignature]
         self._probabilityRepeatBar = probabilityRepeatBar[timeSignature]
 
+    @classmethod
+    def fromModelData(cls, metre, md):
+        # I know this is a little redundant to unpack the dict, but the comments
+        #for each variable were useful, so I wanted to keep them here.
+        #TODO: figure out a way to (properly) document the features of each model's data
+
+        lowestDurationLevelOptions = md["lowestDurationLevelOptions"]
+
+        # scores associated to the distance from the duration level of the tactus
+        # The indexes of the list represent the distance in duration levels.
+        tactusDistScores = md["tactusDistScores"]
+
+        # scores associated to the metrical prominence. Higher duration levels are
+        # favoured. The raw indexes of the list represent the duration level,
+        # the column indexes represent the metrical accent.
+        metricalProminenceScores = md["metricalProminenceScores"]
+
+        musicFeaturesMaxImpact = md["metricalProminenceScores"]
+
+        weightMetrics = md["weightMetrics"]
+
+        # probability of having a dot for different duration levels. Probabilty of
+        # having a dot in the lowest duration level must always be 0!
+        probabilityDot = md["probabilityDot"]
+
+        # probability of single dot vs double dot. Double dot is only possible if
+        # duration level has at least 2 children below it.
+        probabilitySingleDot = md["probabilitySingleDot"]
+
+        densityImpactDurationLevels = md["densityImpactDurationLevels"]
+
+        # probability of having a tie
+        probabilityTie = md["probabilityTie"]
+
+        probabilityRepeatBar = md["probabilityRepeatBar"]
+        return cls(metre, lowestDurationLevelOptions, tactusDistScores,
+                 metricalProminenceScores, musicFeaturesMaxImpact,
+                 densityImpactDurationLevels, weightMetrics,
+                 probabilityDot, probabilitySingleDot, probabilityTie,
+                 probabilityRepeatBar)
 
     # TODO: controller on top of generator to decide repetitions/variations
     # TODO: have hypermetre influence the generation

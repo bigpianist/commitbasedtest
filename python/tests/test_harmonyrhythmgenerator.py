@@ -1,15 +1,16 @@
 from musiclib.harmonyrhythmgenerator import HarmonyRhythmGenerator
 from musiclib.metre import Metre
 from musiclib.rhythmtree import RhythmTree
+from musiclib.rhythmdata import rhythmData as rd
 
-m = Metre("4/4", "quarternote", "halfnote")
-hrg = HarmonyRhythmGenerator(m)
+m = Metre.createMetreFromLabels("4/4", "quarternote", "halfnote")
+hrg = HarmonyRhythmGenerator.fromModelData(m, rd['harmony'])
 hrg.densityImpact = 0
 hrg.entropyImpact = 0
 
 
 def testHarmonyRhythmGeneratorIsInstantiated():
-    hrg = HarmonyRhythmGenerator(m)
+    hrg = HarmonyRhythmGenerator.fromModelData(m, rd['harmony'])
     hrg is not None
 
 
