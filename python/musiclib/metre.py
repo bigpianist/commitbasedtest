@@ -94,10 +94,11 @@ class Metre(object):
                              quarter notes.
     """
 
-    def __init__(self, timeSigString, tactusDuration, harmonicTactusDuration, lowestDurationLevel, subdivisions=None):
+    def __init__(self, timeSigString, tactusDuration, harmonicTactusDuration, levelOfBar=0, lowestDurationLevel=4, subdivisions=None):
         super(Metre, self).__init__()
-        self.timeSignatureName = timeSigString
-        self.beatsPerBar, self.durOfBeat = [int(ts) for ts in self.timeSignatureName.split('/')]
+        self.timeSignature = timeSigString
+        self.beatsPerBar, self.durOfBeat = [int(ts) for ts in self.timeSignature.split('/')]
+        self.levelOfBar = levelOfBar
         self.lowestDurationLevel = lowestDurationLevel
         # this is how the denominator of a time signature works - to convert to the
         # convention where a quarter note = 1.0, you have to divide 4.0
@@ -112,6 +113,25 @@ class Metre(object):
         #    print('Error: tactus level is ' + str(tactusDuration) +' while the metre only has levels 0 through ' + str(lowestDurationLevel))
         self.tactus = Tactus.createTactusFromMetreAndDuration(tactusDuration, self)
         self.harmonicTactus = Tactus.createTactusFromMetreAndDuration(harmonicTactusDuration, self)
+        self.durationLevelLabels = self.calculateDurationLevelLabels()
+
+    @classmethod
+    def createMetreFromLabels(cls, timeSigString, tactusLabel, harmonicTactusLabel):
+        tactusDuration = cls.getDurationOfLabel(cls, tactusLabel)
+        harmonicTactusDuration = cls.getDurationOfLabel(cls, harmonicTactusLabel)
+        return cls(timeSigString, tactusDuration, harmonicTactusDuration)
+
+    # TODO test the starting levels that are not = 0
+    def calculateDurationLevelLabels(self):
+        #list of labels for duration levels
+        totalDur = self.barDuration
+        labels = []
+        for i in range(self.levelOfBar):
+            labels.append(None)
+        for k in sorted(self.subdivisions.keys()):
+            labels.append(self.getLabelOfDuration(totalDur))
+            totalDur /= self.subdivisions[k]
+        return labels
 
     def getLabelOfDuration(self, duration):
         tactusLabel = None
@@ -127,8 +147,8 @@ class Metre(object):
                 break
         return duration
 
-    def getTimeSignatureName(self):
-        return self.timeSignatureName
+    def getTimeSignature(self):
+        return self.timeSignature
 
     def getTactus(self):
         return self.tactus
@@ -137,7 +157,7 @@ class Metre(object):
         return self.tactus["durationLevel"]
 
     def getDurationLevels(self):
-        return self.durationLevels
+        return self.durationLevelLabels
 
     def getDurationOfLevel(self, level):
         totalDur = self.barDuration
@@ -160,13 +180,13 @@ class Metre(object):
         return None
 
     def getDurationSubdivisions(self):
-        return self.durationSubdivisions
+        return self.subdivisions
 
     def getHarmonicTactus(self):
         return self.harmonicTactus
 
     def getHarmonicTactusLevel(self):
-        return self.harmonicTactus["durationLevel"]
+        return self.harmonicTactus.durationLevel
 
     def getBarDuration(self):
         return self.barDuration

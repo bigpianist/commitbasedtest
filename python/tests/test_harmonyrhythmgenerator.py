@@ -26,7 +26,7 @@ def testCalculateScores():
     d3 = hrg.rhythmTree.children[1].children[0]
     d4 = hrg.rhythmTree.children[1].children[0].children[0]
 
-    hm2 = Metre("4/4", "quarternote", "halfnote")
+    hm2 = Metre.createMetreFromLabels("4/4", "quarternote", "halfnote")
     candidates = [d2, d3, d4]
     scores = hrg._calcScores(candidates, hm2, 0.05)
     expectedScores = [1.0, 0.55, 0.35]
@@ -34,7 +34,7 @@ def testCalculateScores():
     assert scores == expectedScores
 
 def testGenerateHarmonycRhythmBar():
-    hm2 = Metre("4/4", "quarternote", "halfnote")
+    hm2 = Metre.createMetreFromLabels("4/4", "quarternote", "halfnote")
     rhythm = hrg._generateHarmonicRhythmBar(hm2, 0.05)
     barDuration = sum(i for i, _ in rhythm)
     expectedBarDuration = 4.0
@@ -51,7 +51,7 @@ def testDecideToApplyTie():
 def testGenerateHarmonicRhythmMU():
     hrg.densityImpact = 1
     hrg.entropyImpact = 1
-    hm2 = Metre("4/4", "quarternote", "halfnote")
+    hm2 = Metre.createMetreFromLabels("4/4", "quarternote", "halfnote")
     rhythm = hrg.generateHarmonicRhythmMU(hm2, 0.05, 2)
 
 

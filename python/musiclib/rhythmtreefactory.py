@@ -219,10 +219,10 @@ class RhythmTreeFactory(object):
         if (lowestDurationLevel - currentLevel) < 0:
             return
 
-        parentLevelLabel = durationLevels[currentLevel-1]
+        parentLevel = currentLevel-1
 
         # calculate duration of child
-        subdivisionsParent = durationSubdivisions[parentLevelLabel]
+        subdivisionsParent = durationSubdivisions[parentLevel]
         parentDuration = parent.getDuration()
         duration = parentDuration / subdivisionsParent
 
