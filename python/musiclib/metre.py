@@ -1,44 +1,47 @@
+from .tactus import Tactus
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-WHOLENOTE = "wholenote"
-DOTTEDHALFNOTE = "dottedhalfnote"
-HALFNOTE = "halfnote"
-QUARTERNOTE = "quarternote"
-EIGHTHNOTE = "eighthnote"
-SIXTEENTHNOTE = "sixteenthnote"
-THIRTYSECONDNOTE = "thirtysecondnote"
+durationNames = {
+    6.0: "dottedwholenote",
+    4.0: "wholenote",
+    3.0: "dottedhalfnote",
+    2.0: "halfnote",
+    1.5: "dottedquarternote",
+    1.0: "quarternote",
+    0.75: "dottedeighthnote",
+    0.5: "eighthnote",
+    0.375: "dottedsixteenthnote",
+    0.25: "sixteenthnote",
+    0.125: "thirtysecondnote"
+}
 
-timeSignatures = (FOURFOUR, THREEFOUR)
+#timeSignatures = (FOURFOUR, THREEFOUR)
 
-tactusOptions = {FOURFOUR: (HALFNOTE, QUARTERNOTE, EIGHTHNOTE),
-                 THREEFOUR: (DOTTEDHALFNOTE, QUARTERNOTE, EIGHTHNOTE)}
+#tactusOptions = {FOURFOUR: (HALFNOTE, QUARTERNOTE, EIGHTHNOTE),
+#                 THREEFOUR: (DOTTEDHALFNOTE, QUARTERNOTE, EIGHTHNOTE)}
 
-harmonicTactusOptions = {FOURFOUR: (WHOLENOTE, HALFNOTE, QUARTERNOTE),
-                         THREEFOUR: (DOTTEDHALFNOTE, QUARTERNOTE)}
-
-# durations are notated in quarter notes
-barDurations = {FOURFOUR: 4,
-                THREEFOUR: 3}
+#harmonicTactusOptions = {FOURFOUR: (WHOLENOTE, HALFNOTE, QUARTERNOTE),
+#                         THREEFOUR: (DOTTEDHALFNOTE, QUARTERNOTE)}
 
 # start from 0 at the level of the bar and increase by 1 at each lower level
-durationLevelsOptions = {FOURFOUR: [WHOLENOTE,
-                                    HALFNOTE,
-                                    QUARTERNOTE,
-                                    EIGHTHNOTE,
-                                    SIXTEENTHNOTE],
-                         THREEFOUR: [DOTTEDHALFNOTE,
-                                     QUARTERNOTE,
-                                     EIGHTHNOTE,
-                                     SIXTEENTHNOTE]}
-
-durationSubdivisionsOptions = {FOURFOUR: {WHOLENOTE: 2,
-                                          HALFNOTE: 2,
-                                          QUARTERNOTE: 2,
-                                          EIGHTHNOTE: 2},
-                               THREEFOUR: {DOTTEDHALFNOTE: 3,
-                                           QUARTERNOTE: 2,
-                                           EIGHTHNOTE: 2}}
+# durationLevelOptions = {FOURFOUR: [WHOLENOTE,
+#                                     HALFNOTE,
+#                                     QUARTERNOTE,
+#                                     EIGHTHNOTE,
+#                                     SIXTEENTHNOTE],
+#                          THREEFOUR: [DOTTEDHALFNOTE,
+#                                      QUARTERNOTE,
+#                                      EIGHTHNOTE,
+#                                      SIXTEENTHNOTE]}
+#
+# durationSubdivisionOptions = {FOURFOUR: {WHOLENOTE: 2,
+#                                           HALFNOTE: 2,
+#                                           QUARTERNOTE: 2,
+#                                           EIGHTHNOTE: 2},
+#                                THREEFOUR: {DOTTEDHALFNOTE: 3,
+#                                            QUARTERNOTE: 2,
+#                                            EIGHTHNOTE: 2}}
 
 
 # need to generalise this to account for compound time signature (e.g., 6/8)
@@ -46,14 +49,16 @@ def calculateDurationSubdivisions(beatsPerBar, lowestDurationLevel, levelOfFullB
     """
 
     :param beatsPerBar: number of beats in the bar
-    :param lowestDurationlevel: How many levels of subdivisions there should be (lowestDurationLevel - levelOfFullBar)
+    :param lowestDuration: The duration of the lowest subdivision level
     :param levelOfFullBar:  The level that we want to assign to a full bar of duration.
                             This could be non-zero in the case of hypermetre
     :return: a dict of subdivisions, indexed by level
     """
     subdivisions = {}
+
     if beatsPerBar % 2 == 0 or beatsPerBar <= 1:
         # it's divisible by 2. All is well.
+        #while
         for i in range(lowestDurationLevel - levelOfFullBar):
             subdivisions[i + levelOfFullBar] = 2
     elif beatsPerBar % 3 == 0:
@@ -89,47 +94,41 @@ class Metre(object):
                              quarter notes.
     """
 
-
-
-    def __init__(self, timeSignature=FOURFOUR, tactusLabel=QUARTERNOTE,
-                 harmonicTactusLabel=QUARTERNOTE):
+    def __init__(self, timeSigString, tactusDuration, harmonicTactusDuration, lowestDurationLevel, subdivisions=None):
         super(Metre, self).__init__()
+        self.timeSignatureName = timeSigString
+        self.beatsPerBar, self.durOfBeat = [int(ts) for ts in self.timeSignatureName.split('/')]
+        self.lowestDurationLevel = lowestDurationLevel
+        # this is how the denominator of a time signature works - to convert to the
+        # convention where a quarter note = 1.0, you have to divide 4.0
+        # by the denominator
+        self.durOfBeat = 4.0 / self.durOfBeat
+        self.barDuration = self.beatsPerBar * self.durOfBeat
+        if subdivisions is not None:
+            self.subdivisions = subdivisions
+        else:
+            self.subdivisions = calculateDurationSubdivisions(self.beatsPerBar, self.lowestDurationLevel)
+        #if tactusDuration < self.lowestDuration or tactusDuration > self.barDuration:
+        #    print('Error: tactus level is ' + str(tactusDuration) +' while the metre only has levels 0 through ' + str(lowestDurationLevel))
+        self.tactus = Tactus.createTactusFromMetreAndDuration(tactusDuration, self)
+        self.harmonicTactus = Tactus.createTactusFromMetreAndDuration(harmonicTactusDuration, self)
 
-        # raise error if time signature isn't supported
-        if timeSignature not in timeSignatures:
-            raise ValueError("%s is not a supported time signature" %
-                             timeSignature)
-        self.timeSignature = timeSignature
+    def getLabelOfDuration(self, duration):
+        tactusLabel = None
+        if duration in durationNames:
+            tactusLabel = durationNames[duration]
+        return tactusLabel
 
-        # raise error if tactus isn't supported
-        if tactusLabel not in tactusOptions[self.timeSignature]:
-            raise ValueError("%s is not a supported tactusLabel" % tactusLabel)
+    def getDurationOfLabel(self, noteDurationLabel):
+        duration = None
+        for key, value in durationNames.items():
+            if noteDurationLabel == value:
+                duration = key
+                break
+        return duration
 
-        # raise error if tactus isn't supported
-        if harmonicTactusLabel not in harmonicTactusOptions[self.timeSignature]:
-            raise ValueError("%s is not a supported harmonicTactusLabel" %
-                             harmonicTactusLabel)
-
-        durationLevelTactus = durationLevelsOptions[timeSignature].index(
-            tactusLabel)
-        self.tactus = {
-            "label": tactusLabel,
-            "durationLevel": durationLevelTactus
-        }
-
-        durationLevelHarmonicTactus = durationLevelsOptions[
-            timeSignature].index(harmonicTactusLabel)
-        self.harmonicTactus = {
-            "label": harmonicTactusLabel,
-            "durationLevel": durationLevelHarmonicTactus
-        }
-        self.metricalAccentuation = self._populateMetricalStruct()
-        self.durationLevels = durationLevelsOptions[timeSignature]
-        self.durationSubdivisions = durationSubdivisionsOptions[timeSignature]
-        self.barDuration = barDurations[timeSignature]
-
-    def getTimeSignature(self):
-        return self.timeSignature
+    def getTimeSignatureName(self):
+        return self.timeSignatureName
 
     def getTactus(self):
         return self.tactus
@@ -137,26 +136,37 @@ class Metre(object):
     def getTactusLevel(self):
         return self.tactus["durationLevel"]
 
+    def getDurationLevels(self):
+        return self.durationLevels
+
+    def getDurationOfLevel(self, level):
+        totalDur = self.barDuration
+        for k in sorted(self.subdivisions.keys()):
+            totalDur /= self.subdivisions[k]
+            if k == level:
+                break
+        return totalDur
+
+    def getLevelOfDuration(self, duration):
+        totalDur = self.barDuration
+        foundDur = False
+        for k in sorted(self.subdivisions.keys()):
+            if totalDur == duration:
+                foundDur = True
+                break
+            totalDur /= self.subdivisions[k]
+        if foundDur:
+            return k
+        return None
+
+    def getDurationSubdivisions(self):
+        return self.durationSubdivisions
+
     def getHarmonicTactus(self):
         return self.harmonicTactus
 
     def getHarmonicTactusLevel(self):
         return self.harmonicTactus["durationLevel"]
 
-    def getMetricalStruct(self):
-        return self.metricalAccentuation
-
-    def getDurationLevels(self):
-        return self.durationLevels
-
-    def getDurationSubdivisions(self):
-        return self.durationSubdivisions
-
     def getBarDuration(self):
         return self.barDuration
-
-    def _populateMetricalStruct(self):
-        pass
-
-
-
