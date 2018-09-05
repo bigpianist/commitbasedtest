@@ -1,6 +1,6 @@
 from musiclib.rhythmtree import RhythmTree
 from musiclib.probability import *
-import random
+from melodrive.stats.randommanager import RandomManager
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
@@ -64,6 +64,7 @@ class RhythmTreeFactory(object):
         lowestDurationLevel = parent.getLowestDurationLevel()
         currentLevel = parent.getDurationLevel()
         metricalAccent = parent.getMetricalAccent()
+        random = RandomManager.getActive()
 
         # return up the stack if we're at the penultimate lowest duration level
 

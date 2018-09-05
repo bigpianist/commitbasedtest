@@ -1,7 +1,7 @@
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
 from musiclib.rhythmdata import rhythmData as rd
-import random
+from melodrive.stats.randommanager import RandomManager
 
 #TODO: Internal repetition, prefer duration levels of tuplets, elaborate
 # duration fingerprint, add rests, fix bug
@@ -90,7 +90,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
 
 
     def generateMelodicRhythmMU(self, metre, numBarsMU):
-
+        random = RandomManager.getActive()
         rhythmicSeq = []
 
         # decide whether to generate pickup

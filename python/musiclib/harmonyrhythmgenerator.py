@@ -1,7 +1,7 @@
 from musiclib.rhythmtreefactory import RhythmTreeFactory
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.probability import *
-import random
+from melodrive.stats.randommanager import RandomManager
 
 
 class HarmonyRhythmGenerator(RhythmGenerator):
@@ -22,8 +22,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         self._lowestDurationLevel = lowestDurationLevelOptions[timeSignature]
         self.rhythmTree = self.rsf.createRhythmTree(self._lowestDurationLevel,
                                                      metre)
-        #TODO this should be the same type of distributions that we use
-        # i.e. a dictionary with explicit keys
+
         self._tactusDistScores = tactusDistScores[timeSignature]
         self._metricalProminenceScores = metricalProminenceScores[
             timeSignature]
@@ -99,6 +98,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         rhythmicSeq = []
 
         # decide whether to use bar as a repeated pattern
+        random = RandomManager.getActive()
         r = random.random()
         if r < self._probabilityRepeatBar:
             rhythmicSeqBar = self._generateHarmonicRhythmBar(metre)

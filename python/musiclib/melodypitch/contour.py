@@ -1,4 +1,4 @@
-import random
+from melodrive.stats.randommanager import RandomManager
 from musiclib.probability import *
 
 UP = "up"
@@ -95,6 +95,7 @@ class Contour(object):
         """
         type = self.type
         typeTemplate = self._availableTypes[type]
+        random = RandomManager.getActive()
 
         # manage "ascending" and "descending" contour types
         if type == "ascending" or type == "descending":

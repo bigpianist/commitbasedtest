@@ -1,6 +1,6 @@
 from musiclib.probability import *
 from musiclib.rhythmtreefactory import RhythmTreeFactory
-import random
+from melodrive.stats.randommanager import RandomManager
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
@@ -240,6 +240,7 @@ class RhythmGenerator(object):
         """
 
         duration = rhythmicSeqElement[0]
+        random = RandomManager.getActive()
         r = random.random()
         if r <= self._probabilityTie[durationLevel]:
             return [duration, 't']
@@ -279,6 +280,7 @@ class RhythmGenerator(object):
 
         duration = rhythmTree.getDuration()
         durationLevel = rhythmTree.getDurationLevel()
+        random = RandomManager.getActive()
         r = random.random()
 
         numDots = 0
@@ -288,6 +290,7 @@ class RhythmGenerator(object):
 
             # decide which type of dot to apply
             #TODO need to verify that we're using melodrive's random manager when we integrate
+            random = RandomManager.getActive()
             r2 = random.random()
 
             # handle single dot
