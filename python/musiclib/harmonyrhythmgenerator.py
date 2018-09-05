@@ -19,8 +19,8 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         super(HarmonyRhythmGenerator, self).__init__(metre)
 
         timeSignature = metre.getTimeSignature()
-        lowestDurationLevel = lowestDurationLevelOptions[timeSignature]
-        self.rhythmTree = self.rsf.createRhythmTree(lowestDurationLevel,
+        self._lowestDurationLevel = lowestDurationLevelOptions[timeSignature]
+        self.rhythmTree = self.rsf.createRhythmTree(self._lowestDurationLevel,
                                                      metre)
         #TODO this should be the same type of distributions that we use
         # i.e. a dictionary with explicit keys
@@ -56,7 +56,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         # the column indexes represent the metrical accent.
         metricalProminenceScores = md["metricalProminenceScores"]
 
-        musicFeaturesMaxImpact = md["metricalProminenceScores"]
+        musicFeaturesMaxImpact = md["musicFeaturesMaxImpact"]
 
         weightMetrics = md["weightMetrics"]
 
@@ -83,8 +83,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
     # TODO: controller on top of generator to decide repetitions/variations
     # TODO: have hypermetre influence the generation
     # TODO: have harmonic tactus change based on arousal
-    def generateHarmonicRhythmMU(self, metre, harmonicDensityImpact,
-                                 numBarsMU):
+    def generateHarmonicRhythmMU(self, metre, numBarsMU, densityImpact=None):
         """Generates a harmonic rhythm sequence for a MU
 
         Args:
@@ -93,30 +92,33 @@ class HarmonyRhythmGenerator(RhythmGenerator):
                                            the density of the harmony
             numBarsMU (int): Number of bars in a MU
         """
+        # if we need to change the densityImpact, do so on the parent class which is how it's used
+        if densityImpact is not None:
+            super(HarmonyRhythmGenerator, self).setDensityImpact(densityImpact)
 
         rhythmicSeq = []
 
         # decide whether to use bar as a repeated pattern
         r = random.random()
         if r < self._probabilityRepeatBar:
-            rhythmicSeqBar = self._generateHarmonicRhythmBar(metre,
-                                harmonicDensityImpact)
-            rhythmicSeq = [[rhythmicSeqBar]*numBarsMU]
+            rhythmicSeqBar = self._generateHarmonicRhythmBar(metre)
+            rhythmicSeq = []
+            for i in range(numBarsMU):
+                rhythmicSeq += rhythmicSeqBar
 
         else:
 
             # create harmonic rhythm for each bar
             for i in range(numBarsMU):
-                rhythmicSeqBar = self._generateHarmonicRhythmBar(metre,
-                                    harmonicDensityImpact)
-                rhythmicSeq.append(rhythmicSeqBar)
+                rhythmicSeqBar = self._generateHarmonicRhythmBar(metre)
+                rhythmicSeq += rhythmicSeqBar
 
-        print()
-        print(rhythmicSeq)
-        return rhythmicSeqBar
+        #print()
+        #print(rhythmicSeq)
+        return rhythmicSeq
 
 
-    def _generateHarmonicRhythmBar(self, metre, harmonicDensityImpact):
+    def _generateHarmonicRhythmBar(self, metre):
         """Generates a harmonic rhythm sequence for a bar
 
         Returns:
@@ -139,8 +141,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
             candidates = currentRS.getDurationCandidates(numDots)
 
             # calculate scores
-            scores = self._calcScores(candidates, metre,
-                                      harmonicDensityImpact)
+            scores = self._calcScores(candidates, metre)
 
             # choose new duration
             currentRS = self._decideNextDuration(scores, candidates)
@@ -163,8 +164,13 @@ class HarmonyRhythmGenerator(RhythmGenerator):
                 rhythmicSeqElement = self._decideToApplyTie(
                     rhythmicSeqElement, durationLevelRT)
             else:
+                #Check whether we _can_ apply a dot
+                # Note: we want to base the ability to apply a dot on the settings
+                # of the generator (_lowestDurationLevel), and not on the tree itself
+                # because we can have multiple generators using the same tree
+                maxDepth = self._lowestDurationLevel - currentRS.getDurationLevel()
                 rhythmicSeqElement, numDots = self._decideToApplyDot(
-                                                    currentRS)
+                                                    currentRS, maxDepth)
 
             rhythmicSeq.append(rhythmicSeqElement)
             totDuration += rhythmicSeqElement[0]
@@ -172,13 +178,12 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         return rhythmicSeq
 
 
-    def _calcScores(self, candidates, metre, harmonicDensityImpact):
+    def _calcScores(self, candidates, metre):
         """Returns combined scores for all the candidate durations.
 
         Args:
             metre (metre):
             candidates (list): All the candidates to be evaluated
-            harmonicDensityImpact (float):
 
         Returns:
             scores (list): List with all the scores for the combined scores for

@@ -116,7 +116,7 @@ class Metre(object):
         self.durationLevelLabels = self.calculateDurationLevelLabels()
 
     @classmethod
-    def createMetreFromLabels(cls, timeSigString, tactusLabel, harmonicTactusLabel):
+    def createFromLabels(cls, timeSigString, tactusLabel, harmonicTactusLabel):
         tactusDuration = cls.getDurationOfLabel(cls, tactusLabel)
         harmonicTactusDuration = cls.getDurationOfLabel(cls, harmonicTactusLabel)
         return cls(timeSigString, tactusDuration, harmonicTactusDuration)
@@ -158,6 +158,9 @@ class Metre(object):
 
     def getDurationLevels(self):
         return self.durationLevelLabels
+
+    def getLowestDurationLevel(self):
+        return self.lowestDurationLevel
 
     def getDurationOfLevel(self, level):
         totalDur = self.barDuration

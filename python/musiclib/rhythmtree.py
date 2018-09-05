@@ -88,6 +88,13 @@ class RhythmTree(Tree):
         self.duration = duration
 
 
+    def getDepthOfTree(self, depth=0):
+        if not self.hasChildren():
+            return depth
+        depth = self.getChild(0).getDepth(depth + 1)
+        return depth
+
+
     def _getLeftViewCurrentNode(self, candidateDurations=[]):
         """Returns the list of candidate durations traversing down the tree
         and picking the 0-index children, included the current node (self)

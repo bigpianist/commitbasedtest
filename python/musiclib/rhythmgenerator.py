@@ -265,7 +265,7 @@ class RhythmGenerator(object):
         return dottedDuration
 
 
-    def _decideToApplyDot(self, rhythmTree):
+    def _decideToApplyDot(self, rhythmTree, maxDepth):
         """Decides whether to apply a dot either single or double.
 
         Args:
@@ -284,7 +284,7 @@ class RhythmGenerator(object):
         numDots = 0
 
         # decide whether to apply a dot
-        if r <= self._probabilityDot[durationLevel]:
+        if r <= self._probabilityDot[durationLevel] and maxDepth >= 1:
 
             # decide which type of dot to apply
             #TODO need to verify that we're using melodrive's random manager when we integrate
@@ -292,7 +292,7 @@ class RhythmGenerator(object):
 
             # handle single dot
             #TODO: this is confusing, but I get why you did it this way (compactness)
-            if r2 <= self._probabilitySingleDot[durationLevel]:
+            if r2 <= self._probabilitySingleDot[durationLevel] or maxDepth < 2:
                 numDots = 1
                 duration = self._calcDotDuration(duration, numDots)
                 return [duration, None], numDots
