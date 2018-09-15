@@ -11,7 +11,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
           rhythmTree (RhythmTree): Rhythm space tree
     """
 
-    def __init__(self, metre, lowestDurationLevelOptions, tactusDistScores,
+    def __init__(self, metre, lowestDurationLevelOptions, tactusScoreByDistance,
                  metricalProminenceScores, musicFeaturesMaxImpact,
                  densityImpactDurationLevels, weightMetrics,
                  probabilityDot, probabilitySingleDot, probabilityTie,
@@ -23,7 +23,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         self.rhythmTree = self.rsf.createRhythmTree(self._lowestDurationLevel,
                                                      metre)
 
-        self._tactusDistScores = tactusDistScores[timeSignature]
+        self._tactusScoreByDistance = tactusScoreByDistance[timeSignature]
         self._metricalProminenceScores = metricalProminenceScores[
             timeSignature]
 
@@ -48,7 +48,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
 
         # scores associated to the distance from the duration level of the tactus
         # The indexes of the list represent the distance in duration levels.
-        tactusDistScores = md["tactusDistScores"]
+        tactusScoreByDistance = md["tactusScoreByDistance"]
 
         # scores associated to the metrical prominence. Higher duration levels are
         # favoured. The raw indexes of the list represent the duration level,
@@ -73,7 +73,7 @@ class HarmonyRhythmGenerator(RhythmGenerator):
         probabilityTie = md["probabilityTie"]
 
         probabilityRepeatBar = md["probabilityRepeatBar"]
-        return cls(metre, lowestDurationLevelOptions, tactusDistScores,
+        return cls(metre, lowestDurationLevelOptions, tactusScoreByDistance,
                  metricalProminenceScores, musicFeaturesMaxImpact,
                  densityImpactDurationLevels, weightMetrics,
                  probabilityDot, probabilitySingleDot, probabilityTie,

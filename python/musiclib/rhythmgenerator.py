@@ -194,7 +194,7 @@ class RhythmGenerator(object):
             # A replacement formula would be:
             # score = 1/(metricalDist+1)
             #that gives you [1, .5, .33, .25, .2] etc. and is not limited by a list
-            score = self._tactusDistScores[metricalDist]
+            score = self._tactusScoreByDistance[metricalDist]
             tactusDistScores.append(score)
 
         return tactusDistScores

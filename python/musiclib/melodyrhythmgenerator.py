@@ -70,7 +70,7 @@ class MelodyRhythmGenerator(RhythmGenerator):
         self.rhythmSpace = self.rsf.createRhythmTree(lowestDurationLevel,
                                                      metre)
 
-        self._tactusDistScores = tactusDistScores[timeSignature]
+        self._tactusScoreByDistance = tactusDistScores[timeSignature]
         self._metricalProminenceScores = metricalProminenceScores[
             timeSignature]
 

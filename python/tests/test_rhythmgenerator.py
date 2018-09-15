@@ -9,7 +9,7 @@ metricalLevels = m.getDurationLevels()
 r._metricalAccentImpact = [0, 0.1, 0.15, 0.2, 0.3]
 #TODO: duplicate assignment of this var - maybe you're just saving this one for testing?
 r._densityImpactDurationLevels = [0, 0.1, 0.3, 0.6, 1]
-r._tactusDistScores = [1, 0.6, 0.4, 0.2]
+r._tactusScoreByDistance = [1, 0.6, 0.4, 0.2]
 r._densityImpactDurationLevels = [-0.5, -0.2, 0, 0.6, 1]
 #TODO, I think these metrical prominence scores could also potentially be
 #a formula rather than a list - it's really just 1 if durationLevel == metricalAccent

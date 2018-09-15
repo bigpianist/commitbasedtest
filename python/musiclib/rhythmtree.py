@@ -95,7 +95,7 @@ class RhythmTree(Tree):
         return depth
 
 
-    def _getLeftViewCurrentNode(self, candidateDurations=[]):
+    def _getLeftViewCurrentNode(self, candidateDurations):
         """Returns the list of candidate durations traversing down the tree
         and picking the 0-index children, included the current node (self)
 
@@ -201,7 +201,7 @@ class RhythmTree(Tree):
 
         # handle case we're at the root of the tree
         if self.parent == None:
-            candidateDurations =  self._getLeftViewCurrentNode()
+            candidateDurations =  self._getLeftViewCurrentNode([])
             return candidateDurations
 
         # handle case we're at the last child
