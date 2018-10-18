@@ -1,4 +1,0 @@
-{
-  "tests/test_melodyrhythmgenerator.py::testDurationGeneratedBar": true,
-  "tests/test_rhythmspace.py::testCorrectCandidateDurationsWithNoDotsArePicked": true
-}
