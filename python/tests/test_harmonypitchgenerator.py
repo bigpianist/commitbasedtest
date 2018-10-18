@@ -1,5 +1,5 @@
 from musiclib.harmonypitch.harmonypitchgenerator import HarmonyPitchGenerator
-from musiclib.rhythmspace import RhythmSpace
+from musiclib.rhythmtree import RhythmTree
 from musiclib.harmonypitch.chord import Chord
 
 def testHarmonyPitchGeneratorIsInstantiatedCorrectly():
@@ -11,9 +11,9 @@ def testHarmonyPitchGeneratorIsInstantiatedCorrectly():
     assert len(hpg._candidateTriads) == 48
 
 def testChordProgressionsForCadencesAreCreatedCorrectly():
-    rs1 = RhythmSpace(4, 1)
-    rs2 = RhythmSpace(3, 1)
-    rs3 = RhythmSpace(2, 1)
+    rs1 = RhythmTree(4, 1)
+    rs2 = RhythmTree(3, 1)
+    rs3 = RhythmTree(2, 1)
 
     rs1.setMetricalAccent(1)
     rs2.setMetricalAccent(2)
@@ -25,10 +25,10 @@ def testChordProgressionsForCadencesAreCreatedCorrectly():
 
 def testChordProgressionsAreGeneratedCorrectly():
     hpg = HarmonyPitchGenerator()
-    rs1 = RhythmSpace(3.5, 0)
-    rs2 = RhythmSpace(0.5, 0)
-    rs3 = RhythmSpace(2, 0)
-    rs4 = RhythmSpace(2, 1)
+    rs1 = RhythmTree(3.5, 0)
+    rs2 = RhythmTree(0.5, 0)
+    rs3 = RhythmTree(2, 0)
+    rs4 = RhythmTree(2, 1)
 
 
     rs1.setMetricalAccent(0)

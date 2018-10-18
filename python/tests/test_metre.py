@@ -1,10 +1,12 @@
 from musiclib.metre import Metre
 
+
 def testMetreIsInstantiatedCorrectly():
+    m = Metre("3/4", 1.0, 3.0, 4)
     m = Metre("3/4", "quarternote")
     assert m.timeSignature == "3/4"
     assert m.tactus["label"] == "quarternote"
-    assert m.tactus["metricalLevel"] == 1
+    assert m.tactus["durationLevel"] == 1
 
 """def test_metrical_structure_44_is_generated_correctly():
     m = Metre("4/4", "quarternote")

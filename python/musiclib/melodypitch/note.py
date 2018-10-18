@@ -6,7 +6,7 @@ class Note():
                  isBackboneNote=False):
         super(Note, self).__init__()
         self.pitch = pitch
-        self.rhythm = rhythm  #RhythmSpace object
+        self.rhythm = rhythm  #RhythmTree object
         self.underlyingChord = underlyingChord  #Chord object
         self.isBackboneNote = isBackboneNote
 

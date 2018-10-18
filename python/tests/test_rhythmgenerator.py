@@ -1,15 +1,21 @@
 from musiclib.rhythmgenerator import RhythmGenerator
 from musiclib.metre import Metre
-from musiclib.rhythmspace import RhythmSpace
+from musiclib.rhythmtree import RhythmTree
 
 
 m = Metre("4/4", "quarternote")
 r = RhythmGenerator(m)
-metricalLevels = m.getMetricalLevels()
+metricalLevels = m.getDurationLevels()
 r._metricalAccentImpact = [0, 0.1, 0.15, 0.2, 0.3]
-r._densityImpactMetricalLevels = [0, 0.1, 0.3, 0.6, 1]
-r._tactusDistScores = [1, 0.6, 0.4, 0.2]
-r._densityImpactMetricalLevels = [-0.5, -0.2, 0, 0.6, 1]
+#TODO: duplicate assignment of this var - maybe you're just saving this one for testing?
+r._densityImpactDurationLevels = [0, 0.1, 0.3, 0.6, 1]
+r._tactusScoreByDistance = [1, 0.6, 0.4, 0.2]
+r._densityImpactDurationLevels = [-0.5, -0.2, 0, 0.6, 1]
+#TODO, I think these metrical prominence scores could also potentially be
+#a formula rather than a list - it's really just 1 if durationLevel == metricalAccent
+#then a decay for those metric levels < metricalAccent
+#I can see us wanting different numbers, but it seems like it will always
+#have a shape to it.
 r._metricalProminenceScores = [[1, 0, 0, 0, 0],
                                        [0.7, 1, 0, 0, 0],
                                        [0.3, 0.5, 1, 0, 0],
@@ -22,18 +28,18 @@ def testCompressValues():
     expectedCompressedValues = [0.95, 0.77, 0.5, 0.14, 0.05]
     assert compressedValues == expectedCompressedValues
 
-
+"""
 def testVAfeaturesAreMappedCorrectly():
     mapping = r.mapVAfeature(0, 0.2)
     expectedMapping = 0.1
     assert mapping == expectedMapping
-
+"""
 
 def testCalcScoreDistHarmonicTactusReturnsCorrectScores():
-    d1 = RhythmSpace(1, 0)
-    d2 = RhythmSpace(1, 1)
-    d3 = RhythmSpace(1, 2)
-    d4 = RhythmSpace(1, 3)
+    d1 = RhythmTree(1, 0)
+    d2 = RhythmTree(1, 1)
+    d3 = RhythmTree(1, 2)
+    d4 = RhythmTree(1, 3)
 
     candidates = [d1, d2, d3, d4]
     expectedScores = [0.4, 0.6, 1, 0.6]
@@ -46,9 +52,9 @@ def testCalcScoreDistHarmonicTactusReturnsCorrectScores():
 
 
 def testCalcScoreMetricalProminence():
-    d2 = r.rhythmSpace.children[1]
-    d3 = r.rhythmSpace.children[1].children[0]
-    d4 = r.rhythmSpace.children[1].children[0].children[0]
+    d2 = r.rhythmTree.children[1]
+    d3 = r.rhythmTree.children[1].children[0]
+    d4 = r.rhythmTree.children[1].children[0].children[0]
 
     expectedPositionScores = [1, 0.5, 0.3]
 
@@ -64,9 +70,9 @@ def testDecideToApplyTie():
 
 
 def testScoresAreModifiedCorrectlyForDensity():
-    d1 = RhythmSpace(1, 0)
-    d2 = RhythmSpace(1, 1)
-    d3 = RhythmSpace(1, 2)
+    d1 = RhythmTree(1, 0)
+    d2 = RhythmTree(1, 1)
+    d3 = RhythmTree(1, 2)
     candidates = [d1, d2, d3]
     scores = [0.8, 0.6, 0.5]
     r.densityImpact = 1

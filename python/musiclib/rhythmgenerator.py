@@ -1,11 +1,11 @@
 from musiclib.probability import *
-from musiclib.rhythmspacefactory import RhythmSpaceFactory
-import random
+from musiclib.rhythmtreefactory import RhythmTreeFactory
+from melodrive.stats.randommanager import RandomManager
 
 FOURFOUR = "4/4"
 THREEFOUR = "3/4"
 
-lowestMetricalLevelOptions = {FOURFOUR: 4,
+lowestDurationLevelOptions = {FOURFOUR: 4,
                               THREEFOUR: 3}
 
 
@@ -25,7 +25,7 @@ probabilitySingleDot = {FOURFOUR: [0, 0.8, 0.8, 1, 0],
                         THREEFOUR: [0, 0.8, 1, 0]}
 
 
-densityImpactMetricalLevels = {FOURFOUR: [-0.5, -0.2, 0, 0.6, 1],
+densityImpactDurationLevels = {FOURFOUR: [-0.5, -0.2, 0, 0.6, 1],
                                THREEFOUR: [0, 0.3, 0.6, 1]}
 
 
@@ -54,7 +54,6 @@ weightMetrics = {FOURFOUR: {"distTactus": 1,
                 THREEFOUR: {"distTactus": 1,
                             "metricalProminence": 1}}
 
-
 class RhythmGenerator(object):
     """Base class for melody and harmony rhythm generator classes"""
 
@@ -63,34 +62,23 @@ class RhythmGenerator(object):
         self.entropyImpact = None
         self.densityImpact = None
 
-        timeSignature = metre.getTimeSignature()
-        lowestMetricalLevel = lowestMetricalLevelOptions[timeSignature]
-        self.rsf = RhythmSpaceFactory()
-
-        self.rhythmSpace = self.rsf.createRhythmSpace(lowestMetricalLevel,
-                                                     metre)
+        self.rsf = RhythmTreeFactory()
         self._barDuration = metre.getBarDuration()
-        self._probabilityTie = probabilityTie[timeSignature]
-        self._probabilityDot = probabilityDot[timeSignature]
-        self._probabilitySingleDot = probabilitySingleDot[timeSignature]
-        self._weightMetrics = weightMetrics[timeSignature]
-        self._densityImpactMetricalLevels = densityImpactMetricalLevels[timeSignature]
-        self._tactusDistScores = tactusDistScores[timeSignature]
-        self._metricalProminenceScores = metricalProminenceScores[timeSignature]
+
 
 
     def setEntropyImpact(self, newEntropy):
-        self.entropyImpact = self.mapVAfeature(newEntropy,
-                                    self._VAfeaturesMaxImpact["entropy"])
+        self.entropyImpact = self.mapMusicFeature(newEntropy,
+                                    self._musicFeaturesMaxImpact["entropy"])
 
 
     def setDensityImpact(self, newDensity):
-        self.densityImpact = self.apVAfeature(newDensity,
-                                    self._VAfeaturesMaxImpact["density"])
+        self.densityImpact = self.mapMusicFeature(newDensity,
+                                    self._musicFeaturesMaxImpact["density"])
 
 
     @staticmethod
-    def mapVAfeature(value, maxValue=1):
+    def mapMusicFeature(value, maxValue=1):
         """Maps a VA feature onto interval [0, maxValue].
 
         Args:
@@ -119,7 +107,7 @@ class RhythmGenerator(object):
                                     around 'attractionValue'
 
         Returns:
-            commpressedValues (list):
+            compressedValues (list):
         """
 
         compressedValues = []
@@ -162,11 +150,11 @@ class RhythmGenerator(object):
 
         Args:
             scores (list): List of scores for each duration candidate
-            candidates (list of lists): List of RhythmSpace objects that
+            candidates (list of lists): List of RhythmTree objects that
                                         can be chosen as the next duration
 
         Returns:
-            nextDuration (RhythmSpace): Duration (RhythmSpace object) to be
+            nextDuration (RhythmTree): Duration (RhythmTree object) to be
                                         used
         """
 
@@ -183,7 +171,7 @@ class RhythmGenerator(object):
         bigger the distance the lower the score.
 
         Args:
-            candidates (list of RhythmSpace objects): All the candidates to be
+            candidates (list of RhythmTree objects): All the candidates to be
                                                       evaluated
             tactusLevel (int): Numeric index of tactus
 
@@ -196,25 +184,31 @@ class RhythmGenerator(object):
 
         # calculate score for all candidates
         for candidate in candidates:
-            candidateMetricalLevel = candidate.getMetricalLevel()
-            metricalDist = abs(tactusLevel - candidateMetricalLevel)
+            candidateDurationLevel = candidate.getDurationLevel()
+            metricalDist = abs(tactusLevel - candidateDurationLevel)
 
             # convert distance into normalised score
-            score = self._tactusDistScores[metricalDist]
+            #TODO: this (tactusDistScores) definitely doesn't need to be stored as a list,
+            # and is not fail-safe
+            #if anything we should have a setting that specifies the type of distribution
+            # A replacement formula would be:
+            # score = 1/(metricalDist+1)
+            #that gives you [1, .5, .33, .25, .2] etc. and is not limited by a list
+            score = self._tactusScoreByDistance[metricalDist]
             tactusDistScores.append(score)
 
         return tactusDistScores
 
 
     def _calcMetricalProminenceMetric(self, candidates):
-        """Caluclates a score related to the metrical level of the
+        """Calculates a score related to the metrical level of the
         candidate durations. Notes corresponding to higher metrical levels
         tend to be favoured, especially on strong metrical points.
 
         Args:
-            candidates (list of RhythmSpace objects): All the candidates to be
+            candidates (list of RhythmTree objects): All the candidates to be
                                                       evaluated
-            metricalLevels (list): Available metrical levels
+            durationLevels (list): Available metrical levels
 
         Returns:
             metricalProminenceScores (list): List with the scores of metrical
@@ -225,20 +219,20 @@ class RhythmGenerator(object):
 
         # calculate basic score for all candidates
         for candidate in candidates:
-            metricalLevel = candidate.getMetricalLevel()
+            durationLevel = candidate.getDurationLevel()
             metricalAccent = candidate.getMetricalAccent()
-            score = self._metricalProminenceScores[metricalLevel][metricalAccent]
+            score = self._metricalProminenceScores[durationLevel][metricalAccent]
             metricalProminenceScores.append(score)
 
         return metricalProminenceScores
 
 
-    def _decideToApplyTie(self, rhythmicSeqElement, metricalLevel):
+    def _decideToApplyTie(self, rhythmicSeqElement, durationLevel):
         """Decides whether to apply tie and adds a 't' to the duration
 
         Args:
             rhythmicSeqElement (list): [duration, None] - None indicates no tie
-            metricalLevel (int): Metrical level of chosen rhythm space node
+            durationLevel (int): Metrical level of chosen rhythm space node
 
         Returns:
             newDuration (list): Pair duration, 't' (symbol ofr tie), if tie
@@ -246,8 +240,9 @@ class RhythmGenerator(object):
         """
 
         duration = rhythmicSeqElement[0]
+        random = RandomManager.getActive()
         r = random.random()
-        if r <= self._probabilityTie[metricalLevel]:
+        if r <= self._probabilityTie[durationLevel]:
             return [duration, 't']
         else:
             return [duration, None]
@@ -271,32 +266,36 @@ class RhythmGenerator(object):
         return dottedDuration
 
 
-    def _decideToApplyDot(self, rhythmSpace):
+    def _decideToApplyDot(self, rhythmTree, maxDepth):
         """Decides whether to apply a dot either single or double.
 
         Args:
-            rhythmSpace (RhythmSpace): Chosen rhythm space node
+            rhythmTree (RhythmTree): Chosen rhythm space node
 
         Returns:
-            newDuration (list): Pair duration, 't' (symbol ofr tie), if tie
+            newDuration (list): Pair duration, 't' (symbol for tie), if tie
                                 gets applied
             numDots (int): Number of dots applied
         """
 
-        duration = rhythmSpace.getDuration()
-        metricalLevel = rhythmSpace.getMetricalLevel()
+        duration = rhythmTree.getDuration()
+        durationLevel = rhythmTree.getDurationLevel()
+        random = RandomManager.getActive()
         r = random.random()
 
         numDots = 0
 
         # decide whether to apply a dot
-        if r <= self._probabilityDot[metricalLevel]:
+        if r <= self._probabilityDot[durationLevel] and maxDepth >= 1:
 
             # decide which type of dot to apply
+            #TODO need to verify that we're using melodrive's random manager when we integrate
+            random = RandomManager.getActive()
             r2 = random.random()
 
             # handle single dot
-            if r2 <= self._probabilitySingleDot[metricalLevel]:
+            #TODO: this is confusing, but I get why you did it this way (compactness)
+            if r2 <= self._probabilitySingleDot[durationLevel] or maxDepth < 2:
                 numDots = 1
                 duration = self._calcDotDuration(duration, numDots)
                 return [duration, None], numDots
@@ -324,12 +323,12 @@ class RhythmGenerator(object):
         Returns:
             newScores (list):
         """
-
+        #TODO: (minor) make sure scores and candidates are the same length
         newScores = []
         impact = self.densityImpact
         for index, score in enumerate(scores):
-            metricalLevel = candidates[index].getMetricalLevel()
-            densityScore = self._densityImpactMetricalLevels[metricalLevel]
+            durationLevel = candidates[index].getDurationLevel()
+            densityScore = self._densityImpactDurationLevels[durationLevel]
             newScore = (score + densityScore * impact) / MAXSCORE
             newScores.append(newScore)
         return newScores
@@ -354,6 +353,10 @@ class RhythmGenerator(object):
         newScores = self.compressValues(MIDVALUE, scores, self.entropyImpact)
 
         return newScores
+
+
+    def _calcScores(self):
+        pass
 
 
 

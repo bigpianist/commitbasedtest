@@ -1,24 +1,25 @@
 from musiclib.tree import Tree
 
-class RhythmSpace(Tree):
-    """RhythmSpace is a class to represent the rhythm space of a bar of
+
+class RhythmTree(Tree):
+    """RhythmTree is a class to represent the rhythm space of a bar of
     a given time signature with a tree structure.
 
     Attributes:
         duration (float): Duration of node of the rhythm space
-        metricalLevel (int):  Metrical level of node of the rhythm space
+        durationLevel (int):  Metrical level of node of the rhythm space
         metricalAccent (int): Metrical accent level in the metrical grid
-        lowestMetricalLevel (int):
+        lowestDurationLevel (int):
         hasTupletChildren (bool): Flag to know whether node has children
                                   that are a tuplet
     """
 
-    def __init__(self, duration, metricalLevel, children=None):
-        super(RhythmSpace, self).__init__(duration, children)
+    def __init__(self, duration, durationLevel, children=None):
+        super(RhythmTree, self).__init__(duration, children)
         self.duration = float(duration)
-        self.metricalLevel = metricalLevel
+        self.durationLevel = durationLevel
         self.metricalAccent = None
-        self.lowestMetricalLevel = None
+        self.lowestDurationLevel = None
         self.hasTupletChildren = False
 
 
@@ -47,10 +48,10 @@ class RhythmSpace(Tree):
         current one
 
         Args:
-            numDots (int): Number of dots current rhythmc space
+            numDots (int): Number of dots current rhythmic space
 
         Returns:
-            candidateDurations (list): List of RhythmSpace objects
+            candidateDurations (list): List of RhythmTree objects
         """
 
         if numDots == 0:
@@ -65,7 +66,7 @@ class RhythmSpace(Tree):
         figuring out whether it is a first child
 
         Args:
-            parent (RhythmSpace): Parent node of self
+            parent (RhythmTree): Parent node of self
             currentLevel (int): Metrical level of the child
         """
         if self.isFirstChild():
@@ -79,20 +80,27 @@ class RhythmSpace(Tree):
         return self.duration
 
 
-    def getMetricalLevel(self):
-        return self.metricalLevel
+    def getDurationLevel(self):
+        return self.durationLevel
 
 
     def setDuration(self, duration):
         self.duration = duration
 
 
-    def _getAllCandidateDurationsLowerLevels(self, candidateDurations=[]):
+    def getDepthOfTree(self, depth=0):
+        if not self.hasChildren():
+            return depth
+        depth = self.getChild(0).getDepth(depth + 1)
+        return depth
+
+
+    def _getLeftViewCurrentNode(self, candidateDurations):
         """Returns the list of candidate durations traversing down the tree
-        and picking the 0-index children
+        and picking the 0-index children, included the current node (self)
 
         Returns:
-            candidateDurations (list): List of RhythmSpace objects
+            candidateDurations (list): List of RhythmTree objects
         """
         candidateDurations.append(self)
 
@@ -101,7 +109,7 @@ class RhythmSpace(Tree):
             return candidateDurations
 
         firstChild = self.children[0]
-        candidateDurations = firstChild._getAllCandidateDurationsLowerLevels(
+        candidateDurations = firstChild._getLeftViewCurrentNode(
                                                 candidateDurations)
         return candidateDurations
 
@@ -114,12 +122,19 @@ class RhythmSpace(Tree):
         self.metricalAccent = metricalAccent
 
 
-    def getLowestMetricalLevel(self):
-        return self.lowestMetricalLevel
+    def getLowestDurationLevel(self):
+        """Recursively traverse up the tree and get the lowestDurationLevel on
+        the root
+        """
+
+        if not self.hasParent():
+            return self.lowestDurationLevel
+        else:
+            return self.parent.getLowestDurationLevel()
 
 
-    def setLowestMetricalLevel(self, lowestMetricalLevel):
-        self.lowestMetricalLevel = lowestMetricalLevel
+    def setLowestDurationLevel(self, lowestDurationLevel):
+        self.lowestDurationLevel = lowestDurationLevel
 
 
     def getHasTupletChildren(self):
@@ -180,13 +195,13 @@ class RhythmSpace(Tree):
         current one, in case the current duration isn't dotted.
 
         Returns:
-            candidateDurations (list): List of RhythmSpace objects
+            candidateDurations (list): List of RhythmTree objects
 
         """
 
         # handle case we're at the root of the tree
         if self.parent == None:
-            candidateDurations =  self._getAllCandidateDurationsLowerLevels()
+            candidateDurations =  self._getLeftViewCurrentNode([])
             return candidateDurations
 
         # handle case we're at the last child
@@ -195,11 +210,11 @@ class RhythmSpace(Tree):
             if firstAncestorNotLastChild == None:
                 return None
             rightSiblingAncestor = firstAncestorNotLastChild.getRightSibling()
-            candidateDurations = rightSiblingAncestor._getAllCandidateDurationsLowerLevels([])
+            candidateDurations = rightSiblingAncestor._getLeftViewCurrentNode([])
             return candidateDurations
         else:
             rightSibling = self.getRightSibling()
-            candidateDurations = rightSibling._getAllCandidateDurationsLowerLevels([])
+            candidateDurations = rightSibling._getLeftViewCurrentNode([])
             return candidateDurations
 
 
@@ -210,7 +225,7 @@ class RhythmSpace(Tree):
             numDots (int): Should be either 1 or 2
 
         Retutrns:
-            candidateDurations (RhythmSpace):  List of RhythmSpace objects
+            candidateDurations (RhythmTree):  List of RhythmTree objects
         """
 
         LASTCHILDINDEX = 1
@@ -219,17 +234,51 @@ class RhythmSpace(Tree):
         rightSibling = self.getRightSibling()
 
         # move down as many levels as the number of dots, choosing last child
-        targetDuration = rightSibling.getNodeLowerLevels(numDots, LASTCHILDINDEX)
+        targetDuration = rightSibling.getDescendantAtIndex(numDots, LASTCHILDINDEX)
 
         # expand the node getting all the first children until the bottom
         candidateDurations = \
-            targetDuration._getAllCandidateDurationsLowerLevels([])
+            targetDuration._getLeftViewCurrentNode([])
         return candidateDurations
 
 
+    def _getIndexOfNodeInTree(self):
+        if self.parent is not None:
+            curIndex = self._getIndexOfNodeInSiblingList()
+            return [curIndex] + self.parent._getIndexOfNodeInTree
+        return []
 
 
+    def __getitem__(self, index):
+        if isinstance(index, (int, slice)):
+            return self.children[index]
+        elif isinstance(index, (list, tuple)):
+            if len(index) == 0:
+                return self
+            elif len(index) == 1:
+                return self[index[0]]
+            else:
+                return self[index[0]][index[1:]]
+        else:
+            raise TypeError("%s indices must be integers, not %s" %
+                            (type(self).__name__, type(index).__name__))
 
+
+    def __setitem__(self, index, value):
+        if isinstance(index, (int, slice)):
+            self.children[index] = value
+            return
+        if isinstance(index, (list, tuple)):
+            if len(index) == 0:
+                raise IndexError('The tree position () may not be '
+                                 'assigned to.')
+            elif len(index) == 1:
+                self[index[0]] = value
+            else:
+                self[index[0]][index[1:]] = value
+        else:
+            raise TypeError("%s indices must be integers, not %s" %
+                            (type(self).__name__, type(index).__name__))
 
 
 

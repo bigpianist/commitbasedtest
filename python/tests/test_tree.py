@@ -49,12 +49,11 @@ def testChildrenAreRecursivelyRemoved():
 
     assert str(t) == str(t2)
 
-
+"""
 def testGetRightSibling():
-    t = Tree(1, [Tree(2),Tree(2)])
-
-    rightSibling = t.children[0].getRightSibling()
-    expectedRightSibling = t.children[1]
+    
+    rightSibling = t.children[0].children[1].getRightSibling()
+    expectedRightSibling = t.children[1].children[0]
     assert rightSibling == expectedRightSibling
 
     # case where node is last children
@@ -64,7 +63,7 @@ def testGetRightSibling():
     # case where node is root
     rightSibling = t.getRightSibling()
     assert rightSibling == None
-
+"""
 
 def testIsLastChild():
     t = Tree(1, [Tree(1), Tree(1)])
@@ -91,29 +90,29 @@ def testGetFirstAncestorNotLastChild():
     assert ancestor == expectedAncestor
 
 
-def testGetNodeLowerLevels():
+def testgetDescendantAtIndex():
 
     # case with last children to be expanded
     expectedNode = t.children[1].children[1]
-    node = t.getNodeLowerLevels(2, 1, 0)
+    node = t.getDescendantAtIndex(2, 1, 0)
     assert node == expectedNode
 
     # case with first children to be expanded
     expectedNode = t.children[0].children[0].children[0]
-    node = t.getNodeLowerLevels(3, 0, 0)
+    node = t.getDescendantAtIndex(3, 0, 0)
     assert node == expectedNode
 
 
-def testGetAllNodesLowerLevels():
+def testcollectDescendantsAtRecursiveIndex():
 
     # case with last children to be expanded
     expectedNodes = [t, t.children[1]]
-    nodes = t.getAllNodesLowerLevels(1, 1, 0)
+    nodes = t.collectDescendantsAtRecursiveIndex(1, 1, 0)
     assert nodes == expectedNodes
 
     # case with first children to be expanded
     expectedNodes = [t, t.children[0], t.children[0].children[0]]
-    nodes = t.getAllNodesLowerLevels(2, 0, 0, [])
+    nodes = t.collectDescendantsAtRecursiveIndex(2, 0, 0, [])
     assert nodes == expectedNodes
 
 
@@ -158,4 +157,3 @@ if __name__ == "__main__":
     import pytest
     errno = pytest.main(["-x", __file__])
     sys.exit(errno)
-
