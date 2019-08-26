@@ -1,32 +1,32 @@
 from musiclib.tree import Tree
 
 t = Tree(1, [Tree(2.1, [
-                    Tree(3.1, [
-                        Tree(4.1), Tree(4.2)]),
-                    Tree(3.2, [
-                        Tree(4.3), Tree(4.4)])]),
-             Tree(2.2, [
+        Tree(3.1, [
+            Tree(4.1), Tree(4.2)]),
+        Tree(3.2, [
+            Tree(4.3), Tree(4.4)])]),
+                 Tree(2.2, [
                      Tree(3.3, [
                          Tree(4.5), Tree(4.6)]),
                      Tree(3.4, [
                          Tree(4.7), Tree(4.8)])])])
 
-def testTreeIsInstantiatedCorrectly():
+def test_tree_is_instantiated_correctly():
     t = Tree(1)
     assert t is not None
 
-def testTreeWithChildrenIsInstantiatedCorrectly():
+def test_tree_with_children_is_instantiated_correctly():
     t = Tree(1, [Tree(2), Tree(2)])
     assert len(t.children) == 2
 
-def testChildIsAdded():
+def test_child_is_added():
     t = Tree(1)
     t2 = Tree(2)
     t.addChild(t2)
     assert len(t.children) == 1
     assert t.children[0].parent is t
 
-def testChildrenAreRecursivelyRemoved():
+def test_children_are_recursively_removed():
     t = Tree(1, [Tree(2, [
                     Tree(3, [
                         Tree(4), Tree(4)]),
@@ -44,13 +44,13 @@ def testChildrenAreRecursivelyRemoved():
                      Tree(3, [
                          Tree(4), Tree(4)])])])
 
-    t.children[0].removeChildrenRecursively()
+    t.children[0].removeChildren()
     print(t)
 
     assert str(t) == str(t2)
 
 
-def testGetRightSibling():
+def test_getRightSibling():
     t = Tree(1, [Tree(2),Tree(2)])
 
     rightSibling = t.children[0].getRightSibling()
@@ -66,7 +66,7 @@ def testGetRightSibling():
     assert rightSibling == None
 
 
-def testIsLastChild():
+def test_isLastChild():
     t = Tree(1, [Tree(1), Tree(1)])
 
     # case where node is last child
@@ -79,7 +79,7 @@ def testIsLastChild():
     assert t.isLastChild() == True
 
 
-def testGetFirstAncestorNotLastChild():
+def test_getFirstAncestorNotLastChild():
 
     expectedAncestor = t.children[0]
     ancestor = t.children[0].children[1].children[1].getFirstAncestorNotLastChild()
@@ -91,7 +91,7 @@ def testGetFirstAncestorNotLastChild():
     assert ancestor == expectedAncestor
 
 
-def testGetNodeLowerLevels():
+def test_getNodeLowerLevels():
 
     # case with last children to be expanded
     expectedNode = t.children[1].children[1]
@@ -104,7 +104,7 @@ def testGetNodeLowerLevels():
     assert node == expectedNode
 
 
-def testGetAllNodesLowerLevels():
+def test_getAllNodesLowerLevels():
 
     # case with last children to be expanded
     expectedNodes = [t, t.children[1]]
@@ -117,40 +117,13 @@ def testGetAllNodesLowerLevels():
     assert nodes == expectedNodes
 
 
-def testIsFirstChild():
+def test_isFirstChild():
     t1 = t.children[0].children[1]
     t2 = t.children[0].children[0].children[0]
 
     assert t1.isFirstChild() == False
     assert t2.isFirstChild() == True
 
-
-def testHasDescendant():
-
-    # case where there's descendant
-    expectedResult = True
-    result = t.hasDescendant(3)
-    a = result
-    assert result == expectedResult
-
-    # case where there's no descendant
-    expectedResult = False
-    result = t.hasDescendant(4)
-    a = result
-    assert result == expectedResult
-
-
-def testHasAncestor():
-
-    # case where there's descendant
-    expectedResult = True
-    result = t.children[1].children[0].hasAncestor(2)
-    assert result == expectedResult
-
-    # case where there's no ancestor
-    expectedResult = False
-    result = t.children[1].children[0].hasAncestor(3)
-    assert result == expectedResult
 
 
 if __name__ == "__main__":

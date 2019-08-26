@@ -8,12 +8,16 @@ hm = HarmonicMetre("3/4", "dottedhalfnote")
 hrg = HarmonyRhythmGenerator(m)
 
 
-def testHarmonyRhythmGeneratorIsInstantiated():
+def test_HarmonyRhythmGenerator_is_instantiated():
     hrg = HarmonyRhythmGenerator(m)
     hrg is not None
 
 
-def testCalcScoreDistHarmonicTactusReturnsCorrectScores():
+def test_generateHarmonicRhythmBar():
+    pass
+
+
+def test_calcScoreDistHarmonicTactus_returns_correct_scores():
     d1 = RhythmSpace(1, 0)
     d2 = RhythmSpace(1, 1)
     d3 = RhythmSpace(1, 2)
@@ -24,14 +28,14 @@ def testCalcScoreDistHarmonicTactusReturnsCorrectScores():
     assert scores == expectedScores
 
 
-def testCompressValues():
+def test_compressValues():
     l = [1, 0.8, 0.5, 0.1, 0]
     compressedValues = hrg.compressValues(0.5, l, 0.1)
     expectedCompressedValues = [0.95, 0.77, 0.5, 0.14, 0.05]
     assert compressedValues == expectedCompressedValues
 
 
-def testCalcScoreMetricalPosition():
+def test_calcScoreMetricalPosition():
     d2 = hrg.rhythmSpace.children[1]
     d3 = hrg.rhythmSpace.children[1].children[0]
     d4 = hrg.rhythmSpace.children[1].children[0].children[0]
@@ -45,7 +49,7 @@ def testCalcScoreMetricalPosition():
     assert metricalPositionScores == expectedPositionScores
 
 
-def testCalculateScores():
+def test_calculateScores():
     d1 = hrg.rhythmSpace
     d2 = hrg.rhythmSpace.children[1]
     d3 = hrg.rhythmSpace.children[1].children[0]
@@ -59,7 +63,7 @@ def testCalculateScores():
     assert scores == expectedScores
 
 
-def testGenerateHarmonycRhythmBar():
+def test_generateHarmonycRhythmBar():
     hm2 = HarmonicMetre("4/4", "halfnote")
     rhythm = hrg._generateHarmonicRhythmBar(hm2, 0.05)
     barDuration = sum(i for i, _ in rhythm)
@@ -68,13 +72,13 @@ def testGenerateHarmonycRhythmBar():
     assert barDuration == expectedBarDuration
 
 
-def testDecideToApplyTie():
+def test_decideToApplyTie():
     newDuration = hrg._decideToApplyTie([2, None], 1)
 
     assert newDuration == [2, 't'] or newDuration == [2, None]
 
 
-def testGenerateHarmonicRhythmMU():
+def test_generateHarmonicRhythmMU():
     hm2 = HarmonicMetre("4/4", "wholenote")
     rhythm = hrg.generateHarmonicRhythmMU(hm2, 0.05, 2)
 

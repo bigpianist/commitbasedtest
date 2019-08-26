@@ -1,22 +1,13 @@
-from musiclib.harmonypitch.scale import Scale
+from musiclib.scale import Scale
 
-s = Scale()
-
-def testScaleIsInstantiatedCorrectly():
+def test_scale_is_instantiated_correctly():
     s = Scale("dorian")
     assert s.name == "dorian"
     assert s.pitchClassSequence == [0, 2, 3, 5, 7, 9, 10]
 
-def testScaleWithWrongNameDefaultsCorrectly():
+def test_scale_with_wrong_name_defaults_correctly():
     s = Scale("ssds")
     assert s.name == "ionian"
-
-def testScalesAreExpandedCorrectly():
-    seq = s.expandScaleSequence(octave=1)
-    expectedSeq = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23]
-    print()
-    print(seq)
-    assert seq == expectedSeq
 
 if __name__ == "__main__":
     import sys

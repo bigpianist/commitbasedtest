@@ -1,20 +1,4 @@
 from musiclib.rhythmspace import RhythmSpace
-from musiclib.probability import *
-import random
-
-FOURFOUR = "4/4"
-THREEFOUR = "3/4"
-
-metricalLevelDurations = {FOURFOUR: {0: 4.0,
-                                     1: 2.0,
-                                     2: 1.0,
-                                     3: 0.5,
-                                     4: 0.25},
-                          THREEFOUR: {0: 3,
-                                      1: 1,
-                                      3: 0.5,
-                                      4: 0.25}
-                          }
 
 class RhythmSpaceFactory(object):
     """RhythmSpaceFactory is a class used for instantiating and
@@ -25,8 +9,7 @@ class RhythmSpaceFactory(object):
         super(RhythmSpaceFactory, self).__init__()
 
 
-    def createRhythmSpace(self, lowestMetricalLevel, metre,
-                          highestMetricalLevel=0):
+    def createRhythmSpace(self, lowestMetricalLevel, metre):
         """Instantiate and returns a rhythm space tree
 
         Args:
@@ -34,190 +17,41 @@ class RhythmSpaceFactory(object):
                                        space to be created
             metre (Metre): Metre object
         """
-        STARTLEVEL = highestMetricalLevel
-        timeSignature = metre.getTimeSignature()
-        duration = float(metricalLevelDurations[timeSignature][STARTLEVEL])
+        STARTLEVEL = 0
+        barDuration = float(metre.getBarDuration())
 
         # instantiate root level of rhythm space
-        rhythmSpace = RhythmSpace(duration, STARTLEVEL)
+        rhythmSpace = RhythmSpace(barDuration, STARTLEVEL)
         rhythmSpace.setMetricalAccent(STARTLEVEL)
-        rhythmSpace.setLowestMetricalLevel(lowestMetricalLevel)
 
         metricalLevels = metre.getMetricalLevels()
         metricalSubdivisions = metre.getMetricalSubdivisions()
 
-        if STARTLEVEL == lowestMetricalLevel:
-            return rhythmSpace
-
         # expand root
         rhythmSpace = self._expandRoot(lowestMetricalLevel, metricalLevels,
-                                       metricalSubdivisions, duration,
+                                       metricalSubdivisions, barDuration,
                                        STARTLEVEL+1, rhythmSpace)
         return rhythmSpace
 
 
-    def addTupletsToRhythmSpace(self, parent, probTuplets, probTupletType):
-        """Inserts tuplets in the rhythm space tree
-
-        Args:
-            probTuplet (list): Prob of having a tuplet at different metrical
-                               levels
-            probTupletType (dict): Prob of having different types of tuplets at
-                                   different metrical levels
-
-        Returns:
-            newTree (RhythmSpace): Rhythm space with tuplets
-        """
-
-        lowestMetricalLevel = parent.getLowestMetricalLevel()
-        currentLevel = parent.getMetricalLevel()
-        metricalAccent = parent.getMetricalAccent()
-
-        # return up the stack if we're at the penultimate lowest metrical level
-
-        if (lowestMetricalLevel - currentLevel) < 1:
-            return parent
-
-        # decide whether to insert tuplets
-        r = random.random()
-        if r < probTuplets[currentLevel][metricalAccent]:
-
-            # decide which type of tuplets to insert
-            tupletType = self._decideTupletType(probTupletType, currentLevel)
-            self.insertTuplet(parent, tupletType)
-            return parent
-
-        children = parent.getChildren()
-        for child in children:
-            self.addTupletsToRhythmSpace(child, probTuplets, probTupletType)
-        return parent
-
-
-    def restoreRhythmSpace(self, tree):
-        """Restores normal durations, removing tuplets for all of the rhythm
-        space tree
-
-        Args:
-            tree (RhythmSpace): Root of the rhythm space tree
-            """
-
-        # get all the nodes of the tree which have tuplet children
-        nodesWithTupletChildren = tree.getNodesWithTupletChildren(nodes=[])
-
-        # restore nodes
-        for node in nodesWithTupletChildren:
-            node.setHasTupletChildren(False)
-            self._restoreRhythmSpaceNode(node)
-
-        return tree
-
-
-    # TODO: generalise method to handle all possible tuplets
-    def insertTuplet(self, parent, tupletType):
-        """Inserts a tuplet of a given type in a rhythm space node
-
-        Args:
-            parent (RhythmSpace): RhythmSpace object that gets a
-            tupletType (int): Number that indicates the type of tuplet to be
-                              inserted (e.g., 5 stands for quintuplet)
-        """
-
-        availableNonTripletTuplets = (5, 7)
-
-        if tupletType == 3:
-            self._insertTriplet(parent)
-        elif tupletType in availableNonTripletTuplets:
-            self._insertNonTripletTuplets(parent, tupletType)
-        else:
-            raise ValueError("%s-tuplet is not a supported tuplet type" %
-                             tupletType)
-        parent.setHasTupletChildren(True)
-        return parent
-
-
-    def _restoreRhythmSpaceNode(self, tree):
-        """Restores normal durations, removing tuplets and going back to
-        initial metrical divisions for a given node.
-
-        Args:
-            tree (RhythmSpace): RhythmSpace node that needs to be restored
-        """
-
-        # remove children from RhythmSpace node
-        tree.removeChildren()
-
-        # expand node
-        startLevel = tree.getMetricalLevel() + 1
-        lowestMetricalLevel = tree.getLowestMetricalLevel()
-
-        self._expandNode(lowestMetricalLevel, startLevel, tree)
-
-
-    def _insertNonTripletTuplets(self, parent, tupletType):
-        """Inserts a non triplet tuplet in a rhythm space tree.
-
-        Args:
-            parent (RhythmSpace): Node in the rhythm space, the tuplet is
-                                  inserted into
-            tupletType (int): Number that indicates the type of tuplet to be
-                              inserted (e.g., 5 stands for quintuplet)
-
-        Returns:
-            parent (RhythmSpace)
-        """
-
-        NOMETRICALLEVELSBELOWPARENT = 2
-
-        # check there are two metrical levels below the parent
-        if not parent.hasDescendant(NOMETRICALLEVELSBELOWPARENT):
-            raise ValueError("It's not possible to insert a %s-tuplet, "
-                             "as there are not enough metrical levels to "
-                             "support it" % tupletType)
-
-        # cut off the children
-        parent.removeChildren()
-
-        # create children with right duration and metrical level
-        tupletItemDuration = parent.calculateTupletItemDuration(tupletType)
-        metricalLevelChildren = parent.getMetricalLevel() + NOMETRICALLEVELSBELOWPARENT
-
-        parent = self._createChildren(parent, tupletType, tupletItemDuration,
-                                      metricalLevelChildren)
-
-        # expand children
-        children = parent.getChildren()
-        startLevel = children[0].getMetricalLevel() + 1
-        lowestMetricalLevel = parent.getLowestMetricalLevel()
-
-        for child in children:
-            self._expandNode(lowestMetricalLevel, startLevel, child)
-
-        return parent
-
-
-    def _insertTriplet(self, parent):
+    def insertTriplet(self, parent):
 
         # add extra child to parent
         parentMetricalLevel = parent.getMetricalLevel()
         child = RhythmSpace(1, parentMetricalLevel+1)
-        child.setMetricalAccent(parentMetricalLevel+1)
-
         parent.addChild(child)
 
         tripletItems = parent.getChildren()
 
-        tripletItemDuration = parent.calculateTupletItemDuration(3)
+        tripletItemDuration = parent.calculateTripletItemDuration()
 
         # change duration of children
         for item in tripletItems:
             item.setDuration(tripletItemDuration)
 
-        lowestMetricalLevel = parent.getLowestMetricalLevel()
-        startLevel = parentMetricalLevel + 2
-
         # expand triplet
-        self._modifyTripletItemsDurations(parent, parentMetricalLevel)
-        self._expandNode(lowestMetricalLevel, startLevel, parent.children[2])
+        self._expandTriplet(parent, parentMetricalLevel)
+        self._expandNode(2, 2, parent.children[2])
 
 
     def _expandRoot(self, lowestMetricalLevel, metricalLevels,
@@ -240,10 +74,11 @@ class RhythmSpaceFactory(object):
             parent.addChild(child)
 
             # assign metrical accent to child
-            child.assignMetricalAccent(parent, currentLevel)
-
-            # assign lowest metrical level to child
-            child.setLowestMetricalLevel(lowestMetricalLevel)
+            if child.isFirstChild():
+                parentMetricalAccent = parent.getMetricalAccent()
+                child.setMetricalAccent(parentMetricalAccent)
+            else:
+                child.setMetricalAccent(currentLevel)
 
             self._expandRoot(lowestMetricalLevel, metricalLevels,
                              metricalSubdivisions, barDuration,
@@ -251,7 +86,7 @@ class RhythmSpaceFactory(object):
         return parent
 
 
-    def _modifyTripletItemsDurations(self, parent, thresholdMetricalLevel):
+    def _expandTriplet(self, parent, thresholdMetricalLevel):
 
         # return up the stack if we're at the lowest level of the tree
         if not parent.hasChildren():
@@ -264,88 +99,24 @@ class RhythmSpaceFactory(object):
             parentDuration = parent.getDuration()
             newChildDuration = parentDuration / 2
             for child in children:
+                self._expandTriplet(child, thresholdMetricalLevel)
                 child.setDuration(newChildDuration)
-                self._modifyTripletItemsDurations(child, thresholdMetricalLevel)
         else:
             for child in children:
-                self._modifyTripletItemsDurations(child, thresholdMetricalLevel)
+                self._expandTriplet(child, thresholdMetricalLevel)
 
 
     def _expandNode(self, lowestMetricalLevel, currentLevel, parent):
-
-        NOSUBDIVISIONS = 2
 
         # return up the stack if we've reached the desired depth
         if (lowestMetricalLevel - currentLevel) < 0:
             return
         parentDuration = parent.getDuration()
-        duration = parentDuration / NOSUBDIVISIONS
+        duration = parentDuration / 2
         for _ in range(2):
             child = RhythmSpace(duration, currentLevel)
             parent.addChild(child)
-
-            # assign metrical accent to child
-            child.assignMetricalAccent(parent, currentLevel)
-
-            # assign lowest metrical level to child
-            child.setLowestMetricalLevel(lowestMetricalLevel)
-
             self._expandNode(lowestMetricalLevel, currentLevel+1, child)
-
-
-    def _createChildren(self, parent, number, noteDuration, metricalLevel):
-        """Creates a number of children with a note duration and metrical
-        level
-
-        Args:
-            parent (RhythmSpace): Node we want to add the children to
-            number (int): Number of children to be added
-            noteDuration (float): Note duration of children
-            metricalLevel (float): Metrical level of children
-
-        Returns:
-            parent (RhythmSpace)
-        """
-        lowestMetricalLevel = parent.getLowestMetricalLevel()
-        parentMetricalAccent = parent.getMetricalAccent()
-
-        # create children, add them to parent and assign them a metrical accent
-        for i in range(number):
-            child = RhythmSpace(noteDuration, metricalLevel)
-
-            if i == 0:
-                child.setMetricalAccent(parentMetricalAccent)
-            else:
-                child.setMetricalAccent(metricalLevel)
-
-            # assign lowest metrical level to child
-            child.setLowestMetricalLevel(lowestMetricalLevel)
-            parent.addChild(child)
-
-        return parent
-
-
-    def _decideTupletType(self, probTupletType, currentLevel):
-        """Decide which tuplet type to apply
-
-        Args:
-            probTupletType (list of list): Prob tuplet type across metrical
-                                           levels
-            currentLevel (int): Current metrical level
-
-        Returns:
-            tupletType (int): Tuplet type (e.g., '3' stands for triplet)
-        """
-        normDistr = toNormalisedCumulativeDistr(probTupletType[currentLevel])
-        outcome = decideCumulativeDistrOutcome(normDistr)
-
-        # map index onto tuplet type
-        if outcome == 0:
-            return 3
-        elif outcome == 1:
-            return 5
-        else:
-            return 7
 
 
 

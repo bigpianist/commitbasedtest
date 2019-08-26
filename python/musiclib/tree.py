@@ -34,16 +34,6 @@ class Tree(object):
         self.children.append(child)
 
 
-    def addChildren(self, children):
-        """Appends children to a parent
-
-        Args:
-            children (list): List of children Trees to be added
-        """
-        for child in children:
-            self.children.append(child)
-
-
     def removeChild(self, childIndex):
         """Removes child from parent given an index
 
@@ -54,11 +44,6 @@ class Tree(object):
 
 
     def removeChildren(self):
-        """Removes children from parent"""
-        self.children = []
-
-
-    def removeChildrenRecursively(self):
         """Recursively removes all children of the Tree object it is called
         from
         """
@@ -69,7 +54,7 @@ class Tree(object):
             if not child.hasChildren():
                 self.removeChild(FIRSTCHILD)
                 continue
-            child.removeChildrenRecursively()
+            child.removeChildren()
         return
 
 
@@ -81,51 +66,6 @@ class Tree(object):
     def hasParent(self):
         """Boolean method that checks whether Tree object has parent"""
         return self.parent is not None
-
-
-    def hasDescendant(self, degree, startLevel=0):
-        """Boolean method that checks whether Tree object has descendant of
-        x degree.
-
-        Args:
-            degree (int): Degree of descendant to be checked
-        """
-
-        # return up the stack if we've reached the desired depth
-        if (degree - startLevel) == 0:
-            return True
-
-        # return False if we don't have children and we haven't reached the
-        # desired depth
-        if not self.hasChildren():
-            return False
-
-        childToExpand = self.children[0]
-        hasDescendant = childToExpand.hasDescendant(degree, startLevel+1)
-        return hasDescendant
-
-
-    def hasAncestor(self, degree, startLevel=0):
-        """Boolean method that checks whether Tree object has ancestor of
-        x degree.
-
-        Args:
-            degree (int): Degree of ancestor to be checked
-        """
-
-        # return up the stack if we've reached the desired depth
-        if (degree - startLevel) == 0:
-            return True
-
-        # return False if we don't have children and we haven't reached the
-        # desired depth
-        if not self.hasParent():
-            return False
-
-        parentToExpand = self.parent
-        hasAncestor = parentToExpand.hasAncestor(degree, startLevel+1)
-        return hasAncestor
-
 
 
     def isLastChild(self):
@@ -192,42 +132,6 @@ class Tree(object):
             return None
 
 
-    def getLeftSibling(self):
-        """Returns left sibling with same parent if possible. If there's no
-        left sibling, returns None"""
-
-        nodeIndex = self._getIndexOfNodeInParentChildrenList()
-
-        # if nodeIndex is None that means that node is Root and has no siblings
-        if nodeIndex == None:
-            return None
-
-        parentChildrenList = self.parent.children
-
-        # if node is first child, move up a level
-        if self.isFirstChild():
-            self.parent.getLeftSibling()
-
-        tentativeLeftSiblingIndex = nodeIndex - 1
-
-        # return right sibling if it exists
-        try:
-            leftSibling = parentChildrenList[tentativeLeftSiblingIndex]
-            return leftSibling
-        except IndexError:
-            return None
-
-
-    def isTheLastChild(self):
-        """Boolean method that returns True if child is the last one"""
-
-        rightSibling = self.getRightSibling()
-
-        if rightSibling == None:
-            return True
-        return False
-
-
     def getFirstAncestorNotLastChild(self):
         """Returns the first ancestor node which is not a last child.
         Returns None if such an ancestor doesn't exist
@@ -246,7 +150,7 @@ class Tree(object):
 
 
     def getNodeLowerLevels(self, depth, indexChild, startLevel=0):
-        """Returns node at 'depth' levels below, expanding the
+        """Returns node at 'depth' levels below, expanding either the
         indexChild at each level.
 
         Args:
@@ -313,10 +217,7 @@ class Tree(object):
         if not self.hasParent():
             return None
         parentChildrenList = self.parent.children
-        try:
-            nodeIndex = parentChildrenList.index(self)
-        except ValueError:
-            a = 1
+        nodeIndex = parentChildrenList.index(self)
         return nodeIndex
 
 

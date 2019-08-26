@@ -23,19 +23,23 @@ metricalLevelsOptions = {FOURFOUR: [WHOLENOTE,
                                     HALFNOTE,
                                     QUARTERNOTE,
                                     EIGHTHNOTE,
-                                    SIXTEENTHNOTE],
+                                    SIXTEENTHNOTE,
+                                    THIRTYSECONDNOTE],
                          THREEFOUR: [DOTTEDHALFNOTE,
                                      QUARTERNOTE,
                                      EIGHTHNOTE,
-                                     SIXTEENTHNOTE]}
+                                     SIXTEENTHNOTE,
+                                     THIRTYSECONDNOTE]}
 
 metricalSubdivisionsOptions = {FOURFOUR: {WHOLENOTE: 2,
                                           HALFNOTE: 2,
                                           QUARTERNOTE: 2,
-                                          EIGHTHNOTE: 2},
+                                          EIGHTHNOTE: 2,
+                                          SIXTEENTHNOTE: 2},
                                THREEFOUR: {DOTTEDHALFNOTE: 3,
                                            QUARTERNOTE: 2,
-                                           EIGHTHNOTE: 2}}
+                                           EIGHTHNOTE: 2,
+                                           SIXTEENTHNOTE: 2}}
 
 class Metre(object):
     """Metre is a class that represents time signatures and their metrical
@@ -83,9 +87,6 @@ class Metre(object):
 
     def getTactus(self):
         return self.tactus
-
-    def getTactusLevel(self):
-        return  self.tactus["metricalLevel"]
 
     def getMetricalStruct(self):
         return self.metricalAccentuation
